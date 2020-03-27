@@ -1,8 +1,8 @@
 ﻿namespace PizzaDotNet.Data.Configurations
 {
-    using PizzaDotNet.Data.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using PizzaDotNet.Data.Models;
 
     public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {

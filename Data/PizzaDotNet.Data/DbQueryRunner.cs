@@ -3,9 +3,8 @@
     using System;
     using System.Threading.Tasks;
 
-    using PizzaDotNet.Data.Common;
-
     using Microsoft.EntityFrameworkCore;
+    using PizzaDotNet.Data.Common;
 
     public class DbQueryRunner : IDbQueryRunner
     {

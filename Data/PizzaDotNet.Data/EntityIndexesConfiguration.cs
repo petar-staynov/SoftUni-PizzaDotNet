@@ -2,9 +2,8 @@
 {
     using System.Linq;
 
-    using PizzaDotNet.Data.Common.Models;
-
     using Microsoft.EntityFrameworkCore;
+    using PizzaDotNet.Data.Common.Models;
 
     internal static class EntityIndexesConfiguration
     {

@@ -4,9 +4,8 @@ namespace PizzaDotNet.Data.Models
     using System;
     using System.Collections.Generic;
 
-    using PizzaDotNet.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+    using PizzaDotNet.Data.Common.Models;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
