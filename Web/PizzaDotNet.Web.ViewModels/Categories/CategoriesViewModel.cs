@@ -7,6 +7,6 @@
 
     public class CategoriesViewModel : IMapFrom<Category>
     {
-        public IEnumerable<CategoryViewModel> Categories { get; set; }
+        public IEnumerable<CategoriesCategoryViewModel> Categories { get; set; }
     }
 }

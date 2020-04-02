@@ -1,11 +1,9 @@
 ﻿namespace PizzaDotNet.Web.Controllers
 {
     using System.Linq;
+
     using Microsoft.AspNetCore.Mvc;
-    using PizzaDotNet.Data.Common.Repositories;
-    using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Data;
-    using PizzaDotNet.Services.Mapping;
     using PizzaDotNet.Web.ViewModels.Categories;
 
     public class CategoriesController : BaseController
@@ -22,16 +20,22 @@
             var viewModel = new CategoriesViewModel
             {
                 Categories =
-                    this.categoriesService.GetAll<CategoryViewModel>(),
+                    this.categoriesService.GetAll<CategoriesCategoryViewModel>(),
             };
 
             return this.View(viewModel);
         }
 
-        // public IActionResult Details(int id)
-        // {
-        //     var categoryVeiwModel = new CategoryViewModel();
-        //     return this.View(null)
-        // }
+
+        public IActionResult Details(string name)
+        {
+            // Get category from service by name
+            // Get products in category
+            // Add them to CategoryProductsViewModel
+            // Create ProductViewModel
+            var categoryViewModel = this.categoriesService.GetByName<CategoryViewModel>(name);
+
+            return this.View(categoryViewModel);
+        }
     }
 }

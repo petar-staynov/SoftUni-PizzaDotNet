@@ -1,10 +1,8 @@
-﻿@using PizzaDotNet.Common
-@model PizzaDotNet.Web.ViewModels.Categories.CategoriesViewModel
+﻿@model PizzaDotNet.Web.ViewModels.Categories.CategoriesViewModel
 
 <div class="text-center">
     @foreach (var category in Model.Categories)
     {
-        <a class="" asp-area="" asp-controller="Categories" asp-action="Index">Home</a>
-        <p>@category.Name</p>
+        <a class="" asp-area="" asp-controller="Categories" asp-action="@category.Name">@category.Name</a> <br/>
     }
 </div>
