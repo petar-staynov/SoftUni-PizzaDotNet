@@ -2,6 +2,13 @@
 {
     using System.Reflection;
 
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using PizzaDotNet.Data;
     using PizzaDotNet.Data.Common;
     using PizzaDotNet.Data.Common.Repositories;
@@ -12,14 +19,6 @@
     using PizzaDotNet.Services.Mapping;
     using PizzaDotNet.Services.Messaging;
     using PizzaDotNet.Web.ViewModels;
-
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
 
     public class Startup
     {
@@ -60,6 +59,8 @@
             services.AddTransient<IEmailSender>(x=> 
                 new SendGridEmailSender("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"));
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<ICategoriesService, CategoriesService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
