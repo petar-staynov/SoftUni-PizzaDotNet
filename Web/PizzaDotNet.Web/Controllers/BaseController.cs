@@ -1,8 +1,11 @@
 ﻿namespace PizzaDotNet.Web.Controllers
 {
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    public class BaseController : Controller
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public abstract class BaseController : Controller
     {
     }
 }

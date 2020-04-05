@@ -1,10 +1,9 @@
 ﻿namespace PizzaDotNet.Data.Common
 {
     using System;
-    using System.Threading.Tasks;
 
     public interface IDbQueryRunner : IDisposable
     {
-        Task RunQueryAsync(string query, params object[] parameters);
+        void RunQuery(string query, params object[] parameters);
     }
 }

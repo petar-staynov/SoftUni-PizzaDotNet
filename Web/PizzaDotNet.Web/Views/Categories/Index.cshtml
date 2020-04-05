@@ -1,8 +1,0 @@
-﻿@model PizzaDotNet.Web.ViewModels.Categories.CategoriesViewModel
-
-<div class="text-center">
-    @foreach (var category in Model.Categories)
-    {
-        <a class="" asp-area="" asp-controller="Categories" asp-action="@category.Name">@category.Name</a> <br/>
-    }
-</div>

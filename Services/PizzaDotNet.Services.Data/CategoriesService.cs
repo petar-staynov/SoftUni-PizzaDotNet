@@ -3,9 +3,9 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using PizzaDotNet.Common.Mapping;
     using PizzaDotNet.Data.Common.Repositories;
     using PizzaDotNet.Data.Models;
-    using PizzaDotNet.Services.Mapping;
 
     public class CategoriesService : ICategoriesService
     {

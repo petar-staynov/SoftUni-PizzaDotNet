@@ -1,15 +1,17 @@
-﻿namespace PizzaDotNet.Data.Seeding
+﻿﻿namespace PizzaDotNet.Data.Seeding
 {
     using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+    using System.Linq;
 
+    using PizzaDotNet.Common;
+    using PizzaDotNet.Data.Models;
+
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
 
-    public class ApplicationDbContextSeeder : ISeeder
+    public static class ApplicationDbContextSeeder
     {
-        public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
+        public static void Seed(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
             if (dbContext == null)
             {
@@ -21,21 +23,41 @@
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
-            var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger(typeof(ApplicationDbContextSeeder));
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+            Seed(dbContext, roleManager);
+        }
 
-            var seeders = new List<ISeeder>
-                          {
-                              new RolesSeeder(),
-                              new SettingsSeeder(),
-                              new CategoriesSeeder(),
-                              new ProductsSeeder(),
-                          };
-
-            foreach (var seeder in seeders)
+        public static void Seed(ApplicationDbContext dbContext, RoleManager<ApplicationRole> roleManager)
+        {
+            if (dbContext == null)
             {
-                await seeder.SeedAsync(dbContext, serviceProvider);
-                await dbContext.SaveChangesAsync();
-                logger.LogInformation($"Seeder {seeder.GetType().Name} done.");
+                throw new ArgumentNullException(nameof(dbContext));
+            }
+
+            if (roleManager == null)
+            {
+                throw new ArgumentNullException(nameof(roleManager));
+            }
+
+            SeedRoles(roleManager);
+        }
+
+        private static void SeedRoles(RoleManager<ApplicationRole> roleManager)
+        {
+            SeedRole(GlobalConstants.AdministratorRoleName, roleManager);
+        }
+
+        private static void SeedRole(string roleName, RoleManager<ApplicationRole> roleManager)
+        {
+            var role = roleManager.FindByNameAsync(roleName).GetAwaiter().GetResult();
+            if (role == null)
+            {
+                var result = roleManager.CreateAsync(new ApplicationRole(roleName)).GetAwaiter().GetResult();
+
+                if (!result.Succeeded)
+                {
+                    throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
+                }
             }
         }
     }

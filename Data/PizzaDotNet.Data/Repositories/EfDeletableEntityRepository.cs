@@ -4,9 +4,10 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Microsoft.EntityFrameworkCore;
     using PizzaDotNet.Data.Common.Models;
     using PizzaDotNet.Data.Common.Repositories;
+
+    using Microsoft.EntityFrameworkCore;
 
     public class EfDeletableEntityRepository<TEntity> : EfRepository<TEntity>, IDeletableEntityRepository<TEntity>
         where TEntity : class, IDeletableEntity
@@ -24,18 +25,35 @@
 
         public IQueryable<TEntity> AllAsNoTrackingWithDeleted() => base.AllAsNoTracking().IgnoreQueryFilters();
 
-        public Task<TEntity> GetByIdWithDeletedAsync(params object[] id)
+        public override async ValueTask<TEntity> GetByIdAsync(params object[] id)
         {
-            var getByIdPredicate = EfExpressionHelper.BuildByIdPredicate<TEntity>(this.Context, id);
-            return this.AllWithDeleted().FirstOrDefaultAsync(getByIdPredicate);
+            var entity = await base.GetByIdAsync(id);
+
+            if (entity?.IsDeleted ?? false)
+            {
+                entity = null;
+            }
+
+            return entity;
         }
 
-        public void HardDelete(TEntity entity) => base.Delete(entity);
+        public Task<TEntity> GetByIdWithDeletedAsync(params object[] id)
+        {
+            var byIdPredicate = EfExpressionHelper.BuildByIdPredicate<TEntity>(this.Context, id);
+
+            return this.AllWithDeleted().FirstOrDefaultAsync(byIdPredicate);
+        }
+
+        public void HardDelete(TEntity entity)
+        {
+            base.Delete(entity);
+        }
 
         public void Undelete(TEntity entity)
         {
             entity.IsDeleted = false;
             entity.DeletedOn = null;
+
             this.Update(entity);
         }
 
@@ -43,6 +61,7 @@
         {
             entity.IsDeleted = true;
             entity.DeletedOn = DateTime.UtcNow;
+
             this.Update(entity);
         }
     }

@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <LangVersion>latest</LangVersion>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -11,17 +11,13 @@
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164" PrivateAssets="all">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Data\PizzaDotNet.Data.Common\PizzaDotNet.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\PizzaDotNet.Data.Models\PizzaDotNet.Data.Models.csproj" />
-    <ProjectReference Include="..\PizzaDotNet.Services.Mapping\PizzaDotNet.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\PizzaDotNet.Common\PizzaDotNet.Common.csproj" />
   </ItemGroup>
 
 </Project>

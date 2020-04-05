@@ -4,8 +4,8 @@
 
     using Microsoft.AspNetCore.Mvc;
     using PizzaDotNet.Services.Data;
-    using PizzaDotNet.Web.ViewModels.Categories;
 
+    [ApiController]
     public class CategoriesController : BaseController
     {
         private readonly ICategoriesService categoriesService;
@@ -17,25 +17,28 @@
 
         public IActionResult Index()
         {
-            var viewModel = new CategoriesViewModel
-            {
-                Categories =
-                    this.categoriesService.GetAll<CategoriesCategoryViewModel>(),
-            };
-
-            return this.View(viewModel);
+            return null;
+            // var viewModel = new CategoriesViewModel
+            // {
+            //     Categories =
+            //         this.categoriesService.GetAll<CategoriesCategoryViewModel>(),
+            // };
+            //
+            // return this.View(viewModel);
         }
 
 
         public IActionResult Details(string name)
         {
+            return null;
             // Get category from service by name
             // Get products in category
             // Add them to CategoryProductsViewModel
             // Create ProductViewModel
-            var categoryViewModel = this.categoriesService.GetByName<CategoryViewModel>(name);
-
-            return this.View(categoryViewModel);
+            
+            // var categoryViewModel = this.categoriesService.GetByName<CategoryViewModel>(name);
+            //
+            // return this.View(categoryViewModel);
         }
     }
 }

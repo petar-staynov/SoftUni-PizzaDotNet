@@ -1,11 +1,11 @@
-﻿namespace PizzaDotNet.Data.Models.Enums
+﻿namespace PizzaDotNet.Data.Models.enums
 {
     public enum RatingValue
     {
-        VeryBad = 0,
-        Bad = 1,
-        Ok = 2,
-        Good = 3,
+        Bad = 0,
+        Ok = 1,
+        Good = 2,
+        VeryGood = 3,
         Excellent = 4,
     }
 }

@@ -1,2 +1,5 @@
-# SoftUni-PizzaDotNet
- A business "web app" for a Pizza restaurant based on ASP.NET Core 3.1
+﻿## How to run the project
+
+1. Open the project with Visual Studio 2017
+2. Restore npm packages
+3. Run gulp dev

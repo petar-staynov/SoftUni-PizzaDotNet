@@ -10,6 +10,12 @@
     <IntegerProperty Name="MaxViolationCount">2000</IntegerProperty>
     <CollectionProperty Name="RecognizedWords">
       <Value>Json</Value>
+      <Value>xaml</Value>
+      <Value>ciphertext</Value>
+      <Value>Rijndael</Value>
+      <Value>unenroll</Value>
+      <Value>unenrollment</Value>
+      <Value>bgcoder</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>
@@ -71,8 +77,8 @@
           <Value>it</Value>
           <Value>un</Value>
           <Value>bg</Value>
-          <Value>ip</Value>
-          <Value>id</Value>
+		  <Value>ip</Value>
+		  <Value>id</Value>
         </CollectionProperty>
       </AnalyzerSettings>
     </Analyzer>
