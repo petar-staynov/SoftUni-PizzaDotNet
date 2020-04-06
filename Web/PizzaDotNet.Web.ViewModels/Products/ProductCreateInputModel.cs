@@ -2,16 +2,13 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
 
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using PizzaDotNet.Web.ViewModels.Categories;
 
     public class ProductCreateInputModel
     {
-        // public ProductCreateInputModel()
-        // {
-        //     this.Categories = new List<CategoryDropdownViewModel>();
-        // }
-
         [Required]
         public string Name { get; set; }
 
@@ -27,5 +24,8 @@
         public int CategoryId { get; set; }
 
         public IEnumerable<CategoryDropdownViewModel> Categories { get; set; }
+
+        public IEnumerable<SelectListItem> CategoriesListItems =>
+            this.Categories.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
     }
 }

@@ -34,7 +34,7 @@
         <select
             id="CategoryId"
             asp-for="CategoryId"
-            asp-items="Model.Categories.Select(x=> new SelectListItem(x.Name, x.Id.ToString()))">
+            asp-items="Model.CategoriesListItems">
         </select>
         <span asp-validation-for="CategoryId"> </span>
     </div>
