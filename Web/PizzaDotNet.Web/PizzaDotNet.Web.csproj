@@ -39,4 +39,8 @@
     <ProjectReference Include="..\PizzaDotNet.Web.Infrastructure\PizzaDotNet.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\PizzaDotNet.Web.ViewModels\PizzaDotNet.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Settings\Index.cshtml" />
+  </ItemGroup>
 </Project>

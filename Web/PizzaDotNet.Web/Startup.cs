@@ -1,4 +1,6 @@
-﻿namespace PizzaDotNet.Web
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace PizzaDotNet.Web
 {
     using System.Reflection;
     using Microsoft.AspNetCore.Builder;
@@ -49,7 +51,10 @@
                     options.MinimumSameSitePolicy = SameSiteMode.None;
                 });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+                {
+                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                });
             services.AddRazorPages();
 
             services.AddSingleton(this.configuration);
@@ -62,8 +67,8 @@
             // Application services
             services.AddTransient<IEmailSender>(x =>
                 new SendGridEmailSender("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"));
-            services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
+            services.AddTransient<IProductsService, ProductsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
