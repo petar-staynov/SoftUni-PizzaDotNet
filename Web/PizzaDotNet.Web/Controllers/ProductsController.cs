@@ -42,7 +42,7 @@ namespace PizzaDotNet.Web.Controllers
             var viewModel = new ProductCreateInputModel();
             viewModel.Categories = categories;
 
-            return this.View();
+            return this.View(viewModel);
         }
 
         // [Authorize]

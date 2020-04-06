@@ -7,36 +7,36 @@
 <form method="post" asp-action="Create">
     <div>
         <label for="Name">Name:</label>
-        <input asp-for="Name" type="text"/>
-        <span asp-validation-for="Name"></span>
+        <input id="Name" asp-for="Name" type="text"/>
+        <span asp-validation-for="Name"> </span>
     </div>
     <br/>
     <div>
         <label for="Description">Description:</label>
-        <input asp-for="Description" type="text"/>
-        <span asp-validation-for="Description"></span>
+        <input id="Description"  asp-for="Description" type="text"/>
+        <span asp-validation-for="Description"> </span>
     </div>
     <br/>
     <div>
         <label for="Price">Price:</label>
-        <input asp-for="Price" type="number"/>
-        <span asp-validation-for="Price"></span>
+        <input id="Price" asp-for="Price" type="number"/>
+        <span asp-validation-for="Price"> </span>
     </div>
     <br/>
     <div>
         <label for="ImageUrl">Image:</label>
-        <input asp-for="ImageUrl" type="text"/>
-        <span asp-validation-for="ImageUrl"></span>
+        <input id="ImageUrl" asp-for="ImageUrl" type="text"/>
+        <span asp-validation-for="ImageUrl"> </span>
     </div>
     <br/>
     <div>
         <label for="CategoryId">Category:</label>
-        <input asp-for="CategoryId" type="text"/>
         <select
+            id="CategoryId"
             asp-for="CategoryId"
-            asp-items="Model.CategoriesListItems">
+            asp-items="Model.Categories.Select(x=> new SelectListItem(x.Name, x.Id.ToString()))">
         </select>
-        <span asp-validation-for="CategoryId"></span>
+        <span asp-validation-for="CategoryId"> </span>
     </div>
     <br/>
     <div>
