@@ -1,9 +1,11 @@
 ﻿namespace PizzaDotNet.Services.Data
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using PizzaDotNet.Data.Common.Repositories;
     using PizzaDotNet.Data.Models;
+    using PizzaDotNet.Services.Mapping;
 
     public class ProductsService : IProductsService
     {
@@ -29,6 +31,17 @@
             await this.productsRepository.SaveChangesAsync();
 
             return product.Id;
+        }
+
+        public T GetById<T>(int id)
+        {
+            var product = this.productsRepository
+                .All()
+                .Where(x => x.Id == id)
+                .To<T>()
+                .FirstOrDefault();
+
+            return product;
         }
     }
 }
