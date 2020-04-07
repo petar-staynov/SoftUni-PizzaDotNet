@@ -1,0 +1,11 @@
+﻿@model PizzaDotNet.Web.ViewModels.Products.ProductViewModel
+
+@{
+    this.ViewData["Title"] = Model.Name;
+}
+
+<img src="~/images/@Model.ImageUrl" asp-append-version="true">
+<p>@Model.Name</p>
+<p>@Model.Description</p>
+<p>@Model.Price</p>
+<p>@Model.Name</p>

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using PizzaDotNet.Web.ViewModels.Categories;
-
-namespace PizzaDotNet.Web.Controllers
+﻿namespace PizzaDotNet.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
     using PizzaDotNet.Services.Data;
+    using PizzaDotNet.Web.ViewModels.Categories;
     using PizzaDotNet.Web.ViewModels.Products;
 
     public class ProductsController : BaseController
@@ -26,10 +25,15 @@ namespace PizzaDotNet.Web.Controllers
             throw new NotImplementedException();
         }
 
-        public IActionResult ViewProductyById(int id)
+        public IActionResult ViewById(int id)
         {
-            // TODO read post, auto-map to viewmodel, display page with view model
-            throw new NotImplementedException();
+            var productViewModel = this.productsService.GetById<ProductViewModel>(id);
+            if (productViewModel == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(productViewModel);
         }
 
         // [Authorize]
@@ -62,7 +66,7 @@ namespace PizzaDotNet.Web.Controllers
                 inputModel.ImageUrl,
                 inputModel.CategoryId);
 
-            return this.RedirectToAction("ViewProductyById", new { id = productId });
+            return this.RedirectToAction("ViewById", new { id = productId });
         }
     }
 }
