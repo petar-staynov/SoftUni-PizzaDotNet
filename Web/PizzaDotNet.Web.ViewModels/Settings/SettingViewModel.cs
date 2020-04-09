@@ -1,9 +1,8 @@
 ﻿namespace PizzaDotNet.Web.ViewModels.Settings
 {
+    using AutoMapper;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {

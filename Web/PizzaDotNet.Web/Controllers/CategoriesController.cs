@@ -26,7 +26,6 @@
             return this.View(viewModel);
         }
 
-
         public IActionResult Details(string name)
         {
             // Get category from service by name

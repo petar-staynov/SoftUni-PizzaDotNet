@@ -1,10 +1,9 @@
 ﻿namespace PizzaDotNet.Web.Areas.Administration.Controllers
 {
-    using PizzaDotNet.Common;
-    using PizzaDotNet.Web.Controllers;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using PizzaDotNet.Common;
+    using PizzaDotNet.Web.Controllers;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     [Area("Administration")]

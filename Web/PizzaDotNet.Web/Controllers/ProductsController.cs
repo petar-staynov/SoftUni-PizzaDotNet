@@ -58,7 +58,6 @@
                 return this.View(inputModel);
             }
 
-
             var productId = await this.productsService.CreateAsync(
                 inputModel.Name,
                 inputModel.Description,

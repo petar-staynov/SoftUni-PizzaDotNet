@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace PizzaDotNet.Web
+﻿namespace PizzaDotNet.Web
 {
     using System.Reflection;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -52,9 +51,11 @@ namespace PizzaDotNet.Web
                 });
 
             services.AddControllersWithViews(options =>
-                {
-                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                });
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
+            services.AddAntiforgery(options => { options.HeaderName = "X-CSRF-TOKEN"; });
+
             services.AddRazorPages();
 
             services.AddSingleton(this.configuration);
@@ -69,6 +70,7 @@ namespace PizzaDotNet.Web
                 new SendGridEmailSender("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"));
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IProductsService, ProductsService>();
+            services.AddTransient<IRatingsService, RatingsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

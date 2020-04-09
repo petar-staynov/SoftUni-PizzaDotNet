@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace PizzaDotNet.Web.Views.Categories
+﻿namespace PizzaDotNet.Web.Views.Categories
 {
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+
     public class Details : PageModel
     {
         public void OnGet()
         {
-            
         }
     }
 }
