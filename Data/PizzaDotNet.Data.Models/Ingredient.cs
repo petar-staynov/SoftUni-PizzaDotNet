@@ -6,8 +6,15 @@
 
     public class Ingredient : BaseDeletableModel<int>
     {
+        public Ingredient()
+        {
+            this.Products = new HashSet<Product>();
+        }
+
         public string Name { get; set; }
 
-        public virtual ICollection<ProductsIngredients> Products { get; set; }
+        public string Description { get; set; }
+
+        public virtual ICollection<Product> Products { get; set; }
     }
 }
