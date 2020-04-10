@@ -3,6 +3,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Http;
     using PizzaDotNet.Data.Common.Repositories;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
@@ -16,21 +17,22 @@
             this.productsRepository = productsRepository;
         }
 
-        public async Task<int> CreateAsync(string name, string description, decimal price, string imageUrl, int categoryId)
+        public async Task<Product> CreateAsync(string name, string description, decimal price, int categoryId, string imageUrl, IFormFile imageFile)
         {
             Product product = new Product
             {
                 Name = name,
                 Description = description,
                 Price = price,
-                ImageUrl = imageUrl,
                 CategoryId = categoryId,
+                ImageUrl = imageUrl,
+                ImageFile = imageFile,
             };
 
             await this.productsRepository.AddAsync(product);
             await this.productsRepository.SaveChangesAsync();
 
-            return product.Id;
+            return product;
         }
 
         public T GetById<T>(int id)

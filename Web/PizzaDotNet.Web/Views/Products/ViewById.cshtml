@@ -4,8 +4,50 @@
     this.ViewData["Title"] = Model.Name;
 }
 
-<img src="~/images/@Model.ImageUrl" asp-append-version="true">
+@if (Model.ImageUrl != null){
+<img src="@Url.Content(Model.ImageUrl)" alt="Image" style="width: 150px; height: 220px;"/>
+}
 <p>@Model.Name</p>
 <p>@Model.Description</p>
 <p>@Model.Price</p>
 <p>@Model.Name</p>
+<p>
+    <form id='ratingForm' method='post'></form>
+    <button id="vote-1" onclick="rateProduct(1,  @Model.ProductId)">1</button>
+    <button id="vote-2" onclick="rateProduct(2, @Model.ProductId)">2</button>
+    <button id="vote-3" onclick="rateProduct(3, @Model.ProductId)">3</button>
+    <button id="vote-4" onclick="rateProduct(4, @Model.ProductId)">4</button>
+    <button id="vote-5" onclick="rateProduct(5, @Model.ProductId)">5</button>
+</p>
+
+@section Scripts{
+<script>
+    const rateProduct = (value, productId) => {
+        const token = $("#ratingForm input[name=__RequestVerificationToken]").val();
+        
+        const data = {
+            productId: productId,    
+            value: value,
+            };
+        
+        const response = $.ajax({
+            url: 'api/ratings',
+            type: 'POST',
+            data: data,
+            contentType: 'application/json',
+            dataType: 'json',
+            headers: {
+                'X-CSRF-TOKEN': token,
+            },
+            success: ()=>{
+                // TODO update ratings on page
+                console.log("success");
+            },
+            error: (e) => {
+                console.log(e);
+            }
+        });
+        console.log(response);
+    };
+</script>
+}

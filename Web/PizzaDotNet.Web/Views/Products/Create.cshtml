@@ -1,45 +1,38 @@
 ﻿@model PizzaDotNet.Web.ViewModels.Products.ProductCreateInputModel
 @{
     this.ViewData["Title"] = "Create product";
+    var categories =
+        Model.Categories.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
 }
 
 <h1>Create product</h1>
-<form method="post" asp-action="Create">
-    <div>
-        <label for="Name">Name:</label>
-        <input id="Name" asp-for="Name" type="text"/>
-        <span asp-validation-for="Name"> </span>
+<form method="post" asp-action="Create" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control"/>
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-    <br/>
-    <div>
-        <label for="Description">Description:</label>
-        <input id="Description"  asp-for="Description" type="text"/>
-        <span asp-validation-for="Description"> </span>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" class="form-control"/>
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
-    <br/>
-    <div>
-        <label for="Price">Price:</label>
-        <input id="Price" asp-for="Price" type="number"/>
-        <span asp-validation-for="Price"> </span>
+    <div class="form-group">
+        <label asp-for="Price" class="control-label"></label>
+        <input asp-for="Price" class="form-control"/>
+        <span asp-validation-for="Price" class="text-danger"></span>
     </div>
-    <br/>
-    <div>
-        <label for="ImageUrl">Image:</label>
-        <input id="ImageUrl" asp-for="ImageUrl" type="text"/>
-        <span asp-validation-for="ImageUrl"> </span>
+    <div class="form-group">
+        <label asp-for="CategoryId"></label>
+        <select asp-for="CategoryId" asp-items="categories" class="form-control"></select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
-    <br/>
-    <div>
-        <label for="CategoryId">Category:</label>
-        <select
-            id="CategoryId"
-            asp-for="CategoryId"
-            asp-items="Model.CategoriesListItems">
-        </select>
-        <span asp-validation-for="CategoryId"> </span>
+    <div class="form-group">
+        <label asp-for="ImageFile" class="control-label"></label>
+        <input asp-for="ImageFile"/>
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
     </div>
-    <br/>
-    <div>
-        <input type="submit" class="btn btn-primary"/>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary"/>
     </div>
 </form>
