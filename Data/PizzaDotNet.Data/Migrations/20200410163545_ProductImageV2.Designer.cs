@@ -10,8 +10,8 @@ using PizzaDotNet.Data;
 namespace PizzaDotNet.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200409163951_ProductImage")]
-    partial class ProductImage
+    [Migration("20200410163545_ProductImageV2")]
+    partial class ProductImageV2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

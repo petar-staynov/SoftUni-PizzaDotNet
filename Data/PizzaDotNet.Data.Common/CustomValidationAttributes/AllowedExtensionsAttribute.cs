@@ -15,12 +15,11 @@
             this.extensions = extensions;
         }
 
-        protected override ValidationResult IsValid(
-            object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value is IFormFile file)
             {
-                var extension = Path.GetExtension(file.FileName);
+                string extension = Path.GetExtension(file.FileName);
 
                 if (!this.extensions.Contains(extension.ToLower()))
                 {
@@ -34,7 +33,7 @@
         //TODO Move error message to separate file
         public string GetErrorMessage()
         {
-            return $"This photo extension is not allowed!";
+            return $"Invalid file extension!";
         }
     }
 }

@@ -18,7 +18,7 @@
             this.productsRepository = productsRepository;
         }
 
-        public async Task<Product> CreateAsync(string name, string description, decimal price, int categoryId, string imageUrl, IFormFile imageFile, string imageStorageName)
+        public async Task<Product> CreateAsync(string name, string description, decimal price, int categoryId, string imageUrl, string imageStorageName)
         {
             Product product = new Product
             {
@@ -27,7 +27,6 @@
                 Price = price,
                 CategoryId = categoryId,
                 ImageUrl = imageUrl,
-                ImageFile = imageFile,
                 ImageStorageName = imageStorageName,
             };
 

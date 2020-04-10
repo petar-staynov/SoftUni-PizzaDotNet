@@ -1,37 +1,47 @@
 ﻿namespace PizzaDotNet.Data.Common.CustomValidationAttributes
 {
     using System.ComponentModel.DataAnnotations;
-
     using Microsoft.AspNetCore.Http;
 
     public class MaxFileSizeAttribute : ValidationAttribute
     {
         private readonly int maxFileSize;
 
-        public MaxFileSizeAttribute(int maxFileSize)
+        public MaxFileSizeAttribute(int maxFileSize, string unit = "b")
         {
-            this.maxFileSize = maxFileSize;
+            switch (unit.ToLower())
+            {
+                case "kb":
+                    this.maxFileSize = maxFileSize * 1000;
+                    break;
+                case "mb":
+                    this.maxFileSize = maxFileSize * 1000 * 1000;
+                    break;
+                case "gb":
+                    this.maxFileSize = maxFileSize * 1000 * 1000 * 1000;
+                    break;
+                default:
+                    this.maxFileSize = maxFileSize;
+                    break;
+            }
         }
 
-        protected override ValidationResult IsValid(
-            object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var file = value as IFormFile;
-
-            if (file != null)
+            if (value is IFormFile file)
             {
-                if (file.Length > maxFileSize)
+                if (file.Length > this.maxFileSize)
                 {
-                    return new ValidationResult(GetErrorMessage());
+                    return new ValidationResult(this.GetErrorMessage());
                 }
             }
 
             return ValidationResult.Success;
         }
 
-        public string GetErrorMessage()
+        private string GetErrorMessage()
         {
-            return $"Maximum allowed file size is { maxFileSize} bytes.";
+            return $"Maximum allowed file size is {this.maxFileSize} bytes.";
         }
     }
 }

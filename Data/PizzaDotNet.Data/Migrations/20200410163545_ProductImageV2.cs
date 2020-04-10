@@ -2,7 +2,7 @@
 
 namespace PizzaDotNet.Data.Migrations
 {
-    public partial class ProductImage : Migration
+    public partial class ProductImageV2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

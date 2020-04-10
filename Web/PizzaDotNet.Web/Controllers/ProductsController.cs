@@ -77,6 +77,8 @@
             var img = inputModel.ImageFile;
             if (!this.ModelState.IsValid)
             {
+                // Pass back the categories list because POST Requests lose Collections
+                inputModel.Categories = this.categoriesService.GetAll<CategoryDropdownViewModel>();
                 return this.View(inputModel);
             }
 
@@ -91,7 +93,6 @@
                 inputModel.Price,
                 inputModel.CategoryId,
                 inputModel.ImageUrl,
-                inputModel.ImageFile,
                 inputModel.ImageStorageName);
 
             return this.RedirectToAction("ViewById", new { id = product.Id });
