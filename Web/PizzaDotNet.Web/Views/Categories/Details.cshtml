@@ -9,6 +9,6 @@
     <hr/>
     @foreach (var product in Model.Products)
     {
-        <p>@product.Name</p>
+        <a class="" asp-area="" asp-controller="Products" asp-action="@product.Id">@product.Name</a> <br/>
     }
 </div>

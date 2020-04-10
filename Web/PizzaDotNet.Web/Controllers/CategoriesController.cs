@@ -1,7 +1,5 @@
 ﻿namespace PizzaDotNet.Web.Controllers
 {
-    using System.Linq;
-
     using Microsoft.AspNetCore.Mvc;
     using PizzaDotNet.Services.Data;
     using PizzaDotNet.Web.ViewModels.Categories;
@@ -9,10 +7,14 @@
     public class CategoriesController : BaseController
     {
         private readonly ICategoriesService categoriesService;
+        private readonly IProductsService productsService;
 
-        public CategoriesController(ICategoriesService categoriesService)
+        public CategoriesController(
+            ICategoriesService categoriesService,
+            IProductsService productsService)
         {
             this.categoriesService = categoriesService;
+            this.productsService = productsService;
         }
 
         public IActionResult Index()
@@ -26,13 +28,18 @@
             return this.View(viewModel);
         }
 
+        [Route("[controller]/{name}")]
         public IActionResult Details(string name)
         {
-            // Get category from service by name
-            // Get products in category
-            // Add them to CategoryProductsViewModel
-            // Create ProductViewModel
             var categoryViewModel = this.categoriesService.GetByName<CategoryViewModel>(name);
+            if (categoryViewModel == null)
+            {
+                return this.NotFound();
+            }
+
+            int categoryId = categoryViewModel.Id;
+            categoryViewModel.Products =
+                this.productsService.GetByCategoryId<CategoryProductViewModel>(categoryId);
 
             return this.View(categoryViewModel);
         }

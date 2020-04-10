@@ -1,12 +1,10 @@
 ﻿namespace PizzaDotNet.Web.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
-    using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services;
     using PizzaDotNet.Services.Data;
     using PizzaDotNet.Web.ViewModels.Categories;
@@ -47,6 +45,7 @@
             product.ImageStorageName = fileNameForStorage;
         }
 
+        [Route("[controller]/{id}")]
         public IActionResult ViewById(int id)
         {
             var productViewModel = this.productsService.GetById<ProductViewModel>(id);
@@ -92,7 +91,8 @@
                 inputModel.Price,
                 inputModel.CategoryId,
                 inputModel.ImageUrl,
-                inputModel.ImageFile);
+                inputModel.ImageFile,
+                inputModel.ImageStorageName);
 
             return this.RedirectToAction("ViewById", new { id = product.Id });
         }
