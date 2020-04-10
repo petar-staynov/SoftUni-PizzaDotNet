@@ -4,7 +4,6 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # User-specific files
-.idea
 *.rsuser
 *.suo
 *.user
@@ -355,6 +354,7 @@ MigrationBackup/
 
 # Custom ignores
 **/wwwroot/lib/
-appsettings.Production.json
+appsettings.*
 *.min.css
 *.min.js
+.idea
