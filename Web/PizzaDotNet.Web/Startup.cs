@@ -1,6 +1,9 @@
-﻿namespace PizzaDotNet.Web
+﻿using PizzaDotNet.Services;
+
+namespace PizzaDotNet.Web
 {
     using System.Reflection;
+
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -54,10 +57,14 @@
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
-            services.AddAntiforgery(options => { options.HeaderName = "X-CSRF-TOKEN"; });
+            services.AddAntiforgery(options =>
+            {
+                options.HeaderName = this.configuration.GetValue<string>("AntiforgeryHeader");
+            });
 
             services.AddRazorPages();
 
+            services.AddSingleton<IGoogleCloudStorage, GoogleCloudStorage>();
             services.AddSingleton(this.configuration);
 
             // Data repositories
@@ -67,7 +74,7 @@
 
             // Application services
             services.AddTransient<IEmailSender>(x =>
-                new SendGridEmailSender("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"));
+                new SendGridEmailSender(this.configuration.GetValue<string>("SendGridKey")));
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<IRatingsService, RatingsService>();
@@ -118,7 +125,7 @@
                     endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                     endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                     endpoints.MapControllerRoute("categories", "{controller=Categories}/{name}",
-                        new {controller = "Categories", action = "Details"});
+                        new { controller = "Categories", action = "Details"});
                     endpoints.MapRazorPages();
                 });
         }
