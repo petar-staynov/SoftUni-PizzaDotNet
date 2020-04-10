@@ -1,5 +1,6 @@
 ﻿namespace PizzaDotNet.Services.Data
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@
             this.productsRepository = productsRepository;
         }
 
-        public async Task<Product> CreateAsync(string name, string description, decimal price, int categoryId, string imageUrl, IFormFile imageFile)
+        public async Task<Product> CreateAsync(string name, string description, decimal price, int categoryId, string imageUrl, IFormFile imageFile, string imageStorageName)
         {
             Product product = new Product
             {
@@ -27,6 +28,7 @@
                 CategoryId = categoryId,
                 ImageUrl = imageUrl,
                 ImageFile = imageFile,
+                ImageStorageName = imageStorageName,
             };
 
             await this.productsRepository.AddAsync(product);
@@ -44,6 +46,25 @@
                 .FirstOrDefault();
 
             return product;
+        }
+
+        public IEnumerable<T> GetByCategoryId<T>(int categoryId)
+        {
+            var query = this.productsRepository
+                .All()
+                .Where(p => p.CategoryId == categoryId);
+
+
+            return query.To<T>().ToList();
+        }
+
+        public IEnumerable<T> GetByCategoryName<T>(string categoryName)
+        {
+            var query = this.productsRepository
+                .All()
+                .Where(p => p.Category.Name == categoryName);
+
+            return query.To<T>().ToList();
         }
     }
 }
