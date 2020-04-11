@@ -8,8 +8,8 @@
     using PizzaDotNet.Services.Data;
     using PizzaDotNet.Web.ViewModels.Ratings;
 
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class RatingsController : ControllerBase
     {
         private readonly IRatingsService ratingsService;
@@ -23,15 +23,47 @@
             this.userManager = userManager;
         }
 
-        [HttpGet]
-        // [Route("api/[controller]/{id}")]
-        public async Task<RatingResponseModel> GetRating(int productId)
+        // GET: api/Ratings
+        public IActionResult Get()
         {
-            var productRating = this.ratingsService.GetProductRating(productId);
+            return this.Ok();
+        }
+
+        // GET: api/Rating/5
+        [HttpGet("{id}")]
+        public async Task<RatingResponseModel> GetRating(int id)
+        {
+            var productRating = this.ratingsService.GetProductRating(id);
+
+            if (productRating == null)
+            {
+                return null;
+            }
 
             var response = new RatingResponseModel
             {
                 Rating = productRating,
+            };
+
+            return response;
+        }
+
+        // GET: api/Rating/UserRating?id=1&userId=xxxx-xxxx-xxxx-xxxx
+        [HttpGet("UserRating")]
+        public async Task<UserRatingResponseModel> GetUserRating(int id, string userId)
+        {
+            var productUserRating = this.ratingsService.GetProductUserRating(id, userId);
+
+            if (productUserRating == null)
+            {
+                return null;
+            }
+
+            var response = new UserRatingResponseModel
+            {
+                Id = id,
+                UserId = userId,
+                Rating = productUserRating,
             };
 
             return response;

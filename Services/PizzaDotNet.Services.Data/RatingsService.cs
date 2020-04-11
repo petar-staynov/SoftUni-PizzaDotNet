@@ -22,6 +22,7 @@
             var rating = this.ratingsRepository
                 .All()
                 .FirstOrDefault(x => x.ProductId == productId && x.UserId == userId);
+
             if (rating != null)
             {
                 rating.Value = value;
@@ -41,14 +42,34 @@
             await this.ratingsRepository.SaveChangesAsync();
         }
 
-        public double GetProductRating(int productId)
+        public double? GetProductRating(int productId)
         {
-            var averageRating = this.ratingsRepository
+            var query = this.ratingsRepository
                 .All()
-                .Where(x => x.ProductId == productId)
-                .Average(x => x.Value);
+                .Where(x => x.ProductId == productId);
+
+            if (!query.Any())
+            {
+                return null;
+            }
+
+            double averageRating = query.Average(r => r.Value);
 
             return averageRating;
+        }
+
+        public double? GetProductUserRating(int productId, string userId)
+        {
+            var userRating = this.ratingsRepository
+                .All()
+                .FirstOrDefault(x => x.ProductId == productId && x.UserId == userId);
+
+            if (userRating == null)
+            {
+                return null;
+            }
+
+            return userRating.Value;
         }
 
         public ICollection<ApplicationUser> GetProductVotedUsers(int productId)
