@@ -13,16 +13,26 @@
 <p>@Model.Name</p>
 <p>
     <form id='ratingForm' method='post'></form>
-    <button id="vote-1" onclick="rateProduct(1,  @Model.ProductId)">1</button>
-    <button id="vote-2" onclick="rateProduct(2, @Model.ProductId)">2</button>
-    <button id="vote-3" onclick="rateProduct(3, @Model.ProductId)">3</button>
-    <button id="vote-4" onclick="rateProduct(4, @Model.ProductId)">4</button>
-    <button id="vote-5" onclick="rateProduct(5, @Model.ProductId)">5</button>
+    <p><span id="product-rating"></span>/5</p>
+    <button id="vote-1" onclick="rateProduct(1,  @Model.Id)">1</button>
+    <button id="vote-2" onclick="rateProduct(2, @Model.Id)">2</button>
+    <button id="vote-3" onclick="rateProduct(3, @Model.Id)">3</button>
+    <button id="vote-4" onclick="rateProduct(4, @Model.Id)">4</button>
+    <button id="vote-5" onclick="rateProduct(5, @Model.Id)">5</button>
 </p>
 
 @section Scripts{
 <script>
+    () => {
+        const productRating = $.ajax({
+        
+        })
+        
+        $("#product-rating").val(productRating);
+    }();
+    
     const rateProduct = (value, productId) => {
+        console.log(`${value} ${productId}`);
         const token = $("#ratingForm input[name=__RequestVerificationToken]").val();
         
         const data = {
@@ -31,9 +41,9 @@
             };
         
         const response = $.ajax({
-            url: 'api/ratings',
+            url: `${window.location.origin}/api/ratings`,
             type: 'POST',
-            data: data,
+            data: JSON.stringify(data),
             contentType: 'application/json',
             dataType: 'json',
             headers: {
@@ -47,7 +57,6 @@
                 console.log(e);
             }
         });
-        console.log(response);
     };
 </script>
 }

@@ -14,15 +14,18 @@
     {
         private readonly IProductsService productsService;
         private readonly ICategoriesService categoriesService;
+        private readonly IRatingsService ratingsService;
         private readonly IGoogleCloudStorage googleCloudStorage;
 
         public ProductsController(
             IProductsService productsService,
             ICategoriesService categoriesService,
+            IRatingsService ratingsService,
             IGoogleCloudStorage googleCloudStorage)
         {
             this.productsService = productsService;
             this.categoriesService = categoriesService;
+            this.ratingsService = ratingsService;
             this.googleCloudStorage = googleCloudStorage;
         }
 
@@ -53,6 +56,8 @@
             {
                 return this.NotFound();
             }
+
+            productViewModel.Rating = this.ratingsService.GetProductRating(id);
 
             return this.View(productViewModel);
         }

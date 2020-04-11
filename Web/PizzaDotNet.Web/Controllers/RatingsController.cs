@@ -24,6 +24,7 @@
         }
 
         [HttpGet]
+        // [Route("api/[controller]/{id}")]
         public async Task<RatingResponseModel> GetRating(int productId)
         {
             var productRating = this.ratingsService.GetProductRating(productId);
@@ -36,9 +37,9 @@
             return response;
         }
 
-        [Authorize]
+        // [Authorize] // TODO Enable this
         [HttpPost]
-        public async Task<IActionResult> RateProduct(RatingInputModel inputModel)
+        public async Task<IActionResult> Post(RatingInputModel inputModel)
         {
             var userId = this.userManager.GetUserId(this.User);
             await this.ratingsService.RateProductAsync(inputModel.ProductId, userId, inputModel.Value);
