@@ -15,7 +15,7 @@
             {
                 var products = new List<Product>
                 {
-                    new Product { Name = "A", Description = "A", Price = 0M, ImageUrl = "image.jpg", CategoryId = 1 },
+                    // new Product { Name = "A", Description = "A", Price = 0M, ImageUrl = "image.jpg", CategoryId = 1 },
                 };
 
                 foreach (Product product in products)
