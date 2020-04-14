@@ -4,17 +4,18 @@
 @{
     this.ViewData["Title"] = Model.Name;
     var productId = Model.Id;
+
+    var imageUrl = Model.ImageUrl ?? "~/images/placeholders/320x320.png";
 }
 
-@if (Model.ImageUrl != null){
-<img src="@Url.Content(Model.ImageUrl)" alt="Image" style="width: 150px; height: 220px;"/>
-}
 
-<form id='ratingForm' method='post'></form>
+<img src="@imageUrl" alt="Image" style="width: 150px; height: 220px;"/>
+
+<form id='ratingForm' method='post' hidden></form>
 
 <h4>@Model.Name</h4>
 <p>
-    Rating: 
+    Rating:
     <span id="product-rating"></span>
 </p>
 <p>@Model.Description</p>
@@ -27,8 +28,9 @@
     <button id="vote-5" onclick="rateProduct(5)">5</button>
 </p>
 
+
 @section Scripts{
-<script>
+    <script>
     let productId = @productId;
 
     const updateProductUserRating = (value) => {
