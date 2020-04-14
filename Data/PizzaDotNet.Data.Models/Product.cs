@@ -18,9 +18,6 @@
 
         public string Description { get; set; }
 
-        [Column(TypeName = "decimal(18, 4)")]
-        public decimal Price { get; set; }
-
         public int CategoryId { get; set; }
 
         public virtual Category Category { get; set; }
@@ -28,6 +25,8 @@
         public string ImageUrl { get; set; }
 
         public string ImageStorageName { get; set; }
+
+        public virtual ICollection<SizeOfProduct> Sizes { get; set; }
 
         public virtual ICollection<Rating> Ratings { get; set; }
 

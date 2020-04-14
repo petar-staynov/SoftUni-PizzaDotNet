@@ -27,9 +27,12 @@
 
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<Rating> Ratings { get; set; }
+
+        public DbSet<SizeOfProduct> SizeOfProducts { get; set; }
+
         public DbSet<Product> Products { get; set; }
 
-        public DbSet<Rating> Ratings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

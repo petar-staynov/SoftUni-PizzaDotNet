@@ -18,13 +18,12 @@
             this.productsRepository = productsRepository;
         }
 
-        public async Task<Product> CreateAsync(string name, string description, decimal price, int categoryId, string imageUrl, string imageStorageName)
+        public async Task<Product> CreateAsync(string name, string description, int categoryId, string imageUrl, string imageStorageName)
         {
             Product product = new Product
             {
                 Name = name,
                 Description = description,
-                Price = price,
                 CategoryId = categoryId,
                 ImageUrl = imageUrl,
                 ImageStorageName = imageStorageName,
@@ -53,8 +52,9 @@
                 .All()
                 .Where(p => p.CategoryId == categoryId);
 
+            var categoryProducts = query.To<T>().ToList();
 
-            return query.To<T>().ToList();
+            return categoryProducts;
         }
 
         public IEnumerable<T> GetByCategoryName<T>(string categoryName)
@@ -63,7 +63,9 @@
                 .All()
                 .Where(p => p.Category.Name == categoryName);
 
-            return query.To<T>().ToList();
+            var categoryProducts = query.To<T>().ToList();;
+
+            return categoryProducts;
         }
     }
 }

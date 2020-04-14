@@ -1,5 +1,6 @@
 ﻿namespace PizzaDotNet.Web.ViewModels.Products
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -12,11 +13,18 @@
 
     public class ProductCreateInputModel : IMapFrom<Product>
     {
-        [Required] public string Name { get; set; }
+        public ProductCreateInputModel()
+        {
+            this.Sizes = new List<ProductCreateSizeInputModel>();
+        }
+
+        [Required]
+        public string Name { get; set; }
 
         public string Description { get; set; }
 
-        [Required] public decimal Price { get; set; }
+        [Display(Name = "Sizes")]
+        public List<ProductCreateSizeInputModel> Sizes { get; set; }
 
         [Required]
         [Display(Name = "Category")]
@@ -24,12 +32,12 @@
 
         public IEnumerable<CategoryDropdownViewModel> Categories { get; set; }
 
-        [DataType(DataType.ImageUrl)] 
+        [DataType(DataType.ImageUrl)]
         public string ImageUrl { get; set; }
 
         [Display(Name = "Image")]
         [MaxFileSize(1, "mb")]
-        [AllowedExtensions(new string[] {".jpg"})]
+        [AllowedExtensions(new string[] { ".jpg", "jpeg", ".png", ".gif", ".bmp" })]
         public IFormFile ImageFile { get; set; }
 
         public string ImageStorageName { get; set; }

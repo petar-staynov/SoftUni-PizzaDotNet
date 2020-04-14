@@ -1,8 +1,16 @@
-﻿@model PizzaDotNet.Web.ViewModels.Products.ProductCreateInputModel
+﻿@using PizzaDotNet.Web.ViewModels.Products
+@model PizzaDotNet.Web.ViewModels.Products.ProductCreateInputModel
 @{
     this.ViewData["Title"] = "Create product";
     var categoriesListItems =
         Model.Categories.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+    
+    var sizesList = Model.Sizes;
+    int maxNumberOfSizes = PizzaDotNet.Common.GlobalConstants.MaxNumberOfProductSizes;
+    for (int i = 0; i < maxNumberOfSizes; i++)
+    {
+        sizesList.Add(new ProductCreateSizeInputModel());
+    }
 }
 
 <h1>Create product</h1>
@@ -17,11 +25,22 @@
         <input asp-for="Description" class="form-control"/>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
+    
     <div class="form-group">
-        <label asp-for="Price" class="control-label"></label>
-        <input asp-for="Price" class="form-control"/>
-        <span asp-validation-for="Price" class="text-danger"></span>
+        <label class="control-label">Sizes:</label>
+        <div id="productSizeInput">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Size" asp-for="@Model.Sizes[0].Size">
+                <input type="number" class="form-control" placeholder="Price" asp-for="@Model.Sizes[0].Price">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="addSizeField()">+</button>
+                    <button class="btn btn-outline-secondary" type="button" onclick="removeSizeField(0)">-</button>
+                </div>
+            </div>
+            <span asp-validation-for="@Model.Sizes" class="text-danger"></span>
+        </div>
     </div>
+    
     <div class="form-group">
         <label asp-for="CategoryId"></label>
         <select asp-for="CategoryId" asp-items="categoriesListItems" class="form-control"></select>
@@ -29,10 +48,70 @@
     </div>
     <div class="form-group">
         <label asp-for="ImageFile" class="control-label"></label>
-        <input asp-for="ImageFile"/>
+        <input asp-for="ImageFile" onchange="readImage(this)"/>
         <span asp-validation-for="ImageFile" class="text-danger"></span>
+        <br/>
+        <img id="imageContainer" src="~/images/placeholders/320x320.png" alt="product image" />
     </div>
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-primary"/>
     </div>
 </form>
+
+@section Scripts{
+    <script>        
+        const sizesDiv = $('#productSizeInput');
+        
+        let maxNumberOfSizes = @maxNumberOfSizes;
+        
+        let sizeNumber = 1;
+        const addSizeField = () => {
+            if(sizeNumber >= maxNumberOfSizes){
+                alert(`Cant add more than 5 ${maxNumberOfSizes}`);
+                return
+            }
+            
+            const sizeElementHtml = 
+            `<div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Size" id="Sizes_${sizeNumber}__Size" name="Sizes[${sizeNumber}].Size" value="" asp-for="Sizes[1].Size">
+                <input type="number" class="form-control" placeholder="Price" data-val="true" data-val-number="The field Price must be a number." data-val-required="The Price field is required." id="Sizes_${sizeNumber}__Price" name="Sizes[${sizeNumber}].Price" value="0" asp-for="Sizes[1].Price>
+                 <div class="input-group-append">
+                     <button class="btn btn-outline-secondary" type="button" onclick="addSizeField()">+</button>
+                     <button class="btn btn-outline-secondary" type="button" onclick="removeSizeField(this)">-</button>
+                 </div>
+            </div>`;
+            
+            sizeNumber++;
+            sizesDiv.append(sizeElementHtml);
+        };
+        
+        const removeSizeField = (element) => {
+            console.log(element);
+            
+            if ( element === 0 ){
+                return
+            };
+            
+            const parentDiv = element.parentElement.parentElement;
+            console.log(parentDiv);
+            
+            sizeNumber--;
+            parentDiv.remove();
+        };
+        
+        const readImage = (input) => {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = (e) => {
+                    $('#imageContainer')
+                        .attr('src', e.target.result)
+                        .width("auto")
+                        .height(320);
+                };
+                
+                reader.readAsDataURL(input.files[0]);
+             }
+        };
+    </script>
+}

@@ -76,8 +76,9 @@ namespace PizzaDotNet.Web
             services.AddTransient<IEmailSender>(x =>
                 new SendGridEmailSender(this.configuration.GetValue<string>("SendGridKey")));
             services.AddTransient<ICategoriesService, CategoriesService>();
-            services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<IRatingsService, RatingsService>();
+            services.AddTransient<ISizesOfProductService, SizesOfProductService>();
+            services.AddTransient<IProductsService, ProductsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

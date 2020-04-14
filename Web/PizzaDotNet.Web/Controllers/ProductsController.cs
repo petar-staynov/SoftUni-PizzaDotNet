@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
+    using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services;
     using PizzaDotNet.Services.Data;
     using PizzaDotNet.Web.ViewModels.Categories;
@@ -15,17 +16,21 @@
         private readonly IProductsService productsService;
         private readonly ICategoriesService categoriesService;
         private readonly IRatingsService ratingsService;
+        private readonly ISizesOfProductService sizesOfProductService;
+
         private readonly IGoogleCloudStorage googleCloudStorage;
 
         public ProductsController(
             IProductsService productsService,
             ICategoriesService categoriesService,
             IRatingsService ratingsService,
+            ISizesOfProductService sizesOfProductService,
             IGoogleCloudStorage googleCloudStorage)
         {
             this.productsService = productsService;
             this.categoriesService = categoriesService;
             this.ratingsService = ratingsService;
+            this.sizesOfProductService = sizesOfProductService;
             this.googleCloudStorage = googleCloudStorage;
         }
 
@@ -92,13 +97,28 @@
                 await this.UploadProductImage(inputModel);
             }
 
+            // string name, string description, int categoryId, string imageUrl, string imageStorageName
             var product = await this.productsService.CreateAsync(
-                inputModel.Name,
-                inputModel.Description,
-                inputModel.Price,
-                inputModel.CategoryId,
-                inputModel.ImageUrl,
-                inputModel.ImageStorageName);
+                    inputModel.Name,
+                    inputModel.Description,
+                    inputModel.CategoryId,
+                    inputModel.ImageUrl,
+                    inputModel.ImageStorageName);
+
+            foreach (var productSizeInputModel in inputModel.Sizes)
+            {
+                int productId = product.Id;
+                string size = productSizeInputModel.Size;
+                decimal price = productSizeInputModel.Price;
+
+                // Skip empty sizes
+                if (size == null || price == null)
+                {
+                    continue;
+                }
+
+                await this.sizesOfProductService.CreateAsync(productId, size, price);
+            }
 
             return this.RedirectToAction("ViewById", new { id = product.Id });
         }
