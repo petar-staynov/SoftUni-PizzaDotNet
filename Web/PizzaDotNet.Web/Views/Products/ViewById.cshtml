@@ -1,47 +1,93 @@
-﻿@model PizzaDotNet.Web.ViewModels.Products.ProductViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@model PizzaDotNet.Web.ViewModels.Products.ProductViewModel
 
 @{
     this.ViewData["Title"] = Model.Name;
+    var productId = Model.Id;
 }
 
 @if (Model.ImageUrl != null){
 <img src="@Url.Content(Model.ImageUrl)" alt="Image" style="width: 150px; height: 220px;"/>
 }
-<p>@Model.Name</p>
+
+<form id='ratingForm' method='post'></form>
+
+<h4>@Model.Name</h4>
+<p>
+    Rating: 
+    <span id="product-rating"></span>
+</p>
 <p>@Model.Description</p>
 <p>@Model.Price</p>
-<p>@Model.Name</p>
 <p>
-    <form id='ratingForm' method='post'></form>
-    <p><span id="product-rating"></span>/5</p>
-    <button id="vote-1" onclick="rateProduct(1,  @Model.Id)">1</button>
-    <button id="vote-2" onclick="rateProduct(2, @Model.Id)">2</button>
-    <button id="vote-3" onclick="rateProduct(3, @Model.Id)">3</button>
-    <button id="vote-4" onclick="rateProduct(4, @Model.Id)">4</button>
-    <button id="vote-5" onclick="rateProduct(5, @Model.Id)">5</button>
+    <button id="vote-1" onclick="rateProduct(1)">1</button>
+    <button id="vote-2" onclick="rateProduct(2)">2</button>
+    <button id="vote-3" onclick="rateProduct(3)">3</button>
+    <button id="vote-4" onclick="rateProduct(4)">4</button>
+    <button id="vote-5" onclick="rateProduct(5)">5</button>
 </p>
 
 @section Scripts{
 <script>
-    () => {
-        const productRating = $.ajax({
-        
-        })
-        
-        $("#product-rating").val(productRating);
-    }();
+    let productId = @productId;
+
+    const updateProductUserRating = (value) => {
+        // TODO Parse "value" from API
+        const element = $(`#vote-${value}`);
+        element.addClass("btn btn-primary")
+    };
+    updateProductUserRating(2);
     
-    const rateProduct = (value, productId) => {
-        console.log(`${value} ${productId}`);
+    const getProductRating = () => {
+        const apiUrl = `${window.location.origin}/api/ratings/${productId}`;
+        
+        $.ajax({
+            url: apiUrl,
+            type: 'GET',
+            success: (res) => {
+                const productRating = res["rating"];
+                if(productRating != null){
+                    $('#product-rating').text(`${productRating}/5`)
+                }else{
+                    $('#product-rating').text("No votes yet")
+                }
+            },
+            error: (e) => {
+                console.log('error:');
+                console.log(e)
+            },
+        });
+    };
+    getProductRating();
+    
+    const getProductUserRating = () => {
+        const apiUrl = `${window.location.origin}/api/Rating/UserRating?id=${productId}`;
+
+        $.ajax({
+            url: apiUrl,
+            type: 'GET',
+            success: (res)=>{
+                console.log(res);
+            },
+            error: (e) => {
+                console.log('error:');
+                console.log(e);
+            },
+        });
+    };
+    getProductUserRating();
+    
+    const rateProduct = (value) => {
         const token = $("#ratingForm input[name=__RequestVerificationToken]").val();
         
+        const apiUrl = `${window.location.origin}/api/ratings`;
         const data = {
             productId: productId,    
             value: value,
             };
         
-        const response = $.ajax({
-            url: `${window.location.origin}/api/ratings`,
+        $.ajax({
+            url: apiUrl,
             type: 'POST',
             data: JSON.stringify(data),
             contentType: 'application/json',
@@ -49,13 +95,14 @@
             headers: {
                 'X-CSRF-TOKEN': token,
             },
-            success: ()=>{
-                // TODO update ratings on page
-                console.log("success");
+            success: (res)=>{
+                getProductRating();
             },
             error: (e) => {
+                console.log('error:');
                 console.log(e);
-            }
+                getProductRating();
+            },
         });
     };
 </script>

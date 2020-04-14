@@ -48,11 +48,13 @@
             return response;
         }
 
-        // GET: api/Rating/UserRating?id=1&userId=xxxx-xxxx-xxxx-xxxx
-        [HttpGet("UserRating")]
-        public async Task<UserRatingResponseModel> GetUserRating(int id, string userId)
+        // GET: api/Rating/UserRating/1
+        [HttpGet("UserRating/{productId}")]
+        public async Task<UserRatingResponseModel> GetUserRating(int productId)
         {
-            var productUserRating = this.ratingsService.GetProductUserRating(id, userId);
+            var userId = this.userManager.GetUserId(this.User);
+
+            var productUserRating = this.ratingsService.GetProductUserRating(productId, userId);
 
             if (productUserRating == null)
             {
@@ -61,8 +63,6 @@
 
             var response = new UserRatingResponseModel
             {
-                Id = id,
-                UserId = userId,
                 Rating = productUserRating,
             };
 
@@ -71,7 +71,7 @@
 
         // [Authorize] // TODO Enable this
         [HttpPost]
-        public async Task<IActionResult> Post(RatingInputModel inputModel)
+        public async Task<IActionResult> RateProduct(RatingInputModel inputModel)
         {
             var userId = this.userManager.GetUserId(this.User);
             await this.ratingsService.RateProductAsync(inputModel.ProductId, userId, inputModel.Value);
