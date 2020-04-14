@@ -84,7 +84,6 @@
         [HttpPost]
         public async Task<ActionResult> Create(ProductCreateInputModel inputModel)
         {
-            var img = inputModel.ImageFile;
             if (!this.ModelState.IsValid)
             {
                 // Pass back the categories list because POST Requests lose Collections
