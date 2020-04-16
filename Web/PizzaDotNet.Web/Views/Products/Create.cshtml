@@ -33,14 +33,16 @@
     <div class="form-group">
         <label class="control-label">Sizes:</label>
         <div id="productSizeInput">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Size" asp-for="@Model.Sizes[0].Size">
-                <input type="number" class="form-control" placeholder="Price" asp-for="@Model.Sizes[0].Price">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" onclick="addSizeField()">+</button>
-                    <button class="btn btn-outline-secondary" type="button" onclick="removeSizeField(0)">-</button>
+            @for (int i = 0; i < maxNumberOfSizes; i++)
+            {
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Size" asp-for="@Model.Sizes[i].Size">
+                    <input type="number" class="form-control" placeholder="Price" asp-for="@Model.Sizes[i].Price">
+                    <span asp-validation-for="@Model.Sizes[i]"></span>
                 </div>
-            </div>
+            }
+            <button class="btn btn-outline-secondary" type="button" onclick="addSizeField()">Add size</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="removeSizeField()">Remove size</button>
         </div>
     </div>
 
@@ -62,44 +64,47 @@
 </form>
 
 @section Scripts{
-    <script>        
-        const sizesDiv = $('#productSizeInput');
+    <script>     
+        let maxNumberOfSizes = @maxNumberOfSizes;   
+        const sizeDivs = $('#productSizeInput').children('.input-group').slice(1);
+
+        const hideSizesFields = () => {
+            sizeDivs.each(index => {
+                const element = sizeDivs[index];
+                $(element).attr("hidden", 'true');
+            });
+        };
+        hideSizesFields();
         
-        let maxNumberOfSizes = @maxNumberOfSizes;
         
-        let sizeNumber = 1;
+        let sizeNumber = 0;
         const addSizeField = () => {
-            if(sizeNumber >= maxNumberOfSizes){
-                alert(`Cant add more than 5 ${maxNumberOfSizes}`);
+            if(sizeNumber >= maxNumberOfSizes - 1){
+                alert(`Cant add more than ${maxNumberOfSizes} sizes`);
                 return
             }
             
-            const sizeElementHtml = 
-            `<div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Size" id="Sizes_${sizeNumber}__Size" name="Sizes[${sizeNumber}].Size" value="" asp-for="Sizes[1].Size">
-                <input type="number" class="form-control" placeholder="Price" data-val="true" data-val-number="The field Price must be a number." data-val-required="The Price field is required." id="Sizes_${sizeNumber}__Price" name="Sizes[${sizeNumber}].Price" value="0" asp-for="Sizes[1].Price>
-                 <div class="input-group-append">
-                     <button class="btn btn-outline-secondary" type="button" onclick="addSizeField()">+</button>
-                     <button class="btn btn-outline-secondary" type="button" onclick="removeSizeField(this)">-</button>
-                 </div>
-            </div>`;
+            const sizeElement = sizeDivs[sizeNumber];
+            sizeElement.removeAttribute('hidden');
             
             sizeNumber++;
-            sizesDiv.append(sizeElementHtml);
+            console.log(sizeNumber);
         };
         
-        const removeSizeField = (element) => {
-            console.log(element);
+        const removeSizeField = () => {
+            if (sizeNumber <= 0 ){
+                return;
+            }
             
-            if ( element === 0 ){
-                return
-            };
+            const sizeElement = sizeDivs[sizeNumber - 1];
+            sizeElement.setAttribute('hidden', 'true');
             
-            const parentDiv = element.parentElement.parentElement;
-            console.log(parentDiv);
+            const inputs = $(sizeElement).children();
+            inputs[0].value = '';
+            inputs[1].value = -1;
             
             sizeNumber--;
-            parentDiv.remove();
+            console.log(sizeNumber);
         };
         
         const readImage = (input) => {
