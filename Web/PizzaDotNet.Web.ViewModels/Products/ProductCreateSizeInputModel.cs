@@ -9,11 +9,18 @@
 
     public class ProductCreateSizeInputModel : IMapFrom<SizeOfProduct>
     {
-        [DefaultValue("Default")]
+        public ProductCreateSizeInputModel()
+        {
+            this.Size = "Default";
+        }
+
+        [Required]
+        [MinLength(1)]
         public string Size { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18, 4)")]
+        [Range(0, 999.99)]
         public decimal Price { get; set; }
     }
 }
