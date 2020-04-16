@@ -54,3 +54,20 @@ body {
     height: 60px;
     line-height: 60px; /* Vertically center the text there */
 }
+
+/* Custom css
+-------------------------------------------------- */
+.validation-summary-errors{
+    display: block;
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.validation-summary-errors ul{
+    margin: 0;
+}
