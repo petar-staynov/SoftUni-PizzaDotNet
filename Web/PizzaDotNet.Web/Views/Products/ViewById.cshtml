@@ -9,7 +9,7 @@
 }
 
 
-<img src="@imageUrl" alt="Image" style="width: 150px; height: 220px;"/>
+<img src="@Url.Content(@imageUrl)" alt="Image" style="width: auto; height: 320px;"/>
 
 <form id='ratingForm' method='post' hidden></form>
 
@@ -47,16 +47,17 @@
             url: apiUrl,
             type: 'GET',
             success: (res) => {
-                const productRating = res["rating"];
-                if(productRating != null){
-                    $('#product-rating').text(`${productRating}/5`)
+                console.log(res)
+                const productRating = res.rating;
+                if(productRating == 0){
+                    $('#product-rating').text("No ratings yet")
                 }else{
-                    $('#product-rating').text("No votes yet")
+                    $('#product-rating').text(`${productRating}/5`)
                 }
             },
             error: (e) => {
                 console.log('error:');
-                console.log(e)
+                console.log(e);
             },
         });
     };
