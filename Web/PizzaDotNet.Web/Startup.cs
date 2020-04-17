@@ -1,4 +1,5 @@
-﻿using PizzaDotNet.Services;
+﻿using AutoMapper;
+using PizzaDotNet.Services;
 
 namespace PizzaDotNet.Web
 {
@@ -62,9 +63,14 @@ namespace PizzaDotNet.Web
                 options.HeaderName = this.configuration.GetValue<string>("AntiforgeryHeader");
             });
 
+            // Auto Mapper Configurations
+            services.AddAutoMapper(c => c.AddProfile<AutoMapping>(), typeof(Startup));
+
             services.AddRazorPages();
 
+            // Google Cloud Storage Configurations
             services.AddSingleton<IGoogleCloudStorage, GoogleCloudStorage>();
+
             services.AddSingleton(this.configuration);
 
             // Data repositories
