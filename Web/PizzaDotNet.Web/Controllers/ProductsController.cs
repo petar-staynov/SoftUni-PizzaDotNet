@@ -1,4 +1,8 @@
-﻿namespace PizzaDotNet.Web.Controllers
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
+
+namespace PizzaDotNet.Web.Controllers
 {
     using System;
     using System.IO;
@@ -19,19 +23,22 @@
         private readonly ISizesOfProductService sizesOfProductService;
 
         private readonly IGoogleCloudStorage googleCloudStorage;
+        private readonly IMapper mapper;
 
         public ProductsController(
             IProductsService productsService,
             ICategoriesService categoriesService,
             IRatingsService ratingsService,
             ISizesOfProductService sizesOfProductService,
-            IGoogleCloudStorage googleCloudStorage)
+            IGoogleCloudStorage googleCloudStorage,
+            IMapper mapper)
         {
             this.productsService = productsService;
             this.categoriesService = categoriesService;
             this.ratingsService = ratingsService;
             this.sizesOfProductService = sizesOfProductService;
             this.googleCloudStorage = googleCloudStorage;
+            this.mapper = mapper;
         }
 
         private static string FormFileName(string title, string fileName)
@@ -96,28 +103,34 @@
                 await this.UploadProductImage(inputModel);
             }
 
-            // string name, string description, int categoryId, string imageUrl, string imageStorageName
+            var filteredSizesInputs = inputModel.Sizes
+                .Where(s => !String.IsNullOrEmpty(s.Size) && s.Price >= 0M).ToList();
+
+            List<SizeOfProduct> sizes = this.mapper.Map<List<SizeOfProduct>>(filteredSizesInputs);
+
             var product = await this.productsService.CreateAsync(
                     inputModel.Name,
                     inputModel.Description,
                     inputModel.CategoryId,
+                    sizes,
                     inputModel.ImageUrl,
                     inputModel.ImageStorageName);
 
-            foreach (var productSizeInputModel in inputModel.Sizes)
-            {
-                int productId = product.Id;
-                string size = productSizeInputModel.Size;
-                decimal price = productSizeInputModel.Price;
-
-                // Skip empty sizes
-                if (size == null || price == null)
-                {
-                    continue;
-                }
-
-                await this.sizesOfProductService.CreateAsync(productId, size, price);
-            }
+            // foreach (var productSizeInputModel in inputModel.Sizes)
+            // {
+            //     // TODO map size
+            //     int productId = product.Id;
+            //     string size = productSizeInputModel.Size;
+            //     decimal price = productSizeInputModel.Price;
+            //
+            //     // Skip empty sizes
+            //     if (size == null || price == null)
+            //     {
+            //         continue;
+            //     }
+            //
+            //     await this.sizesOfProductService.CreateAsync(productId, size, price);
+            // }
 
             return this.RedirectToAction("ViewById", new { id = product.Id });
         }

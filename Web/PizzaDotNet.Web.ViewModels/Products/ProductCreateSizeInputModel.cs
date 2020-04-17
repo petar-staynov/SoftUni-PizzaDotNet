@@ -7,20 +7,17 @@
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
 
-    public class ProductCreateSizeInputModel : IMapFrom<SizeOfProduct>
+    public class ProductCreateSizeInputModel
     {
         public ProductCreateSizeInputModel()
         {
-            this.Size = "Default";
+            this.Price = -1;
         }
 
-        [Required]
-        [MinLength(1)]
         public string Size { get; set; }
 
-        [Required]
         [Column(TypeName = "decimal(18, 4)")]
-        [Range(0, 999.99)]
+        [Range(-1, 999.99)]
         public decimal Price { get; set; }
     }
 }

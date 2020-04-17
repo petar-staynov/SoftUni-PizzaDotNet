@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\PizzaDotNet.Services.Mapping\PizzaDotNet.Services.Mapping.csproj" />
     <ProjectReference Include="..\PizzaDotNet.Data.Common\PizzaDotNet.Data.Common.csproj" />
   </ItemGroup>
   

@@ -13,6 +13,8 @@
 
     public class ProductCreateInputModel : IMapFrom<Product>
     {
+        private List<ProductCreateSizeInputModel> _sizes;
+
         public ProductCreateInputModel()
         {
             this.Sizes = new List<ProductCreateSizeInputModel>();
@@ -24,6 +26,7 @@
         public string Description { get; set; }
 
         [Display(Name = "Sizes")]
+        [ProductSizesAttribute]
         public List<ProductCreateSizeInputModel> Sizes { get; set; }
 
         [Required]
