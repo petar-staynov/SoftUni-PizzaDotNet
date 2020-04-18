@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using PizzaDotNet.Web.ViewModels.SizeOfProduct;
 
 namespace PizzaDotNet.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
 
+    using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services;
@@ -70,6 +71,7 @@ namespace PizzaDotNet.Web.Controllers
             }
 
             productViewModel.Rating = this.ratingsService.GetProductRating(id);
+            productViewModel.Sizes = this.sizesOfProductService.GetByProductId<SizeOfProductViewModel>(id);
 
             return this.View(productViewModel);
         }
@@ -115,22 +117,6 @@ namespace PizzaDotNet.Web.Controllers
                     sizes,
                     inputModel.ImageUrl,
                     inputModel.ImageStorageName);
-
-            // foreach (var productSizeInputModel in inputModel.Sizes)
-            // {
-            //     // TODO map size
-            //     int productId = product.Id;
-            //     string size = productSizeInputModel.Size;
-            //     decimal price = productSizeInputModel.Price;
-            //
-            //     // Skip empty sizes
-            //     if (size == null || price == null)
-            //     {
-            //         continue;
-            //     }
-            //
-            //     await this.sizesOfProductService.CreateAsync(productId, size, price);
-            // }
 
             return this.RedirectToAction("ViewById", new { id = product.Id });
         }

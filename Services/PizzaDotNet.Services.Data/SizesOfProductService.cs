@@ -33,7 +33,7 @@
             return sizeOfProduct;
         }
 
-        public IEnumerable<T> GetByProductId<T>(int productId)
+        public ICollection<T> GetByProductId<T>(int productId)
         {
             var query = this.sizeOfProductRepository
                 .All()

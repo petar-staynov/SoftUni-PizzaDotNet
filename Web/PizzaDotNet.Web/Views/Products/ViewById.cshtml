@@ -8,37 +8,42 @@
     var imageUrl = Model.ImageUrl ?? "~/images/placeholders/320x320.png";
 }
 
+<div class="text-center">
+    <img src="@Url.Content(@imageUrl)" alt="Image" style="width: auto; height: 320px;"/>
 
-<img src="@Url.Content(@imageUrl)" alt="Image" style="width: auto; height: 320px;"/>
+    <form id='ratingForm' method='post' hidden></form>
 
-<form id='ratingForm' method='post' hidden></form>
-
-<h4>@Model.Name</h4>
-<p>
-    Rating:
-    <span id="product-rating"></span>
-</p>
-<p>@Model.Description</p>
-<p>@Model.Price</p>
-<p>
-    <button id="vote-1" onclick="rateProduct(1)">1</button>
-    <button id="vote-2" onclick="rateProduct(2)">2</button>
-    <button id="vote-3" onclick="rateProduct(3)">3</button>
-    <button id="vote-4" onclick="rateProduct(4)">4</button>
-    <button id="vote-5" onclick="rateProduct(5)">5</button>
-</p>
-
+    <h4>@Model.Name</h4>
+    <p>@Model.Description</p>
+    <div class="form-check form-check-inline">
+        @foreach (var size in Model.Sizes)
+        {
+            <input class="form-check-input" type="radio" id="product-size-@size.Size" value="@size.Size">
+            <label class="form-check-label" asp-for="@size.Size">@size.Size</label>
+        }
+    </div>
+    <p>
+        Rating:
+        <span id="product-rating"></span>
+    </p>
+    <p>
+        <span>Rate this product:</span>
+        <button id="vote-1" onclick="rateProduct(1)">1</button>
+        <button id="vote-2" onclick="rateProduct(2)">2</button>
+        <button id="vote-3" onclick="rateProduct(3)">3</button>
+        <button id="vote-4" onclick="rateProduct(4)">4</button>
+        <button id="vote-5" onclick="rateProduct(5)">5</button>
+    </p>
+</div>
 
 @section Scripts{
     <script>
     let productId = @productId;
 
     const updateProductUserRating = (value) => {
-        // TODO Parse "value" from API
         const element = $(`#vote-${value}`);
         element.addClass("btn btn-primary")
     };
-    updateProductUserRating(2);
     
     const getProductRating = () => {
         const apiUrl = `${window.location.origin}/api/ratings/${productId}`;
@@ -47,7 +52,6 @@
             url: apiUrl,
             type: 'GET',
             success: (res) => {
-                console.log(res)
                 const productRating = res.rating;
                 if(productRating == 0){
                     $('#product-rating').text("No ratings yet")
@@ -70,7 +74,8 @@
             url: apiUrl,
             type: 'GET',
             success: (res)=>{
-                console.log(res);
+                const productRating = res.rating;
+                updateProductUserRating(productRating);
             },
             error: (e) => {
                 console.log('error:');
@@ -105,6 +110,7 @@
                 console.log('error:');
                 console.log(e);
                 getProductRating();
+                getProductUserRating();
             },
         });
     };
