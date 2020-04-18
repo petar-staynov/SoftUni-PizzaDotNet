@@ -35,11 +35,6 @@
         {
             var productRating = this.ratingsService.GetProductRating(id);
 
-            if (productRating == null)
-            {
-                return null;
-            }
-
             var response = new RatingResponseModel
             {
                 Rating = productRating,
@@ -55,11 +50,6 @@
             var userId = this.userManager.GetUserId(this.User);
 
             var productUserRating = this.ratingsService.GetProductUserRating(productId, userId);
-
-            if (productUserRating == null)
-            {
-                return null;
-            }
 
             var response = new UserRatingResponseModel
             {

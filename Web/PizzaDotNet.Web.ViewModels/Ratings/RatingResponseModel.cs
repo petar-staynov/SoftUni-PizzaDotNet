@@ -2,6 +2,6 @@
 {
     public class RatingResponseModel
     {
-        public dynamic Rating { get; set; }
+        public double Rating { get; set; }
     }
 }

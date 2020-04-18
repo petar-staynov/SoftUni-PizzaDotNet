@@ -9,9 +9,9 @@
     {
         Task RateProductAsync(int productId, string userId, int value);
 
-        double? GetProductRating(int productId);
+        double GetProductRating(int productId);
 
-        double? GetProductUserRating(int productId, string userId);
+        double GetProductUserRating(int productId, string userId);
 
         ICollection<ApplicationUser> GetProductVotedUsers(int productId);
     }

@@ -42,7 +42,7 @@
             await this.ratingsRepository.SaveChangesAsync();
         }
 
-        public double? GetProductRating(int productId)
+        public double GetProductRating(int productId)
         {
             var query = this.ratingsRepository
                 .All()
@@ -50,7 +50,7 @@
 
             if (!query.Any())
             {
-                return null;
+                return 0;
             }
 
             double averageRating = query.Average(r => r.Value);
@@ -58,7 +58,7 @@
             return averageRating;
         }
 
-        public double? GetProductUserRating(int productId, string userId)
+        public double GetProductUserRating(int productId, string userId)
         {
             var userRating = this.ratingsRepository
                 .All()
@@ -66,7 +66,7 @@
 
             if (userRating == null)
             {
-                return null;
+                return 0;
             }
 
             return userRating.Value;
