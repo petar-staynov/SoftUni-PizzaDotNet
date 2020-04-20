@@ -23,7 +23,7 @@
                 {
                     Name = "Kaprichoza",
                     Description = "A classic!",
-                    ImageUrl = "https://storage.googleapis.com/pizzadotnet_bucket/1266medium.png",
+                    ImageUrl = "https://storage.googleapis.com/pizzadotnet_bucket/1290medium.png",
                 },
                 new Product
                 {
@@ -251,12 +251,6 @@
                     Name = "Cream",
                     Description = "none",
                     ImageUrl = "https://storage.googleapis.com/pizzadotnet_bucket/1205ipar.png",
-                },
-                new Product
-                {
-                    Name = "Tomato",
-                    Description = "none",
-                    ImageUrl = "https://storage.googleapis.com/pizzadotnet_bucket/1206ipar.png",
                 },
                 new Product
                 {
