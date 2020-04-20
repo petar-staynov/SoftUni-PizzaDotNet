@@ -52,6 +52,14 @@ namespace PizzaDotNet.Web
                 .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            // Third-party authentication configuration
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = this.configuration.GetValue<string>("FacebookAppId");
+                facebookOptions.AppSecret = this.configuration.GetValue<string>("FacebookAppSecret");
+                facebookOptions.AccessDeniedPath = "/Home/AccessDeniedFacebook";
+            });
+
             services.Configure<CookiePolicyOptions>(
                 options =>
                 {
