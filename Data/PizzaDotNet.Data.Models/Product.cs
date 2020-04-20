@@ -12,6 +12,7 @@
         public Product()
         {
             this.Ratings = new HashSet<Rating>();
+            this.ProductIngredients = new HashSet<ProductIngredient>();
         }
 
         public string Name { get; set; }
@@ -30,6 +31,6 @@
 
         public virtual ICollection<Rating> Ratings { get; set; }
 
-        // public virtual ICollection<Ingredient> Ingredients { get; set; }
+        public virtual ICollection<ProductIngredient> ProductIngredients { get; set; }
     }
 }

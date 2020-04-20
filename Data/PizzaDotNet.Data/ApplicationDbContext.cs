@@ -22,16 +22,20 @@
         {
         }
 
-        // INSERT DbSets HERE
+        // DBSets - Tables
         public DbSet<Setting> Settings { get; set; }
 
         public DbSet<Category> Categories { get; set; }
 
-        public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         public DbSet<SizeOfProduct> SizeOfProducts { get; set; }
 
-        public DbSet<Product> Products { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+
+        public DbSet<Ingredient> Ingredients { get; set; }
+
+        public DbSet<ProductIngredient> ProductsIngredients { get; set; }
 
 
         public override int SaveChanges() => this.SaveChanges(true);
@@ -80,6 +84,20 @@
             {
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
+
+            // Relationships configuration
+            builder.Entity<ProductIngredient>()
+                .HasKey(k => new { k.ProductId, k.IngredientId });
+
+            builder.Entity<ProductIngredient>()
+                .HasOne(pi => pi.Product)
+                .WithMany(p => p.ProductIngredients)
+                .HasForeignKey(pi => pi.ProductId);
+
+            builder.Entity<ProductIngredient>()
+                .HasOne(pi => pi.Ingredient)
+                .WithMany(i => i.ProductIngredients)
+                .HasForeignKey(pi => pi.IngredientId);
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)
