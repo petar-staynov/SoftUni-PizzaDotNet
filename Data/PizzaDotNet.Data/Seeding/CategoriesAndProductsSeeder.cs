@@ -4,16 +4,21 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore.Internal;
     using PizzaDotNet.Data.EntityData;
     using PizzaDotNet.Data.Models;
 
-    public class CategoriesAndProductsSeeder : ISeeder
+    internal class CategoriesAndProductsSeeder : ISeeder
     {
-        public Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
+        public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
+            if (dbContext.Categories.Any())
+            {
+                return;
+            }
+
             var categoriesAndProductsData = CategoriesData.GetCategories();
-            dbContext.Categories.AddRangeAsync(categoriesAndProductsData);
-            return Task.CompletedTask;
+            await dbContext.Categories.AddRangeAsync(categoriesAndProductsData);
         }
     }
 }

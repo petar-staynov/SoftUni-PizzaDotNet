@@ -3,15 +3,20 @@
     using System;
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore.Internal;
     using PizzaDotNet.Data.EntityData;
 
-    public class IngredientsSeeder : ISeeder
+    internal class IngredientsSeeder : ISeeder
     {
-        public Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
+        public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
+            if (dbContext.Ingredients.Any())
+            {
+                return;
+            }
+
             var ingredients = IngredientsData.GetIngredients();
-            dbContext.Ingredients.AddRangeAsync(ingredients);
-            return Task.CompletedTask;
+            await dbContext.Ingredients.AddRangeAsync(ingredients);
         }
     }
 }
