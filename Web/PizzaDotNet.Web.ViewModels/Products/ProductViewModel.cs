@@ -15,6 +15,7 @@
         public string Description { get; set; }
 
         public string Size { get; set; }
+
         public ICollection<SizeOfProductViewModel> Sizes { get; set; }
 
         public string ImageUrl { get; set; }

@@ -15,25 +15,43 @@
 
     <h4>@Model.Name</h4>
     <p>@Model.Description</p>
-    <div class="form-check form-check-inline">
+    <div id="sizeButtons">
         @foreach (var size in Model.Sizes)
         {
-            <input class="form-check-input" type="radio" id="product-size-@size.Size" value="@size.Size">
-            <label class="form-check-label" asp-for="@size.Size">@size.Size</label>
+            <div class="form-check form-check-inline">
+                <input
+                    id="product-size-@size.Size"
+                    class="form-check-input"
+                    type="radio"
+                    name="sizeRadioOption"
+                    asp-for="@size"
+                    value="@size.Size">
+                <label class="form-check-label" asp-for="@size.Size">@size.Size</label>
+            </div>
         }
     </div>
     <p>
         Rating:
         <span id="product-rating"></span>
     </p>
-    <p>
-        <span>Rate this product:</span>
-        <button id="vote-1" onclick="rateProduct(1)">1</button>
-        <button id="vote-2" onclick="rateProduct(2)">2</button>
-        <button id="vote-3" onclick="rateProduct(3)">3</button>
-        <button id="vote-4" onclick="rateProduct(4)">4</button>
-        <button id="vote-5" onclick="rateProduct(5)">5</button>
-    </p>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <p>
+            <span>Rate this product:</span>
+            <button id="vote-1" onclick="rateProduct(1)">1</button>
+            <button id="vote-2" onclick="rateProduct(2)">2</button>
+            <button id="vote-3" onclick="rateProduct(3)">3</button>
+            <button id="vote-4" onclick="rateProduct(4)">4</button>
+            <button id="vote-5" onclick="rateProduct(5)">5</button>
+        </p>
+    }
+    else
+    {
+        <p>
+            <a class="font-weight-bold" asp-area="Identity" asp-page="/Account/Login">Login</a> to rate this product
+        </p>
+    }
+
 </div>
 
 @section Scripts{
