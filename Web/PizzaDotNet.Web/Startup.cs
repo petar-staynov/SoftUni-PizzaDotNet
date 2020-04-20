@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using PizzaDotNet.Services;
 
 namespace PizzaDotNet.Web
@@ -42,6 +43,10 @@ namespace PizzaDotNet.Web
                     options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection"));
                 });
 
+            // Cache configuration
+            services.AddDistributedMemoryCache();
+
+            // Identity configuration
             services
                 .AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>()
@@ -53,6 +58,14 @@ namespace PizzaDotNet.Web
                     options.CheckConsentNeeded = context => true;
                     options.MinimumSameSitePolicy = SameSiteMode.None;
                 });
+
+            // Session configuration
+            services.AddSession(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+                options.IdleTimeout = new TimeSpan(0, 4, 0, 0);
+            });
 
             services.AddControllersWithViews(options =>
             {
@@ -119,6 +132,7 @@ namespace PizzaDotNet.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession();
             app.UseCookiePolicy();
 
             app.UseRouting();
