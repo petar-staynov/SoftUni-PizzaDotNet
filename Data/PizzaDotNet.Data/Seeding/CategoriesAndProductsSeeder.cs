@@ -7,7 +7,7 @@
     using PizzaDotNet.Data.EntityData;
     using PizzaDotNet.Data.Models;
 
-    public class MenuSeeder : ISeeder
+    public class CategoriesAndProductsSeeder : ISeeder
     {
         public Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
