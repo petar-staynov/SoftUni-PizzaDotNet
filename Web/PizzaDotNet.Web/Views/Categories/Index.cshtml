@@ -1,12 +1,20 @@
 ﻿@model PizzaDotNet.Web.ViewModels.Categories.CategoriesViewModel
 
 <div class="text-center">
-    @foreach (var category in Model.Categories)
-    {
-        <a class="" 
-           asp-area="" 
-           asp-controller="Categories" 
-           asp-action="@category.Name">@category.Name</a>
-        <br/>
-    }
+    <div class="row">
+        @foreach (var category in Model.Categories)
+        {
+            <div class="col col-auto">
+                <a asp-controller="Categories" asp-action="@category.Name" class="text-decoration-none text-dark">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="@category.ImageUrl" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@category.Name</h5>
+                            <p class="card-text">@category.Description</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
 </div>
