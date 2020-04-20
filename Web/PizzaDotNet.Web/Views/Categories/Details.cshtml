@@ -7,8 +7,20 @@
     <h1>@this.ViewData["Title"]</h1>
     <p>@Model.Description</p>
     <hr/>
-    @foreach (var product in Model.Products)
-    {
-        <a class="" asp-area="" asp-controller="Products" asp-action="@product.Id">@product.Name</a> <br/>
-    }
+    <div class="row">
+        @foreach (var product in Model.Products)
+        {
+            <div class="col col-auto">
+                <a asp-controller="Products" asp-action="@product.Id" class="text-decoration-none text-dark">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="@product.ImageUrl" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">@product.Description</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
 </div>
