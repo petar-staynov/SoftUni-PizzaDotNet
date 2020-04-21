@@ -64,7 +64,7 @@ namespace PizzaDotNet.Web.Controllers
         [Route("[controller]/{id}")]
         public IActionResult ViewById(int id)
         {
-            var productViewModel = this.productsService.GetById<ProductViewModel>(id);
+            var productViewModel = this.productsService.GetById<ProductViewInputModel>(id);
             if (productViewModel == null)
             {
                 return this.NotFound();
