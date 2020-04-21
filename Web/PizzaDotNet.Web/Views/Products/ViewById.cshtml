@@ -8,6 +8,8 @@
     var sizesDict = Json.Serialize(Model.Sizes.ToDictionary(k => k.Size, v => v.Price));
 
     var imageUrl = Model.ImageUrl ?? "~/images/placeholders/320x320.png";
+
+    var isLoggedIn = User.Identity.IsAuthenticated;
 }
 
 <div class="text-center">
@@ -40,7 +42,7 @@
     }
     <hr/>
     <div class="form-group">
-        <form method="post" asp-controller="Cart" asp-action="AddItem">
+        <form method="post" id="productOrderForm" asp-controller="Cart" asp-action="AddItem">
             <div id="sizeButtons">
                 @foreach (var size in Model.Sizes)
                 {
@@ -80,15 +82,14 @@
     <script>
     let productId = @productId;
     let productSizes = @sizesDict;
+    let isLoggedIn = @isLoggedIn.ToString().ToLower();
+    console.log(isLoggedIn);
+    console.log(productSizes);
     
     $(document).ready(() => {
-        //Select the first size
-        $('input[name=sizeRadioOption]')[0].checked = true;
-        
         //Track for size or quantity change
         $('#productOrderForm').change(function (){
             const selectedSize = $('input[name=sizeRadioOption]:checked').val();
-            
             
             let price = productSizes[selectedSize];
             let quantity = $('input[name=Quantity]').val();
@@ -128,6 +129,7 @@
     getProductRating();
     
     const getProductUserRating = () => {
+        if(!isLoggedIn) return;
         const apiUrl = `${window.location.origin}/api/Rating/UserRating?id=${productId}`;
 
         $.ajax({
@@ -143,7 +145,6 @@
             },
         });
     };
-    getProductUserRating();
     
     const rateProduct = (value) => {
         const token = $("#ratingForm input[name=__RequestVerificationToken]").val();
