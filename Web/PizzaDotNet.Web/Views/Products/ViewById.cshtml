@@ -5,13 +5,13 @@
     this.ViewData["Title"] = Model.Name;
     var productId = Model.Id;
 
-    var sizesDict = Json.Serialize(Model.Sizes.ToDictionary(k=> k.Size, v=> v.Price));
+    var sizesDict = Json.Serialize(Model.Sizes.ToDictionary(k => k.Size, v => v.Price));
 
     var imageUrl = Model.ImageUrl ?? "~/images/placeholders/320x320.png";
 }
 
 <div class="text-center">
-    <img src="@Url.Content(@imageUrl)" alt="Image" style="width: auto; height: 320px;"/>
+    <img src="@Url.Content(@imageUrl)" alt="Image" class="img-fluid"/>
 
     <form id='ratingForm' method='post' hidden></form>
 
@@ -59,9 +59,11 @@
             <span>Price: <span id="selectedSizePrice">0</span></span>
             <span asp-validation-for="Size" class="text-danger"></span>
             <hr/>
-            <div>
-                <label asp-for="Quantity" class="col-1 col-form-label"></label>
-                <input asp-for="Quantity" min="1" class="form-control form-control-sm"/>
+            <div class="form-group row">
+                <label asp-for="Quantity" class="col-2 col-form-label"></label>
+                <div class="col-10">
+                    <input asp-for="Quantity" min="1" class="form-control form-control-sm"/>
+                </div>
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
             <hr/>
@@ -78,10 +80,12 @@
     <script>
     let productId = @productId;
     let productSizes = @sizesDict;
-    console.log(productSizes)
     
-    //Price calculator
     $(document).ready(() => {
+        //Select the first size
+        $('input[name=sizeRadioOption]')[0].checked = true;
+        
+        //Track for size or quantity change
         $('#productOrderForm').change(function (){
             const selectedSize = $('input[name=sizeRadioOption]:checked').val();
             
