@@ -71,3 +71,8 @@ body {
 .validation-summary-errors ul{
     margin: 0;
 }
+
+#external-account button{
+    width: 100%;
+    margin: 4px;
+}

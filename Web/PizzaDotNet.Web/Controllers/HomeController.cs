@@ -17,7 +17,7 @@
             return this.View();
         }
 
-        public IActionResult AccessDeniedFacebook()
+        public IActionResult LoginFailed()
         {
             return this.View();
         }

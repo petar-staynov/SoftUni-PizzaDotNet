@@ -21,6 +21,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
@@ -45,5 +46,12 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Settings\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Home\LoginFailed.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 </Project>

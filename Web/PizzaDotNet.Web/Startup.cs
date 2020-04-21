@@ -57,7 +57,13 @@ namespace PizzaDotNet.Web
             {
                 facebookOptions.AppId = this.configuration.GetValue<string>("FacebookAppId");
                 facebookOptions.AppSecret = this.configuration.GetValue<string>("FacebookAppSecret");
-                facebookOptions.AccessDeniedPath = "/Home/AccessDeniedFacebook";
+                facebookOptions.AccessDeniedPath = "/Home/LoginFailed";
+            });
+            services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = this.configuration.GetValue<string>("GoogleAppId");
+                googleOptions.ClientSecret = this.configuration.GetValue<string>("GoogleAppSecret");
+                googleOptions.AccessDeniedPath = "/Home/LoginFailed";
             });
 
             services.Configure<CookiePolicyOptions>(
