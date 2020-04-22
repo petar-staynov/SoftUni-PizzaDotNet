@@ -10,14 +10,12 @@
 
     public class ProductViewInputModel : IMapFrom<Product>
     {
-        private ICollection<SizeOfProductViewModel> sizes;
-
         public ProductViewInputModel()
         {
             this.Quantity = 1;
-            this.Size = "Unspecified";
         }
 
+        [Required]
         public string Id { get; set; }
 
         public string Name { get; set; }
@@ -27,11 +25,7 @@
         [Required(ErrorMessage = "Please select a valid size")]
         public string Size { get; set; }
 
-        public ICollection<SizeOfProductViewModel> Sizes
-        {
-            get => this.sizes.OrderBy(x => x.Price).ToList();
-            set => this.sizes = value;
-        }
+        public ICollection<SizeOfProductViewModel> Sizes { get; set; }
 
         [Display(Name="Quantity")]
         [Range(1, 20)]

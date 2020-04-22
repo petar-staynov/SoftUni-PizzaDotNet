@@ -5,7 +5,8 @@
     this.ViewData["Title"] = Model.Name;
     var productId = Model.Id;
 
-    var sizesDict = Json.Serialize(Model.Sizes.ToDictionary(k => k.Size, v => v.Price));
+    var sizesOrdered = Model.Sizes.OrderBy(x => x.Price).ToList();
+    var sizesDict = Json.Serialize(sizesOrdered.ToDictionary(k => k.Size, v => v.Price));
 
     var imageUrl = Model.ImageUrl ?? "~/images/placeholders/320x320.png";
 
@@ -15,7 +16,7 @@
 <div class="text-center">
     <img src="@Url.Content(@imageUrl)" alt="Image" class="img-fluid"/>
 
-    <form id='ratingForm' method='post' hidden></form>
+    @* <form id='ratingForm' method='post' hidden></form> *@
 
     <h4>@Model.Name</h4>
     <p>@Model.Description</p>
@@ -42,16 +43,16 @@
     }
     <hr/>
     <div class="form-group">
-        <form method="post" id="productOrderForm" asp-controller="Cart" asp-action="AddItem">
+        <form id="productOrderForm" method="post" asp-controller="Cart" asp-action="AddItem">
+            <input asp-for="Id" hidden/>
             <div id="sizeButtons">
-                @foreach (var size in Model.Sizes)
+                @foreach (var size in sizesOrdered)
                 {
                     <div class="form-check form-check-inline">
                         <input
                             id="product-size-@size.Size"
                             class="form-check-input"
                             type="radio"
-                            name="sizeRadioOption"
                             asp-for="Size"
                             value="@size.Size">
                         <label class="form-check-label" asp-for="@size.Size">@size.Size</label>
@@ -59,6 +60,7 @@
                 }
             </div>
             <span>Price: <span id="selectedSizePrice">0</span></span>
+            <br/>
             <span asp-validation-for="Size" class="text-danger"></span>
             <hr/>
             <div class="form-group row">
@@ -72,9 +74,14 @@
             <p class="h5">
                 Total: <span id="product-price">1</span> x <span id="product-quantity"></span> = <span id="product-total"></span>
             </p>
+            @if (this.TempData["Message"] != null)
+            {
+                <p class="text-white bg-@this.TempData["MessageType"]">@this.TempData["Message"]</p>
+            }
             <input type="submit" value="Add to cart" class="btn btn btn-outline-secondary"/>
+            <hr/>
+            <div asp-validation-summary="All"></div>
         </form>
-        <div asp-validation-summary="All"></div>
     </div>
 </div>
 
@@ -83,13 +90,11 @@
     let productId = @productId;
     let productSizes = @sizesDict;
     let isLoggedIn = @isLoggedIn.ToString().ToLower();
-    console.log(isLoggedIn);
-    console.log(productSizes);
     
     $(document).ready(() => {
         //Track for size or quantity change
         $('#productOrderForm').change(function (){
-            const selectedSize = $('input[name=sizeRadioOption]:checked').val();
+            const selectedSize = $('input[name=Size]:checked').val();
             
             let price = productSizes[selectedSize];
             let quantity = $('input[name=Quantity]').val();
