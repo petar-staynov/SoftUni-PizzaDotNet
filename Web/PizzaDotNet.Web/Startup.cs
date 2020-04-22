@@ -1,11 +1,9 @@
-﻿using System;
-using AutoMapper;
-using PizzaDotNet.Services;
-
-namespace PizzaDotNet.Web
+﻿namespace PizzaDotNet.Web
 {
+    using System;
     using System.Reflection;
 
+    using AutoMapper;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -20,6 +18,7 @@ namespace PizzaDotNet.Web
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Data.Repositories;
     using PizzaDotNet.Data.Seeding;
+    using PizzaDotNet.Services;
     using PizzaDotNet.Services.Data;
     using PizzaDotNet.Services.Mapping;
     using PizzaDotNet.Services.Messaging;
@@ -73,18 +72,27 @@ namespace PizzaDotNet.Web
                     options.MinimumSameSitePolicy = SameSiteMode.None;
                 });
 
+            services.AddControllersWithViews(options =>
+                {
+                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                })
+                .AddSessionStateTempDataProvider();
+
             // Session configuration
             services.AddSession(options =>
             {
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
-                options.IdleTimeout = new TimeSpan(0, 4, 0, 0);
+                options.IdleTimeout = new TimeSpan(0, 24, 0, 0);
             });
 
-            services.AddControllersWithViews(options =>
+            // TempData configuration
+            services.Configure<CookieTempDataProviderOptions>(options =>
             {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Cookie.IsEssential = true;
             });
+
+            //Antiforgery token configuration
             services.AddAntiforgery(options =>
             {
                 options.HeaderName = this.configuration.GetValue<string>("AntiforgeryHeader");
@@ -94,9 +102,6 @@ namespace PizzaDotNet.Web
             services.AddAutoMapper(c => c.AddProfile<AutoMapping>(), typeof(Startup));
 
             services.AddRazorPages();
-
-            // Google Cloud Storage Configurations
-            services.AddSingleton<IGoogleCloudStorage, GoogleCloudStorage>();
 
             services.AddSingleton(this.configuration);
 
@@ -112,6 +117,12 @@ namespace PizzaDotNet.Web
             services.AddTransient<IRatingsService, RatingsService>();
             services.AddTransient<ISizesOfProductService, SizesOfProductService>();
             services.AddTransient<IProductsService, ProductsService>();
+            services.AddTransient<IProductsService, ProductsService>();
+            services.AddTransient<ISessionService, SessionService>();
+
+            // Google Cloud service
+            services.AddSingleton<IGoogleCloudStorage, GoogleCloudStorage>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -144,9 +155,10 @@ namespace PizzaDotNet.Web
                 app.UseHsts();
             }
 
+            app.UseResponseCaching();
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSession();
             app.UseCookiePolicy();
 
             app.UseRouting();
