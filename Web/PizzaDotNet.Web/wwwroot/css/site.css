@@ -65,14 +65,6 @@ body {
     margin-bottom: 20px;
 }
 
-.container-default {
-    background-color: transparent ;
-    padding: 0;
-    border-radius: 0;
-    margin-bottom: 0;
-}
-
-
 /* Custom classes
 -------------------------------------------------- 
 */
@@ -86,6 +78,13 @@ body {
 
 .no-p {
     padding: 0;
+}
+
+.container-default {
+    background-color: transparent ;
+    padding: 0;
+    border-radius: 0;
+    margin-bottom: 0;
 }
 
 .validation-summary-errors {

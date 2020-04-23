@@ -12,10 +12,10 @@
         <div class="col-5">
             <span class="text-uppercase">Product</span>
         </div>
-        <div class="col-2 d-none d-md-block">
+        <div class="col-2 text-center d-none d-md-block">
             <span class="text-uppercase">Quantity</span>
         </div>
-        <div class="col-2 d-none d-md-block">
+        <div class="col-2 text-center d-none d-md-block">
             <span class="text-uppercase">Price</span>
         </div>
         <div class="col-1 d-none d-md-block">
@@ -36,18 +36,107 @@
                     <span class="cart-ingredient">+ Ingredient</span>
                 </div>
             </div>
-            <div class="col-4 col-md-2">
+            <div class="col-4 col-md-2 text-center">
                 <button class="btn btn-outline-secondary btn-circle btn-sm">-</button>
                 <span>@cartProductViewModel.Quantity</span>
                 <button class="btn btn-outline-secondary btn-circle btn-sm">+</button>
             </div>
-            <div class="col-4 col-md-2">
+            <div class="col-4 col-md-2 text-center">
                 <span>@cartProductViewModel.TotalPrice</span>
             </div>
-            <div class="col-4 col-md-1">
+            <div class="col-4 col-md-1  text-center">
                 <button class="btn btn-danger btn-circle btn-sm">X</button>
             </div>
         </div>
         <br/>
     }
+    <hr/>
+
+    <div class="row">
+        <div class="col-12">
+            <form class="form-inline float-right">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="text" class="form-control" id="couponInput" placeholder="Coupon code...">
+                </div>
+                <button type="submit" class="btn btn-success mb-2">Apply code</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row h5">
+        <div class="col-9 col-md-10">
+            <span class="float-right font-weight-bold">Total: </span>
+        </div>
+        <div class="col-3 col-md-2">
+            <span id="totalPrice" class="">000</span><span> $</span>
+        </div>
+    </div>
+
+    <div class="row h5">
+        <div class="col-9 col-md-10">
+            <span class="float-right font-weight-bold">Total with discout: </span>
+        </div>
+        <div class="col-3 col-md-2">
+            <span id="totalPriceDiscounted" class="">000</span><span> $</span>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-12 float-left">
+            <a asp-controller="Categories" asp-action="Index"
+               class="btn btn-outline-secondary text-uppercase" role="button">
+                Back to menu
+            </a>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-12">
+            <form>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputName">Name</label>
+                        <input type="text" class="form-control" id="inputName">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputPhone">Phone number</label>
+                        <input type="number" class="form-control" id="inputPhone">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="inputDistrict">Municipality/District</label>
+                        <input type="text" class="form-control" id="inputDistrict">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="inputStreet">Street/Building</label>
+                        <input type="text" class="form-control" id="inputStreet">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="inputFloor">Floor</label>
+                        <input type="number" class="form-control" id="inputFloor">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="inputApartment">Apartment</label>
+                        <input type="number" class="form-control" id="inputApartment">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputNotes">Additional notes:</label>
+                    <input type="text" class="form-control" id="inputNotes" placeholder="Example: Door is locked or Beware of dog.">
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="gridCheck">
+                        <label class="form-check-label" for="gridCheck">
+                            Use this as my default address
+                        </label>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary w-50">Order now</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
