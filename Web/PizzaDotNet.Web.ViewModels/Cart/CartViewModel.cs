@@ -1,18 +1,27 @@
 ﻿namespace PizzaDotNet.Web.ViewModels.Cart
 {
     using System.Collections.Generic;
+    using System.Linq;
 
-    using PizzaDotNet.Data.Models.DTO;
+    using PizzaDotNet.Services.Mapping;
+    using PizzaDotNet.Web.ViewModels.DTO;
+    using PizzaDotNet.Web.ViewModels.Products;
 
     public class CartViewModel
     {
+        private decimal totalPrice;
+
         public CartViewModel()
         {
-            this.Products = new HashSet<SessionCartProductDto>();
+            this.Products = new List<CartProductViewModel>();
         }
 
-        public ICollection<SessionCartProductDto> Products { get; set; }
+        public ICollection<CartProductViewModel> Products { get; set; }
 
-        public decimal TotalPrice { get; set; }
+        public decimal TotalPrice
+        {
+            get => this.Products.Select(p => p.Price * p.Quantity).Sum();
+            set => this.totalPrice = value;
+        }
     }
 }

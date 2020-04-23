@@ -43,5 +43,19 @@
 
             return productSizes;
         }
+
+        public decimal GetSizePrice(int productId, string size)
+        {
+            SizeOfProduct productSize = this.sizeOfProductRepository
+                .All()
+                .FirstOrDefault(s => s.ProductId == productId && s.Size == size);
+
+            if (productSize == null)
+            {
+                // TODO Handle this error
+            }
+
+            return productSize.Price;
+        }
     }
 }

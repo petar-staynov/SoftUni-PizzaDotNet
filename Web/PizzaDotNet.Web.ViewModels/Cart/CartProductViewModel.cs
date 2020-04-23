@@ -1,12 +1,20 @@
-﻿namespace PizzaDotNet.Data.Models.DTO
+﻿namespace PizzaDotNet.Web.ViewModels.Cart
 {
-    public class SessionCartProductDto
+    using PizzaDotNet.Data.Models;
+    using PizzaDotNet.Services.Mapping;
+    using PizzaDotNet.Web.ViewModels.DTO;
+    using PizzaDotNet.Web.ViewModels.SizeOfProduct;
+
+    public class CartProductViewModel : IMapFrom<Product>
     {
         private decimal totalPrice;
+
 
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public string Description { get; set; }
 
         public string Size { get; set; }
 
@@ -16,7 +24,7 @@
 
         public decimal TotalPrice
         {
-            get => this.Quantity * this.Price;
+            get => this.Price * this.Quantity;
             set => this.totalPrice = value;
         }
 

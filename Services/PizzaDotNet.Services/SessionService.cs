@@ -31,7 +31,8 @@
                 return default(T);
             }
 
-            return JsonConvert.DeserializeObject<T>(value);
+            var data = JsonConvert.DeserializeObject<T>(value);
+            return data;
         }
     }
 }

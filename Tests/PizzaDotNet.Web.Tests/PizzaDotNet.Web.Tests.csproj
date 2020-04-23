@@ -31,4 +31,15 @@
     <ProjectReference Include="..\..\Web\PizzaDotNet.Web\PizzaDotNet.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pages\Cart\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages" />
+  </ItemGroup>
+
 </Project>
