@@ -120,6 +120,10 @@ body {
 /* Cart icon
 -------------------------------------------------- 
 */
+.cart-icon {
+    height: 24px;
+}
+
 #lblCartCount {
     font-size: 12px;
     background: #ff0000;
@@ -161,5 +165,6 @@ body {
 }
 
 .cart-header-row {
-    
+
 }
+

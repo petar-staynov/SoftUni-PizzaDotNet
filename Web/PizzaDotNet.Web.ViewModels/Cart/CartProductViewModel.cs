@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace PizzaDotNet.Web.ViewModels.Cart
+﻿namespace PizzaDotNet.Web.ViewModels.Cart
 {
+    using System;
+
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
     using PizzaDotNet.Web.ViewModels.DTO;
