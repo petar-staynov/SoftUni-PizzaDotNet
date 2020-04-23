@@ -7,12 +7,12 @@
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
 
     <environment names="Development">
-        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true"/>
-        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true"/>
+        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     </environment>
     <environment names="Staging,Production">
-        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true"/>
-        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true"/>
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
     </environment>
 </head>
 <body>
@@ -35,8 +35,10 @@
             </div>
             <ul class="nav navbar-nav text-nowrap flex-row mx-md-auto order-1 order-md-2">
                 <li class="nav-item">
-                    <i class="fa" style="font-size:24px">&#xf07a;</i>
-                    <span class='badge badge-warning' id='lblCartCount'> 5 </span>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
+                        <i class="fa" style="font-size:24px">&#xf07a;</i>
+                        <span class='badge badge-warning' id='lblCartCount'> 5 </span>
+                    </a>
                 </li>
             </ul>
             <div class="ml-auto navbar-collapse collapse nav-content order-3 order-md-3">
@@ -68,7 +70,6 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://kit.fontawesome.com/d48007455e.js" crossorigin="anonymous"></script>
 </environment>
 <environment names="Staging,Production">
@@ -76,7 +77,6 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
-    <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script src="https://kit.fontawesome.com/d48007455e.js" crossorigin="anonymous"></script>
 </environment>
 
