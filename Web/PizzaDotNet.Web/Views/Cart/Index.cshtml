@@ -1,0 +1,88 @@
+﻿@model PizzaDotNet.Web.ViewModels.Cart.CartViewModel
+
+@{
+    this.ViewData["Title"] = "Cart";
+}
+<div class="card shopping-cart">
+    <div class="card-header bg-dark text-light h5-custom">
+        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        <span>Order:</span>
+        <a asp-controller="Categories" asp-action="Index" class="btn btn-outline-info btn-sm float-right">Menu</a>
+    </div>
+    <div class="card-body">
+        @if (Model.Products.Count > 0)
+        {
+            @foreach (var product in Model.Products)
+            {
+                <div class="row">
+                    <div class="col col-sm-12 col-md-3">
+                        <img class="img-responsive" src="http://placehold.it/120x80" alt="prewiew" width="120" height="80">
+                    </div>
+                    <div class="col col-sm-12 col-md-6">
+                        <h4 class="product-name">
+                            <strong>Product Name</strong>
+                        </h4>
+                        <h4>
+                            <small>Product description</small>
+                        </h4>
+                    </div>
+                    <div class="col col-sm-12 col-md-3">
+                        <div class="text-md-right" style="">
+                            <h6>
+                                <strong>25.00 <span class="text-muted">x</span></strong>
+                            </h6>
+                        </div>
+                        <div class="">
+                            <div class="quantity">
+                                <input type="button" value="+" class="plus">
+                                <input type="number" step="1" max="99" min="1" value="1" title="Qty" class="qty" size="4" data-com.bitwarden.browser.user-edited="yes">
+                                <input type="button" value="-" class="minus">
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-outline-danger btn-xs">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            }
+            <div class="pull-right">
+                <a class="btn btn-outline-secondary float-right">
+                    Update shopping cart
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-12">
+                    <p>Cart is empy</p>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="card-footer">
+        <div class="coupon col-md-5 col-sm-5 no-padding-left pull-left">
+            <div class="row">
+                <div class="col-6">
+                    <input type="text" class="form-control" placeholder="Coupon code">
+                </div>
+                <div class="col-6">
+                    <input type="submit" class="btn btn-outline-secondary" value="Apply">
+                </div>
+            </div>
+        </div>
+        <div class="float-right" style="margin: 10px">
+            <a href="" class="btn btn-success float-right">Checkout</a>
+            <div class="float-right" style="margin: 5px">
+                Total price: <b><span id="totalPrice">50.00</span>$</b>
+            </div>
+        </div>
+    </div>
+</div>
+@* @foreach (var product in Model.Products) *@
+@* { *@
+@*     <p>@product.Name</p> *@
+@* } *@
