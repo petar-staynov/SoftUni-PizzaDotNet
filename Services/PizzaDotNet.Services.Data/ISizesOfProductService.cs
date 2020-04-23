@@ -10,5 +10,7 @@
         Task<SizeOfProduct> CreateAsync(int productId, string size, decimal price);
 
         ICollection<T> GetByProductId<T>(int productId);
+
+        decimal GetSizePrice(int productId, string size);
     }
 }

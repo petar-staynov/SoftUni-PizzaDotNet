@@ -101,7 +101,8 @@
             // Auto Mapper Configurations
             services.AddAutoMapper(c => c.AddProfile<AutoMapping>(), typeof(Startup));
 
-            services.AddRazorPages();
+            services.AddRazorPages()
+                .AddSessionStateTempDataProvider();;
 
             services.AddSingleton(this.configuration);
 
@@ -156,7 +157,6 @@
             }
 
             app.UseResponseCaching();
-            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -165,6 +165,8 @@
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(
                 endpoints =>
