@@ -42,16 +42,34 @@ button.accept-policy {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
+    background-image:url(../images/ui/background.jpg)
 }
 
 .footer {
     position: absolute;
-    bottom: 0;
+    bottom: -20px;
     width: 100%;
     white-space: nowrap;
     /* Set the fixed height of the footer here */
     height: 60px;
     line-height: 60px; /* Vertically center the text there */
+}
+
+/* Bootstrap Overrides
+-------------------------------------------------- 
+*/
+.container {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.container-default {
+    background-color: transparent ;
+    padding: 0;
+    border-radius: 0;
+    margin-bottom: 0;
 }
 
 
@@ -90,31 +108,10 @@ body {
     margin: 4px;
 }
 
-.btn-circle .btn-sm {
-    width: 30px;
-    height: 30px;
-    padding: 6px 0px;
-    border-radius: 15px;
-    font-size: 8px;
-    text-align: center;
-}
-
-.btn-circle .btn-md {
-    width: 50px;
-    height: 50px;
-    padding: 7px 10px;
-    border-radius: 25px;
-    font-size: 10px;
-    text-align: center;
-}
-
-.btn-circle .btn-xl {
-    width: 70px;
-    height: 70px;
-    padding: 10px 16px;
-    border-radius: 35px;
-    font-size: 12px;
-    text-align: center;
+.highlight {
+    /*background-color: #f7f7f9;*/
+    border-radius: 4px;
+    margin-top: 20px;
 }
 
 /* Cart icon
