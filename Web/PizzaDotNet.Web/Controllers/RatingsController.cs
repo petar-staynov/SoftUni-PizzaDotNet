@@ -47,6 +47,7 @@
         [HttpGet("UserRating/{productId}")]
         public async Task<UserRatingResponseModel> GetUserRating(int productId)
         {
+            // TODO Make this async. Maybe inject UserManager to get user
             var userId = this.userManager.GetUserId(this.User);
 
             var productUserRating = this.ratingsService.GetProductUserRating(productId, userId);
