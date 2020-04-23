@@ -1,0 +1,22 @@
+﻿<ul class="nav navbar-nav text-nowrap flex-row mx-md-auto order-1 order-md-2">
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
+            <img src="~/images/ui/shopping-cart-solid.svg" alt="Cart" class="cart-icon">
+            <span class='badge badge-warning' id='cartCount'></span>
+        </a>
+    </li>
+</ul>
+
+
+<script>
+    console.log('cart icon js')
+    const cartCountBadge = document.getElementById('cartCount');
+    
+    const uri = `${window.location.origin}/api/Cart/NumberOfItems`;
+    fetch(uri)
+    .then(res => res.json())
+    .then(data => {
+        const numberOfItems = data.numberOfItems;    
+        cartCountBadge.innerText = numberOfItems;
+    })
+</script>
