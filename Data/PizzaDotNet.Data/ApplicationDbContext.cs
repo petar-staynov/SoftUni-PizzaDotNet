@@ -87,6 +87,11 @@
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
+            // IdenityUser configuration
+            builder.Entity<ApplicationUser>()
+                .Ignore(c => c.PhoneNumber)
+                .Ignore(c => c.PhoneNumberConfirmed);
+
             // Relationships configuration
             builder.Entity<ProductIngredient>()
                 .HasKey(k => new { k.ProductId, k.IngredientId });
