@@ -1,22 +1,63 @@
 ﻿@page
-@model PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage.Addresses
-
-@page
 @model AddressesModel
 @{
-    ViewData["Title"] = "Profile";
-    ViewData["ActivePage"] = ManageNavPages.Index;
+    ViewData["Title"] = "Address";
+    ViewData["ActivePage"] = ManageNavPages.Addresses;
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    <h1>ADDRESSES WORK!</h1>
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage"/>
+<div class="">
+    <form id="profile-form">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Input.PersonName">Personal name</label>
+                <input asp-for="Input.PersonName" type="text" class="form-control">
+                <span asp-validation-for="Input.PersonName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Input.PhoneNumber">PhoneNumber</label>
+                <input asp-for="Input.PhoneNumber" type="text" class="form-control">
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Input.Area">Area</label>
+                <input asp-for="Input.Area" type="text" class="form-control">
+                <span asp-validation-for="Input.Area" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Input.Street">Street</label>
+                <input asp-for="Input.Street" type="text" class="form-control">
+                <span asp-validation-for="Input.Street" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Input.Building">Building</label>
+                <input asp-for="Input.Building" type="text" class="form-control">
+                <span asp-validation-for="Input.Building" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Input.Apartment">Apartment</label>
+                <input asp-for="Input.Apartment" type="text" class="form-control">
+                <span asp-validation-for="Input.Apartment" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <button type="submit" class="btn btn-primary w-50">Save</button>
+        </div>
+    </form>
 </div>
-</body>
-</html>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}
