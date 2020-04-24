@@ -37,6 +37,8 @@
 
         public DbSet<ProductIngredient> ProductsIngredients { get; set; }
 
+        public DbSet<UserAddress> Addresses { get; set; }
+
 
         public override int SaveChanges() => this.SaveChanges(true);
 

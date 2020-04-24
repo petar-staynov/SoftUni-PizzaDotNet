@@ -30,6 +30,8 @@ namespace PizzaDotNet.Data.Models
 
         // public virtual ICollection<Product> Favourites { get; set; }
 
+        public virtual ICollection<UserAddress> Addresses { get; set; }
+
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
