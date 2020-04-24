@@ -116,7 +116,7 @@
                 new SendGridEmailSender(this.configuration.GetValue<string>("SendGridKey")));
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IRatingsService, RatingsService>();
-            services.AddTransient<ISizesOfProductService, SizesOfProductService>();
+            services.AddTransient<IProductSizeService, ProductSizeService>();
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<ISessionService, SessionService>();

@@ -6,7 +6,7 @@
 
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
-    using PizzaDotNet.Web.ViewModels.SizeOfProduct;
+    using PizzaDotNet.Web.ViewModels.ProductSize;
 
     public class ProductViewInputModel : IMapFrom<Product>
     {
@@ -25,7 +25,7 @@
         [Required(ErrorMessage = "Please select a valid size")]
         public string Size { get; set; }
 
-        public ICollection<SizeOfProductViewModel> Sizes { get; set; }
+        public ICollection<ProductSizeViewModel> Sizes { get; set; }
 
         [Display(Name="Quantity")]
         [Range(1, 20)]

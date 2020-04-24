@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PizzaDotNet.Data.Migrations
 {
-    public partial class SizeOfProducts : Migration
+    public partial class ProductSizes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace PizzaDotNet.Data.Migrations
                 table: "Products");
 
             migrationBuilder.CreateTable(
-                name: "SizeOfProducts",
+                name: "ProductSizes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -27,9 +27,9 @@ namespace PizzaDotNet.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SizeOfProducts", x => x.Id);
+                    table.PrimaryKey("PK_ProductSizes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SizeOfProducts_Products_ProductId",
+                        name: "FK_ProductSizes_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -37,20 +37,20 @@ namespace PizzaDotNet.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_SizeOfProducts_IsDeleted",
-                table: "SizeOfProducts",
+                name: "IX_ProductSizes_IsDeleted",
+                table: "ProductSizes",
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SizeOfProducts_ProductId",
-                table: "SizeOfProducts",
+                name: "IX_ProductSizes_ProductId",
+                table: "ProductSizes",
                 column: "ProductId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "SizeOfProducts");
+                name: "ProductSizes");
 
             migrationBuilder.AddColumn<decimal>(
                 name: "Price",

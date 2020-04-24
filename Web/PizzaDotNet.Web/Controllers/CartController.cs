@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using AutoMapper;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -18,17 +19,17 @@
     {
         private readonly IProductsService productsService;
         private readonly ISessionService sessionService;
-        private readonly ISizesOfProductService sizesOfProductService;
+        private readonly IProductSizeService productSizeService;
         private readonly IMapper mapper;
 
         public CartController(
             IProductsService productsService,
             ISessionService sessionService,
-            ISizesOfProductService sizesOfProductService,
+            IProductSizeService productSizeService,
             IMapper mapper)
         {
             this.productsService = productsService;
-            this.sizesOfProductService = sizesOfProductService;
+            this.productSizeService = productSizeService;
             this.sessionService = sessionService;
             this.mapper = mapper;
         }
@@ -68,7 +69,7 @@
                 var productViewModel = this.productsService.GetById<CartProductViewModel>(productDto.Id);
 
                 /* Get product size */
-                var productPrice = this.sizesOfProductService.GetSizePrice(productDto.Id, productDto.Size);
+                var productPrice = this.productSizeService.GetSizePrice(productDto.Id, productDto.Size);
 
                 /* Map data (Quantity, Size) from Product DTO to Product View Model
                  * This can not be auto-mapped */

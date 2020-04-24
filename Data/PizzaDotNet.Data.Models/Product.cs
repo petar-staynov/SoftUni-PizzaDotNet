@@ -27,7 +27,7 @@
 
         public string ImageStorageName { get; set; }
 
-        public virtual ICollection<SizeOfProduct> Sizes { get; set; }
+        public virtual ICollection<ProductSize> Sizes { get; set; }
 
         public virtual ICollection<Rating> Ratings { get; set; }
 

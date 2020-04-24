@@ -10,8 +10,8 @@ using PizzaDotNet.Data;
 namespace PizzaDotNet.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200414133718_ProductSizes")]
-    partial class ProductSizes
+    [Migration("20200424102823_ProductSize")]
+    partial class ProductSize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -258,6 +258,12 @@ namespace PizzaDotNet.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageStorageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -267,6 +273,42 @@ namespace PizzaDotNet.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("PizzaDotNet.Data.Models.Ingredient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Ingredients");
                 });
 
             modelBuilder.Entity("PizzaDotNet.Data.Models.Product", b =>
@@ -310,6 +352,59 @@ namespace PizzaDotNet.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("PizzaDotNet.Data.Models.ProductIngredient", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "IngredientId");
+
+                    b.HasIndex("IngredientId");
+
+                    b.ToTable("ProductsIngredients");
+                });
+
+            modelBuilder.Entity("PizzaDotNet.Data.Models.ProductSize", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Size")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductSizes");
                 });
 
             modelBuilder.Entity("PizzaDotNet.Data.Models.Rating", b =>
@@ -383,44 +478,6 @@ namespace PizzaDotNet.Data.Migrations
                     b.ToTable("Settings");
                 });
 
-            modelBuilder.Entity("PizzaDotNet.Data.Models.ProductSize", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Size")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductSizes");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("PizzaDotNet.Data.Models.ApplicationRole", null)
@@ -481,6 +538,30 @@ namespace PizzaDotNet.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PizzaDotNet.Data.Models.ProductIngredient", b =>
+                {
+                    b.HasOne("PizzaDotNet.Data.Models.Ingredient", "Ingredient")
+                        .WithMany("ProductIngredients")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PizzaDotNet.Data.Models.Product", "Product")
+                        .WithMany("ProductIngredients")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PizzaDotNet.Data.Models.ProductSize", b =>
+                {
+                    b.HasOne("PizzaDotNet.Data.Models.Product", "Product")
+                        .WithMany("Sizes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PizzaDotNet.Data.Models.Rating", b =>
                 {
                     b.HasOne("PizzaDotNet.Data.Models.Product", "Product")
@@ -492,15 +573,6 @@ namespace PizzaDotNet.Data.Migrations
                     b.HasOne("PizzaDotNet.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("PizzaDotNet.Data.Models.ProductSize", b =>
-                {
-                    b.HasOne("PizzaDotNet.Data.Models.Product", "Product")
-                        .WithMany("Sizes")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

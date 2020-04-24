@@ -5,7 +5,7 @@
 
     using PizzaDotNet.Data.Common.Models;
 
-    public class SizeOfProduct : BaseDeletableModel<int>
+    public class ProductSize : BaseDeletableModel<int>
     {
         [Required]
         public int ProductId { get; set; }

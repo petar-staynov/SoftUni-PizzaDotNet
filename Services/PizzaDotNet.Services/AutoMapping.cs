@@ -10,7 +10,7 @@
     {
         public AutoMapping()
         {
-            this.CreateMap<ProductCreateSizeInputModel, SizeOfProduct>();
+            this.CreateMap<ProductCreateSizeInputModel, ProductSize>();
 
             this.CreateMap<ProductViewInputModel, SessionCartProductDto>();
 

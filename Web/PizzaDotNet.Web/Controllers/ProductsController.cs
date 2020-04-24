@@ -1,4 +1,4 @@
-﻿using PizzaDotNet.Web.ViewModels.SizeOfProduct;
+﻿using PizzaDotNet.Web.ViewModels.ProductSize;
 
 namespace PizzaDotNet.Web.Controllers
 {
@@ -21,7 +21,7 @@ namespace PizzaDotNet.Web.Controllers
         private readonly IProductsService productsService;
         private readonly ICategoriesService categoriesService;
         private readonly IRatingsService ratingsService;
-        private readonly ISizesOfProductService sizesOfProductService;
+        private readonly IProductSizeService productSizeService;
 
         private readonly IGoogleCloudStorage googleCloudStorage;
         private readonly IMapper mapper;
@@ -30,14 +30,14 @@ namespace PizzaDotNet.Web.Controllers
             IProductsService productsService,
             ICategoriesService categoriesService,
             IRatingsService ratingsService,
-            ISizesOfProductService sizesOfProductService,
+            IProductSizeService productSizeService,
             IGoogleCloudStorage googleCloudStorage,
             IMapper mapper)
         {
             this.productsService = productsService;
             this.categoriesService = categoriesService;
             this.ratingsService = ratingsService;
-            this.sizesOfProductService = sizesOfProductService;
+            this.productSizeService = productSizeService;
             this.googleCloudStorage = googleCloudStorage;
             this.mapper = mapper;
         }
@@ -71,7 +71,7 @@ namespace PizzaDotNet.Web.Controllers
             }
 
             productViewModel.Rating = this.ratingsService.GetProductRating(id);
-            productViewModel.Sizes = this.sizesOfProductService.GetByProductId<SizeOfProductViewModel>(id);
+            productViewModel.Sizes = this.productSizeService.GetByProductId<ProductSizeViewModel>(id);
 
             return this.View(productViewModel);
         }
@@ -108,7 +108,7 @@ namespace PizzaDotNet.Web.Controllers
             var filteredSizesInputs = inputModel.Sizes
                 .Where(s => !String.IsNullOrEmpty(s.Size) && s.Price >= 0M).ToList();
 
-            List<SizeOfProduct> sizes = this.mapper.Map<List<SizeOfProduct>>(filteredSizesInputs);
+            List<ProductSize> sizes = this.mapper.Map<List<ProductSize>>(filteredSizesInputs);
 
             var product = await this.productsService.CreateAsync(
                     inputModel.Name,

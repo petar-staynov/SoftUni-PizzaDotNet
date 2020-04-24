@@ -440,7 +440,7 @@ namespace PizzaDotNet.Data.Migrations
                     b.ToTable("Settings");
                 });
 
-            modelBuilder.Entity("PizzaDotNet.Data.Models.SizeOfProduct", b =>
+            modelBuilder.Entity("PizzaDotNet.Data.Models.ProductSize", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -475,7 +475,7 @@ namespace PizzaDotNet.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("SizeOfProducts");
+                    b.ToTable("ProductSizes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -566,7 +566,7 @@ namespace PizzaDotNet.Data.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("PizzaDotNet.Data.Models.SizeOfProduct", b =>
+            modelBuilder.Entity("PizzaDotNet.Data.Models.ProductSize", b =>
                 {
                     b.HasOne("PizzaDotNet.Data.Models.Product", "Product")
                         .WithMany("Sizes")

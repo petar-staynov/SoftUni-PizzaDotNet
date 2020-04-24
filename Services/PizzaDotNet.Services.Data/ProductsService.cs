@@ -18,7 +18,7 @@
             this.productsRepository = productsRepository;
         }
 
-        public async Task<Product> CreateAsync(string name, string description, int categoryId, List<SizeOfProduct> sizes, string imageUrl, string imageStorageName)
+        public async Task<Product> CreateAsync(string name, string description, int categoryId, List<ProductSize> sizes, string imageUrl, string imageStorageName)
         {
             Product product = new Product
             {

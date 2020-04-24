@@ -174,19 +174,19 @@
             // Generate sizes
             foreach (var product in products)
             {
-                product.Sizes = new List<SizeOfProduct>()
+                product.Sizes = new List<ProductSize>()
                 {
-                    new SizeOfProduct()
+                    new ProductSize()
                     {
                         Size = "Small",
                         Price = Rng.Next(5, 10),
                     },
-                    new SizeOfProduct()
+                    new ProductSize()
                     {
                         Size = "Medium",
                         Price = Rng.Next(10, 15),
                     },
-                    new SizeOfProduct()
+                    new ProductSize()
                     {
                         Size = "Large",
                         Price = Rng.Next(15, 20),
@@ -217,9 +217,9 @@
 
             foreach (var product in products)
             {
-                product.Sizes = new List<SizeOfProduct>()
+                product.Sizes = new List<ProductSize>()
                 {
-                    new SizeOfProduct()
+                    new ProductSize()
                     {
                         Size = "Default",
                         Price = Rng.Next(4, 8),
@@ -262,9 +262,9 @@
 
             foreach (var product in products)
             {
-                product.Sizes = new List<SizeOfProduct>()
+                product.Sizes = new List<ProductSize>()
                 {
-                    new SizeOfProduct()
+                    new ProductSize()
                     {
                         Size = "Default",
                         Price = Rng.Next(3, 4),
@@ -313,9 +313,9 @@
 
             foreach (var product in products)
             {
-                product.Sizes = new List<SizeOfProduct>()
+                product.Sizes = new List<ProductSize>()
                 {
-                    new SizeOfProduct()
+                    new ProductSize()
                     {
                         Size = "Default",
                         Price = Rng.Next(2, 4),
@@ -358,9 +358,9 @@
 
             foreach (var product in products)
             {
-                product.Sizes = new List<SizeOfProduct>()
+                product.Sizes = new List<ProductSize>()
                 {
-                    new SizeOfProduct()
+                    new ProductSize()
                     {
                         Size = "Default",
                         Price = Rng.Next(2, 5),

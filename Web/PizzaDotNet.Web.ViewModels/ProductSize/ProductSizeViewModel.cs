@@ -1,8 +1,8 @@
-﻿namespace PizzaDotNet.Web.ViewModels.SizeOfProduct
+﻿namespace PizzaDotNet.Web.ViewModels.ProductSize
 {
     using PizzaDotNet.Services.Mapping;
 
-    public class SizeOfProductViewModel : IMapFrom<Data.Models.SizeOfProduct>
+    public class ProductSizeViewModel : IMapFrom<Data.Models.ProductSize>
     {
         public string Size { get; set; }
 

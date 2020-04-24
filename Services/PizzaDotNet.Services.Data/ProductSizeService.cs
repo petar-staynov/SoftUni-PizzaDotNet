@@ -8,34 +8,34 @@
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
 
-    public class SizesOfProductService : ISizesOfProductService
+    public class ProductSizeService : IProductSizeService
     {
-        private readonly IDeletableEntityRepository<SizeOfProduct> sizeOfProductRepository;
+        private readonly IDeletableEntityRepository<ProductSize> productSizeRepository;
 
-        public SizesOfProductService(IDeletableEntityRepository<SizeOfProduct> sizeOfProductRepository)
+        public ProductSizeService(IDeletableEntityRepository<ProductSize> productSizeRepository)
         {
-            this.sizeOfProductRepository = sizeOfProductRepository;
+            this.productSizeRepository = productSizeRepository;
         }
 
 
-        public async Task<SizeOfProduct> CreateAsync(int productId, string size, decimal price)
+        public async Task<ProductSize> CreateAsync(int productId, string size, decimal price)
         {
-            var sizeOfProduct = new SizeOfProduct
+            var productSize = new ProductSize
             {
                 ProductId = productId,
                 Size = size,
                 Price = price,
             };
 
-            await this.sizeOfProductRepository.AddAsync(sizeOfProduct);
-            await this.sizeOfProductRepository.SaveChangesAsync();
+            await this.productSizeRepository.AddAsync(productSize);
+            await this.productSizeRepository.SaveChangesAsync();
 
-            return sizeOfProduct;
+            return productSize;
         }
 
         public ICollection<T> GetByProductId<T>(int productId)
         {
-            var query = this.sizeOfProductRepository
+            var query = this.productSizeRepository
                 .All()
                 .Where(x => x.ProductId == productId);
 
@@ -46,7 +46,7 @@
 
         public decimal GetSizePrice(int productId, string size)
         {
-            SizeOfProduct productSize = this.sizeOfProductRepository
+            ProductSize productSize = this.productSizeRepository
                 .All()
                 .FirstOrDefault(s => s.ProductId == productId && s.Size == size);
 

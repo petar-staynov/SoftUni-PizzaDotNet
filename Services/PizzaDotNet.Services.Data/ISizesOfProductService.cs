@@ -5,9 +5,9 @@
 
     using PizzaDotNet.Data.Models;
 
-    public interface ISizesOfProductService
+    public interface IProductSizeService
     {
-        Task<SizeOfProduct> CreateAsync(int productId, string size, decimal price);
+        Task<ProductSize> CreateAsync(int productId, string size, decimal price);
 
         ICollection<T> GetByProductId<T>(int productId);
 

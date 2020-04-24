@@ -29,7 +29,7 @@
 
         public DbSet<Product> Products { get; set; }
 
-        public DbSet<SizeOfProduct> SizeOfProducts { get; set; }
+        public DbSet<ProductSize> ProductSizes { get; set; }
 
         public DbSet<Rating> Ratings { get; set; }
 

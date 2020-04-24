@@ -5,7 +5,7 @@
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
     using PizzaDotNet.Web.ViewModels.DTO;
-    using PizzaDotNet.Web.ViewModels.SizeOfProduct;
+    using PizzaDotNet.Web.ViewModels.ProductSize;
 
     public class CartProductViewModel : IMapFrom<Product>
     {

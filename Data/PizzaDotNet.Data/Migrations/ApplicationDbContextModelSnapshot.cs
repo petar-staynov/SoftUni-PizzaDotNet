@@ -367,6 +367,44 @@ namespace PizzaDotNet.Data.Migrations
                     b.ToTable("ProductsIngredients");
                 });
 
+            modelBuilder.Entity("PizzaDotNet.Data.Models.ProductSize", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Size")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductSizes");
+                });
+
             modelBuilder.Entity("PizzaDotNet.Data.Models.Rating", b =>
                 {
                     b.Property<int>("Id")
@@ -436,44 +474,6 @@ namespace PizzaDotNet.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Settings");
-                });
-
-            modelBuilder.Entity("PizzaDotNet.Data.Models.SizeOfProduct", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Size")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("SizeOfProducts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -551,6 +551,15 @@ namespace PizzaDotNet.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PizzaDotNet.Data.Models.ProductSize", b =>
+                {
+                    b.HasOne("PizzaDotNet.Data.Models.Product", "Product")
+                        .WithMany("Sizes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PizzaDotNet.Data.Models.Rating", b =>
                 {
                     b.HasOne("PizzaDotNet.Data.Models.Product", "Product")
@@ -562,15 +571,6 @@ namespace PizzaDotNet.Data.Migrations
                     b.HasOne("PizzaDotNet.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("PizzaDotNet.Data.Models.SizeOfProduct", b =>
-                {
-                    b.HasOne("PizzaDotNet.Data.Models.Product", "Product")
-                        .WithMany("Sizes")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
