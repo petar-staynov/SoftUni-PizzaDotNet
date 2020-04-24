@@ -6,6 +6,10 @@
 
         public const string AdministratorRoleName = "Administrator";
 
+        public const string ManagerRoleName = "Manager";
+
+        public const string UserRoleName = "User";
+
         public const int MaxNumberOfProductSizes = 5;
     }
 }
