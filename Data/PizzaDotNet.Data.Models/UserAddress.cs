@@ -11,6 +11,8 @@
 
         public virtual ApplicationUser User { get; set; }
 
+        public string PersonName { get; set; }
+
         public string Area { get; set; }
 
         public string Street { get; set; }
