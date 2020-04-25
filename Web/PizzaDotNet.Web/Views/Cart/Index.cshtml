@@ -40,12 +40,16 @@
                 <a role="button" class="btn btn-outline-secondary btn-sm"
                    asp-action="DecreaseItemQuantity"
                    asp-route-itemId="@cartProductViewModel.Id"
-                   asp-route-itemSize="@cartProductViewModel.SizeString">-</a>
+                   asp-route-itemSize="@cartProductViewModel.SizeString">
+                    -
+                </a>
                 <span>@cartProductViewModel.Quantity</span>
                 <a role="button" class="btn btn-outline-secondary btn-sm"
                    asp-action="IncreaseItemQuantity"
                    asp-route-itemId="@cartProductViewModel.Id"
-                   asp-route-itemSize="@cartProductViewModel.SizeString">+</a>
+                   asp-route-itemSize="@cartProductViewModel.SizeString">
+                    +
+                </a>
             </div>
             <div class="col-4 col-md-2 text-center">
                 <span>@cartProductViewModel.TotalPrice</span>
@@ -79,7 +83,7 @@
             <span class="float-right font-weight-bold">Total: </span>
         </div>
         <div class="col-3 col-md-2">
-            <span id="totalPrice" class="">000</span><span> $</span>
+            <span id="totalPrice" class="">@Model.TotalPrice</span><span> $</span>
         </div>
     </div>
 
@@ -88,7 +92,9 @@
             <span class="float-right font-weight-bold">Total with discout: </span>
         </div>
         <div class="col-3 col-md-2">
-            <span id="totalPriceDiscounted" class="">000</span><span> $</span>
+            <span id="totalPriceDiscounted" class="">@Model.DiscountPrice</span><span> $</span>
+            <br/>
+            <small class="discount-text">Discount: @Model.DiscountPercent%</small>
         </div>
     </div>
     <hr/>
@@ -103,45 +109,49 @@
     <hr/>
     <div class="row">
         <div class="col-12">
-            <form>
+            <form method="post" asp-controller="Orders" asp-action="PlaceOrder">
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="inputName">Name</label>
-                        <input type="text" class="form-control" id="inputName">
+                        <label asp-for="@Model.Address.PersonName"></label>
+                        <input type="text" class="form-control" asp-for="@Model.Address.PersonName">
+                        <span asp-validation-for="@Model.Address.PersonName" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="inputPhone">Phone number</label>
-                        <input type="number" class="form-control" id="inputPhone">
+                        <label asp-for="@Model.Address.PhoneNumber"></label>
+                        <input type="text" class="form-control" asp-for="@Model.Address.PhoneNumber">
+                        <span asp-validation-for="@Model.Address.PhoneNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
-                        <label for="inputArea">Residential area</label>
-                        <input type="text" class="form-control" id="inputArea">
+                        <label asp-for="@Model.Address.Area"></label>
+                        <input type="text" class="form-control" asp-for="@Model.Address.Area">
+                        <span asp-validation-for="@Model.Address.Area" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="inputStreet">Street/Building</label>
-                        <input type="text" class="form-control" id="inputStreet">
+                        <label asp-for="@Model.Address.Street"></label>
+                        <input type="text" class="form-control" asp-for="@Model.Address.Street">
+                        <span asp-validation-for="@Model.Address.Street" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="inputFloor">Floor</label>
-                        <input type="number" class="form-control" id="inputFloor">
+                        <label asp-for="@Model.Address.Floor"></label>
+                        <input type="text" class="form-control" asp-for="@Model.Address.Floor">
+                        <span asp-validation-for="@Model.Address.Floor" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="inputApartment">Apartment</label>
-                        <input type="number" class="form-control" id="inputApartment">
+                        <label asp-for="@Model.Address.Apartment"></label>
+                        <input type="text" class="form-control" asp-for="@Model.Address.Apartment">
+                        <span asp-validation-for="@Model.Address.Apartment" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputNotes">Additional notes:</label>
-                    <input type="text" class="form-control" id="inputNotes" placeholder="Example: Door is locked or Beware of dog.">
+                        <label asp-for="@Model.AdditionalNotes"></label>
+                    <input asp-for="@Model.AdditionalNotes" type="text" class="form-control" placeholder="Example: Door is locked or Beware of dog.">
                 </div>
                 <div class="form-group">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="gridCheck">
-                        <label class="form-check-label" for="gridCheck">
-                            Use this as my default address
-                        </label>
+                        <input asp-for="@Model.UseAddress" class="form-check-input" type="checkbox">
+                        <label asp-for="@Model.UseAddress" class="form-check-label"></label>
                     </div>
                 </div>
                 <div class="text-center">

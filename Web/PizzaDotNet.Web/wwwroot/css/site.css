@@ -146,13 +146,6 @@ body {
 /* Cart page
 -------------------------------------------------- 
 */
-.cart-product-description {
-
-}
-
-.cart-image {
-}
-
 .cart-ingredient {
     font-size: 13px;
     font-style: italic;
@@ -160,7 +153,16 @@ body {
     color: #777;
 }
 
-.cart-header-row {
-
+.discount-text {
+    position: relative;
+    font-size: 13px;
+    line-height: 15px;
+    margin-top: 5px;
+    background-color: #db092e;
+    color: #fff;
+    padding: 3px 15px;
+    font-weight: bold;
+    text-align: center;
+    overflow: hidden;
 }
 
