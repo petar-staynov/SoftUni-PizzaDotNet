@@ -5,7 +5,7 @@
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
 
-    public class AddressViewModel : IMapFrom<UserAddress>
+    public class AddressViewInputModel : IMapFrom<UserAddress>
     {
         public string PersonName { get; set; }
 

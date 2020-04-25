@@ -11,7 +11,11 @@
 
         T GetByUserId<T>(string id);
 
+        UserAddress GetBaseByUserId(string id);
+
         T GetById<T>(int id);
+
+        UserAddress GetBaseById(int id);
 
         Task<UserAddress> CreateAddressAsync(UserAddress address);
 

@@ -1,4 +1,7 @@
-﻿namespace PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage
+﻿using AutoMapper;
+using PizzaDotNet.Web.ViewModels.DTO;
+
+namespace PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -16,14 +19,17 @@
         private readonly IAddressesService addressesService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly IMapper mapper;
 
         public AddressesModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            IMapper mapper,
             IAddressesService addressesService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.mapper = mapper;
             this.addressesService = addressesService;
         }
 
@@ -35,48 +41,14 @@
         public string StatusMessage { get; set; }
 
         [BindProperty]
-        public InputModel Input { get; set; }
-
-        public class InputModel
-        {
-            public string PersonName { get; set; }
-
-            public string Area { get; set; }
-
-            public string Street { get; set; }
-
-            public string Building { get; set; }
-
-            public string Floor { get; set; }
-
-            public string Apartment { get; set; }
-
-            [Phone]
-            public string PhoneNumber { get; set; }
-        }
+        public AddressViewInputModel Input { get; set; }
 
         private async Task LoadAsync(ApplicationUser user)
         {
-            var userName = await this.userManager.GetUserNameAsync(user);
-            var userId = await this.userManager.GetUserIdAsync(user);
-            var userAddresses =
-                this.addressesService.GetByUserId<AddressViewModel>(userId) ?? new AddressViewModel();
+            var userAddress =
+                this.addressesService.GetByUserId<AddressViewInputModel>(this.UserId) ?? new AddressViewInputModel();
 
-            this.Username = userName;
-            this.UserId = userId;
-
-            var addressInputModel = new InputModel()
-            {
-                PersonName = userAddresses.PersonName,
-                Area = userAddresses.Area,
-                Street = userAddresses.Street,
-                Building = userAddresses.Building,
-                Floor = userAddresses.Floor,
-                Apartment = userAddresses.Apartment,
-                PhoneNumber = userAddresses.PhoneNumber,
-            };
-
-            this.Input = addressInputModel;
+            this.Input = userAddress;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -86,6 +58,9 @@
             {
                 return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
             }
+
+            this.UserId = user.Id;
+            this.Username = user.UserName;
 
             await this.LoadAsync(user);
             return this.Page();
@@ -105,32 +80,22 @@
                 return this.Page();
             }
 
-            var userId = await this.userManager.GetUserIdAsync(user);
+            var userId = this.userManager.GetUserId(this.User);
 
-            var userAddresses = this.addressesService.GetByUserId<UserAddress>(userId);
-            if (userAddresses != null)
+            var userAddress = this.addressesService.GetBaseByUserId(userId);
+            if (userAddress == null)
             {
-                userAddresses.Area = this.Input.Area;
-                userAddresses.Apartment = this.Input.Apartment;
-                userAddresses.Building = this.Input.Building;
-                userAddresses.Floor = this.Input.Floor;
-                userAddresses.PhoneNumber = this.Input.PhoneNumber;
-                userAddresses.Street = this.Input.Street;
+                userAddress = this.mapper.Map<UserAddress>(this.Input);
+                userAddress.UserId = userId;
+                await this.addressesService.CreateAddressAsync(userAddress);
 
-                var createAddressResult = await this.addressesService.UpdateAddressAsync(userAddresses);
+                this.StatusMessage = "Your address has been updated";
+                return this.RedirectToPage();
             }
 
-            userAddresses = new UserAddress()
-            {
-                Area = this.Input.Area,
-                Apartment = this.Input.Apartment,
-                Building = this.Input.Building,
-                Floor = this.Input.Floor,
-                PhoneNumber = this.Input.PhoneNumber,
-                Street = this.Input.Street,
-            };
-            var result = await this.addressesService.CreateAddressAsync(userAddresses);
+            userAddress = this.mapper.Map(this.Input, userAddress);
 
+            await this.addressesService.UpdateAddressAsync(userAddress);
             this.StatusMessage = "Your address has been updated";
             return this.RedirectToPage();
         }
