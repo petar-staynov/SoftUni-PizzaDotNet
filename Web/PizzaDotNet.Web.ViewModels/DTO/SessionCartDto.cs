@@ -9,6 +9,6 @@
             this.Products = new List<SessionCartProductDto>();
         }
 
-        public ICollection<SessionCartProductDto> Products { get; set; }
+        public List<SessionCartProductDto> Products { get; set; }
     }
 }

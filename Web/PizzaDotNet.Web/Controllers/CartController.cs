@@ -1,4 +1,6 @@
-﻿namespace PizzaDotNet.Web.Controllers
+﻿using System.Linq;
+
+namespace PizzaDotNet.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -114,9 +116,39 @@
         }
 
         // [HttpPost]
-        public async Task<ActionResult> RemoveItem(int itemId)
+        public async Task<ActionResult> RemoveItem(int itemId, string itemSize)
         {
-            return this.Ok();
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+            cart.Products
+                .RemoveAll(p => p.Id == itemId && p.SizeString == itemSize);
+
+            this.sessionService.Set(this.HttpContext.Session, "Cart", cart);
+
+            return this.RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> IncreaseItemQuantity(int itemId, string itemSize)
+        {
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+            cart.Products
+                .FindAll(p => p.Id == itemId && p.SizeString == itemSize && p.Quantity < 10)
+                .ForEach(p => p.Quantity++);
+
+            this.sessionService.Set(this.HttpContext.Session, "Cart", cart);
+
+            return this.RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> DecreaseItemQuantity(int itemId, string itemSize)
+        {
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+            cart.Products
+                .FindAll(p => p.Id == itemId && p.SizeString == itemSize && p.Quantity > 1)
+                .ForEach(p => p.Quantity--);
+
+            this.sessionService.Set(this.HttpContext.Session, "Cart", cart);
+
+            return this.RedirectToAction("Index");
         }
 
         public void SetTempCart()
