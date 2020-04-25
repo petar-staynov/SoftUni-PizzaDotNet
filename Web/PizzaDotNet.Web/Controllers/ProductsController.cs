@@ -71,7 +71,7 @@ namespace PizzaDotNet.Web.Controllers
             }
 
             productViewModel.Rating = this.ratingsService.GetProductRating(id);
-            productViewModel.Sizes = this.productSizeService.GetByProductId<ProductSizeViewModel>(id);
+            productViewModel.Sizes = this.productSizeService.GetAllProductSizes<ProductSizeViewModel>(id);
 
             return this.View(productViewModel);
         }

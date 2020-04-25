@@ -33,29 +33,35 @@
             return productSize;
         }
 
-        public ICollection<T> GetByProductId<T>(int productId)
+        public ICollection<T> GetAllProductSizes<T>(int productId)
         {
             var query = this.productSizeRepository
-                .All()
-                .Where(x => x.ProductId == productId);
+                    .All()
+                    .Where(s => s.ProductId == productId);
 
             var productSizes = query.To<T>().ToList();
 
             return productSizes;
         }
 
-        public decimal GetSizePrice(int productId, string size)
+        public T GetProductSize<T>(int productId, string sizeString)
         {
-            ProductSize productSize = this.productSizeRepository
+            var query = this.productSizeRepository
                 .All()
-                .FirstOrDefault(s => s.ProductId == productId && s.Size == size);
+                .Where(s => s.ProductId == productId && s.Size == sizeString);
 
-            if (productSize == null)
-            {
-                // TODO Handle this error
-            }
+            var productSize = query.To<T>().FirstOrDefault();
 
-            return productSize.Price;
+            return productSize;
+        }
+
+        public ProductSize GetProductSizeBase(int productId, string sizeString)
+        {
+            var productSize = this.productSizeRepository
+                .All()
+                .FirstOrDefault(s => s.ProductId == productId && s.Size == sizeString);
+
+            return productSize;
         }
     }
 }

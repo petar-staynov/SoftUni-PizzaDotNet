@@ -7,7 +7,7 @@
     {
         public int Id { get; set; }
 
-        public string Size { get; set; }
+        public string SizeString { get; set; }
 
         public int Quantity { get; set; }
     }

@@ -6,30 +6,39 @@
 
     using AutoMapper;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services;
     using PizzaDotNet.Services.Data;
+    using PizzaDotNet.Web.ViewModels.Addresses;
     using PizzaDotNet.Web.ViewModels.Cart;
     using PizzaDotNet.Web.ViewModels.DTO;
     using PizzaDotNet.Web.ViewModels.Products;
+    using PizzaDotNet.Web.ViewModels.ProductSize;
 
     public class CartController : BaseController
     {
         private readonly IProductsService productsService;
-        private readonly ISessionService sessionService;
+        private readonly IAddressesService addressesService;
         private readonly IProductSizeService productSizeService;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ISessionService sessionService;
         private readonly IMapper mapper;
 
         public CartController(
             IProductsService productsService,
-            ISessionService sessionService,
+            IAddressesService addressesService,
             IProductSizeService productSizeService,
+            UserManager<ApplicationUser> userManager,
+            ISessionService sessionService,
             IMapper mapper)
         {
             this.productsService = productsService;
+            this.addressesService = addressesService;
             this.productSizeService = productSizeService;
+            this.userManager = userManager;
             this.sessionService = sessionService;
             this.mapper = mapper;
         }
@@ -37,53 +46,39 @@
         public IActionResult Index()
         {
             // TODO Remove dummy data
-            var cartData = new SessionCartDto()
-            {
-                Products = new List<SessionCartProductDto>()
-                {
-                    new SessionCartProductDto()
-                    {
-                        Id = 2,
-                        Quantity = 1,
-                        Size = "Small",
-                    },
-                    new SessionCartProductDto()
-                    {
-                        Id = 3,
-                        Quantity = 2,
-                        Size = "Medium",
-                    },
-                },
-            };
-
-            this.sessionService.Set(this.HttpContext.Session, "Cart", cartData);
+            this.SetTempCart();
 
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
 
-            var viewModel = this.mapper.Map<CartViewModel>(cart);
+            var cartViewModel = this.mapper.Map<CartViewModel>(cart);
 
-            List<CartProductViewModel> productsViewModels = new List<CartProductViewModel>();
+            var productsViewModels = new List<CartProductViewModel>();
             foreach (SessionCartProductDto productDto in cart.Products)
             {
                 /* Create view model */
                 var productViewModel = this.productsService.GetById<CartProductViewModel>(productDto.Id);
 
                 /* Get product size */
-                var productPrice = this.productSizeService.GetSizePrice(productDto.Id, productDto.Size);
+                var productSize =
+                    this.productSizeService.GetProductSize<ProductSizeViewModel>(productDto.Id, productDto.SizeString);
+                productViewModel.Size = productSize;
 
-                /* Map data (Quantity, Size) from Product DTO to Product View Model
-                 * This can not be auto-mapped */
-                productViewModel.Quantity = productDto.Quantity;
-                productViewModel.Size = productDto.Size;
-                productViewModel.Price = productPrice;
+                /* Map data (Quantity, Size) from Product DTO */
+                productViewModel = this.mapper.Map(productDto, productViewModel);
 
                 productsViewModels.Add(productViewModel);
             }
 
             /* Update the Products View Models in the Cart View Model */
-            viewModel.Products = productsViewModels;
+            cartViewModel.Products = productsViewModels;
 
-            return this.View(viewModel);
+            /* Get user address */
+            var userId = this.userManager.GetUserId(this.User);
+            var addressViewModel =
+                this.addressesService.GetByUserId<CartAddressViewInputModel>(userId) ?? new CartAddressViewInputModel();
+            cartViewModel.Address = addressViewModel;
+
+            return this.View(cartViewModel);
         }
 
         // [Authorize]
@@ -112,6 +107,29 @@
             {
                 id = inputModel.Id
             });
+        }
+
+        public void SetTempCart()
+        {
+            var cartData = new SessionCartDto()
+            {
+                Products = new List<SessionCartProductDto>()
+                {
+                    new SessionCartProductDto()
+                    {
+                        Id = 2,
+                        Quantity = 1,
+                        SizeString = "Small",
+                    },
+                    new SessionCartProductDto()
+                    {
+                        Id = 3,
+                        Quantity = 2,
+                        SizeString = "Medium",
+                    },
+                },
+            };
+            this.sessionService.Set(this.HttpContext.Session, "Cart", cartData);
         }
     }
 }

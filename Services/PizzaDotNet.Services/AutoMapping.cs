@@ -25,7 +25,7 @@
 
             /* CartViewModel <--> SessionCartDto*/
             this.CreateMap<SessionCartDto, CartViewModel>();
-            this.CreateMap<SessionCartDto, CartViewModel>();
+            this.CreateMap<CartViewModel, SessionCartDto>();
 
             /* UserAddress <--> AddressViewInputModel*/
             this.CreateMap<AddressViewInputModel, UserAddress>();
