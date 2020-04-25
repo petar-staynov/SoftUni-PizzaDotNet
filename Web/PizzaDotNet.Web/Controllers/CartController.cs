@@ -45,10 +45,14 @@
 
         public IActionResult Index()
         {
-            // TODO Remove dummy data
-            this.SetTempCart();
-
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+
+            // TODO Remove dummy data
+            if (cart == null || cart.Products.Count <= 0)
+            {
+                this.SetTempCart();
+                cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+            }
 
             var cartViewModel = this.mapper.Map<CartViewModel>(cart);
 
@@ -107,6 +111,12 @@
             {
                 id = inputModel.Id
             });
+        }
+
+        // [HttpPost]
+        public async Task<ActionResult> RemoveItem(int itemId)
+        {
+            return this.Ok();
         }
 
         public void SetTempCart()
