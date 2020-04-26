@@ -4,6 +4,10 @@
     this.ViewData["Title"] = "Cart";
 }
 
+@if (this.TempData["Message"] != null)
+{
+    <p class="text-white bg-@this.TempData["MessageType"]">@this.TempData["Message"]</p>
+}
 <div class="container">
     <div class="row cart-header-row">
         <div class="col-2 d-none d-md-block">
@@ -69,9 +73,11 @@
 
     <div class="row">
         <div class="col-12">
-            <form class="form-inline float-right">
+            <form class="form-inline float-right"
+                  method="post" asp-controller="CouponCodes" asp-action="ApplyCode">
                 <div class="form-group mx-sm-3 mb-2">
-                    <input type="text" class="form-control" id="couponInput" placeholder="Coupon code...">
+                    <input asp-for="@Model.CouponCode" type="text" class="form-control" placeholder="@Model.CouponCode">
+                    <span asp-validation-for="@Model.CouponCode" class="text-danger"></span>
                 </div>
                 <button type="submit" class="btn btn-success mb-2">Apply code</button>
             </form>
@@ -145,7 +151,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                        <label asp-for="@Model.AdditionalNotes"></label>
+                    <label asp-for="@Model.AdditionalNotes"></label>
                     <input asp-for="@Model.AdditionalNotes" type="text" class="form-control" placeholder="Example: Door is locked or Beware of dog.">
                 </div>
                 <div class="form-group">

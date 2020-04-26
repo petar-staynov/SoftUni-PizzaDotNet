@@ -25,6 +25,7 @@ namespace PizzaDotNet.Web.Controllers
         private readonly IProductsService productsService;
         private readonly IAddressesService addressesService;
         private readonly IProductSizeService productSizeService;
+        private readonly ICouponCodeService couponCodeService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ISessionService sessionService;
         private readonly IMapper mapper;
@@ -33,6 +34,7 @@ namespace PizzaDotNet.Web.Controllers
             IProductsService productsService,
             IAddressesService addressesService,
             IProductSizeService productSizeService,
+            ICouponCodeService couponCodeService,
             UserManager<ApplicationUser> userManager,
             ISessionService sessionService,
             IMapper mapper)
@@ -40,11 +42,13 @@ namespace PizzaDotNet.Web.Controllers
             this.productsService = productsService;
             this.addressesService = addressesService;
             this.productSizeService = productSizeService;
+            this.couponCodeService = couponCodeService;
             this.userManager = userManager;
             this.sessionService = sessionService;
             this.mapper = mapper;
         }
 
+        // TODO Alert messages to separate variable and use global constants for css
         public IActionResult Index()
         {
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
@@ -83,6 +87,19 @@ namespace PizzaDotNet.Web.Controllers
             var addressViewModel =
                 this.addressesService.GetByUserId<CartAddressViewInputModel>(userId) ?? new CartAddressViewInputModel();
             cartViewModel.Address = addressViewModel;
+
+            /* Get Coupon Code (Discount) */
+            var sessionCouponCode =
+                this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, "CouponCode");
+            if (sessionCouponCode != null)
+            {
+                var couponCode = this.couponCodeService.GetBaseByCode(sessionCouponCode.Code);
+                if (couponCode != null)
+                {
+                    cartViewModel.CouponCode = couponCode.Code;
+                    cartViewModel.DiscountPercent = couponCode.DiscountPercent;
+                }
+            }
 
             return this.View(cartViewModel);
         }

@@ -8,6 +8,7 @@
     public class CartAddressViewInputModel : IMapFrom<UserAddress>
     {
         [Required]
+        [Display(Name = "Personal name")]
         public string PersonName { get; set; }
 
         [Required]
