@@ -8,14 +8,14 @@
     using PizzaDotNet.Services.Data;
     using PizzaDotNet.Web.ViewModels.Ratings;
 
-    [Route("api/[controller]")]
+    [Route("api/Rating")]
     [ApiController]
-    public class RatingsController : ControllerBase
+    public class RatingsApiController : ControllerBase
     {
         private readonly IRatingsService ratingsService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public RatingsController(
+        public RatingsApiController(
             IRatingsService ratingsService,
             UserManager<ApplicationUser> userManager)
         {
@@ -23,7 +23,7 @@
             this.userManager = userManager;
         }
 
-        // GET: api/Ratings
+        // GET: api/Rating
         public IActionResult Get()
         {
             return this.Ok();
@@ -66,7 +66,8 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             await this.ratingsService.RateProductAsync(inputModel.ProductId, userId, inputModel.Value);
-            return this.Ok();
+
+            return this.Ok(new { response = "200 OK" });
 
             // TODO maybe return product average rating
         }

@@ -16,7 +16,7 @@
 <div class="text-center">
     <img src="@Url.Content(@imageUrl)" alt="Image" class="img-fluid"/>
 
-    @* <form id='ratingForm' method='post' hidden></form> *@
+    <form id='ratingForm' method='post' hidden></form>
 
     <h4>@Model.Name</h4>
     <p>@Model.Description</p>
@@ -107,12 +107,19 @@
     });
     
     const updateProductUserRating = (value) => {
+        // Reset all buttons
+        let buttons = $('*[id*=vote-]:visible');
+        buttons.each((i,ele) => {
+            $(ele).removeClass();
+        })
+        
+        // Mark the button corresponding to user rating
         const element = $(`#vote-${value}`);
         element.addClass("btn btn-primary")
     };
     
     const getProductRating = () => {
-        const apiUrl = `${window.location.origin}/api/ratings/${productId}`;
+        const apiUrl = `${window.location.origin}/api/rating/${productId}`;
         
         $.ajax({
             url: apiUrl,
@@ -135,8 +142,8 @@
     
     const getProductUserRating = () => {
         if(!isLoggedIn) return;
-        const apiUrl = `${window.location.origin}/api/Rating/UserRating?id=${productId}`;
-
+        const apiUrl = `${window.location.origin}/api/rating/UserRating/${productId}`;
+        
         $.ajax({
             url: apiUrl,
             type: 'GET',
@@ -150,11 +157,13 @@
             },
         });
     };
+    getProductUserRating();
     
     const rateProduct = (value) => {
         const token = $("#ratingForm input[name=__RequestVerificationToken]").val();
         
-        const apiUrl = `${window.location.origin}/api/ratings`;
+        const apiUrl = `${window.location.origin}/api/Rating`;
+        
         const data = {
             productId: productId,    
             value: value,
@@ -169,8 +178,9 @@
             headers: {
                 'X-CSRF-TOKEN': token,
             },
-            success: (res)=>{
+            success: (res) => {
                 getProductRating();
+                getProductUserRating();
             },
             error: (e) => {
                 console.log('error:');
