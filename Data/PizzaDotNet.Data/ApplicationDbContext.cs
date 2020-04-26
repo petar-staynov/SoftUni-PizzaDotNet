@@ -39,6 +39,7 @@
 
         public DbSet<UserAddress> Addresses { get; set; }
 
+        public DbSet<CouponCode> CouponCodes { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

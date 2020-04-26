@@ -121,6 +121,7 @@
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<ISessionService, SessionService>();
             services.AddTransient<IAddressesService, AddressesService>();
+            services.AddTransient<IOrdersService, OrdersService>();
             services.AddTransient<IOrderStatusService, OrderStatusService>();
 
             // Google Cloud service
