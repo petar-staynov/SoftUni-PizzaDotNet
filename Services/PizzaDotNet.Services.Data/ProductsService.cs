@@ -18,6 +18,7 @@
             this.productsRepository = productsRepository;
         }
 
+        // TODO Make method receive Product directly 
         public async Task<Product> CreateAsync(string name, string description, int categoryId, List<ProductSize> sizes, string imageUrl, string imageStorageName)
         {
             Product product = new Product
