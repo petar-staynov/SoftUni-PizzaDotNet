@@ -41,6 +41,16 @@
 
         public DbSet<CouponCode> CouponCodes { get; set; }
 
+        public DbSet<OrderAddress> OrdersAddresses { get; set; }
+
+        public DbSet<OrderProduct> OrdersProducts { get; set; }
+
+        public DbSet<OrderStatus> OrdersStatus { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -106,6 +116,12 @@
                 .HasOne(pi => pi.Ingredient)
                 .WithMany(i => i.ProductIngredients)
                 .HasForeignKey(pi => pi.IngredientId);
+
+            builder.Entity<OrderAddress>()
+                .HasKey(k => new { k.OrderId, k.UserAddressId });
+
+            builder.Entity<OrderProduct>()
+                .HasKey(k => new { k.OderId, k.ProductId });
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

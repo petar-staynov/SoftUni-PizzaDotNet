@@ -31,6 +31,7 @@
                               new CategoriesAndProductsSeeder(),
                               new IngredientsSeeder(),
                               new OrderStatusesSeeder(),
+                              new CouponCodesSeeder(),
                           };
 
             foreach (var seeder in seeders)
