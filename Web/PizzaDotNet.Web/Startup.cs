@@ -123,6 +123,7 @@
             services.AddTransient<IAddressesService, AddressesService>();
             services.AddTransient<IOrdersService, OrdersService>();
             services.AddTransient<IOrderStatusService, OrderStatusService>();
+            services.AddTransient<ICouponCodeService, CouponCodeService>();
 
             // Google Cloud service
             services.AddSingleton<IGoogleCloudStorage, GoogleCloudStorage>();
