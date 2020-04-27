@@ -10,7 +10,7 @@ using PizzaDotNet.Data;
 namespace PizzaDotNet.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200426172054_CouponCode")]
+    [Migration("20200427144805_CouponCode")]
     partial class CouponCode
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -277,7 +277,8 @@ namespace PizzaDotNet.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(6)")
+                        .HasMaxLength(6);
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -350,8 +351,17 @@ namespace PizzaDotNet.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CouponCodeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CouponCodeString")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<float>("DiscountPercent")
+                        .HasColumnType("real");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -362,16 +372,12 @@ namespace PizzaDotNet.Data.Migrations
                     b.Property<int>("OrderStatusId")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("TotalPriceDiscounted")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CouponCodeId");
 
                     b.HasIndex("OrderStatusId");
 
@@ -427,14 +433,14 @@ namespace PizzaDotNet.Data.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -745,6 +751,12 @@ namespace PizzaDotNet.Data.Migrations
 
             modelBuilder.Entity("PizzaDotNet.Data.Models.Order", b =>
                 {
+                    b.HasOne("PizzaDotNet.Data.Models.CouponCode", "CouponCode")
+                        .WithMany()
+                        .HasForeignKey("CouponCodeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("PizzaDotNet.Data.Models.OrderStatus", "OrderStatus")
                         .WithMany()
                         .HasForeignKey("OrderStatusId")

@@ -1,6 +1,7 @@
 ﻿namespace PizzaDotNet.Data.Models
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using PizzaDotNet.Data.Common.Models;
 
@@ -25,14 +26,20 @@
 
         public ICollection<OrderProduct> OrderProducts { get; set; }
 
-        public decimal? TotalPrice { get; set; }
+        public decimal? TotalPrice => this.OrderProducts.Select(p => p.Price * p.Quantity).Sum();
 
-        public decimal? TotalPriceDiscounted { get; set; }
+        public int CouponCodeId { get; set; }
+
+        public virtual CouponCode CouponCode { get; set; }
+
+        public string CouponCodeString { get; set; }
+
+        public float DiscountPercent { get; set; }
+
+        public decimal? TotalPriceDiscounted => this.DiscountPercent > 0
+        ? this.TotalPrice * (decimal?)(1 - (this.DiscountPercent / 100))
+        : this.TotalPrice;
 
         public string OrderNotes { get; set; }
-
-        // public int DiscountCodeId { get; set; }
-
-        // public virtual DiscountCode DiscountCode { get; set; }
     }
 }

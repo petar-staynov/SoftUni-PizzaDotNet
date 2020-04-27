@@ -1,5 +1,8 @@
 ﻿namespace PizzaDotNet.Data.Models
 {
+    using PizzaDotNet.Data.Common.Models;
+    using PizzaDotNet.Services.Mapping;
+
     public class OrderProduct
     {
         public int OderId { get; set; }
@@ -14,7 +17,7 @@
          * Save a copy of Product Name, Size and Price since they can change over time
          */
 
-        public string ProductName { get; set; }
+        public string Name { get; set; }
 
         public string Size { get; set; }
 
