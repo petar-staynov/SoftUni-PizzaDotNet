@@ -5,7 +5,7 @@
     using PizzaDotNet.Web.ViewModels.Addresses;
     using PizzaDotNet.Web.ViewModels.Cart;
     using PizzaDotNet.Web.ViewModels.DTO;
-    using PizzaDotNet.Web.ViewModels.Order;
+    using PizzaDotNet.Web.ViewModels.Orders;
     using PizzaDotNet.Web.ViewModels.Products;
 
     public class AutoMapping : Profile
@@ -55,6 +55,17 @@
             /* Order <-> OrderViewModel */
             this.CreateMap<Order, OrderViewModel>();
             this.CreateMap<OrderViewModel, Order>();
+
+            /* OrderStatus <-> OrderStatusViewModel */
+            // this.CreateMap<OrderStatus, OrderStatusViewModel>();
+            // this.CreateMap<OrderStatusViewModel, OrderStatus>();
+
+            /* OrderProduct <-> OrderProductViewModel */
+            // this.CreateMap<OrderProduct, OrderProductViewModel>();
+
+            /* OrderAddress <-> OrderAddressViewModel */
+            // this.CreateMap<OrderAddress, OrderAddressViewModel>();
+            // this.CreateMap<OrderAddressViewModel, OrderAddress>();
         }
     }
 }

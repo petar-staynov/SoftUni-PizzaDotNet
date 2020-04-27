@@ -1,6 +1,4 @@
-﻿using PizzaDotNet.Common;
-
-namespace PizzaDotNet.Web.Controllers
+﻿namespace PizzaDotNet.Web.Controllers
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -9,13 +7,14 @@ namespace PizzaDotNet.Web.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using PizzaDotNet.Common;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Data.Models.Enums;
     using PizzaDotNet.Services;
     using PizzaDotNet.Services.Data;
     using PizzaDotNet.Web.ViewModels.Cart;
     using PizzaDotNet.Web.ViewModels.DTO;
-    using PizzaDotNet.Web.ViewModels.Order;
+    using PizzaDotNet.Web.ViewModels.Orders;
 
     [Authorize]
     public class OrdersController : BaseController
@@ -134,12 +133,12 @@ namespace PizzaDotNet.Web.Controllers
                 this.couponCodeService.UseCodeByCode(inputModel.CouponCode);
             }
 
-            var orderViewModel = this.mapper.Map<OrderViewModel>(orderEntity);
-            return this.RedirectToAction("ViewOrder", orderViewModel);
+            return this.RedirectToAction("ViewOrder", orderEntity.Id);
         }
 
-        public IActionResult ViewOrder(OrderViewModel orderViewModel)
+        public IActionResult ViewOrder(int orderId)
         {
+            var orderViewModel = this.ordersService.GetById<OrderViewModel>(orderId);
             return this.View(orderViewModel);
         }
     }
