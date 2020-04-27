@@ -36,6 +36,6 @@ namespace PizzaDotNet.Web.ViewModels.Cart
         public string AdditionalNotes { get; set; }
 
         [Display(Name = "Use this as my default address")]
-        public bool UseAddress { get; set; } 
+        public bool UseAddress { get; set; }
     }
 }
