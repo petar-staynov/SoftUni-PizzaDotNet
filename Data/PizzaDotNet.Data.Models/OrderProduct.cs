@@ -1,11 +1,13 @@
 ﻿namespace PizzaDotNet.Data.Models
 {
+    using System.ComponentModel.DataAnnotations;
+
     using PizzaDotNet.Data.Common.Models;
     using PizzaDotNet.Services.Mapping;
 
     public class OrderProduct
     {
-        public int OderId { get; set; }
+        public int OrderId { get; set; }
 
         public virtual Order Order { get; set; }
 

@@ -117,11 +117,18 @@
                 .WithMany(i => i.ProductIngredients)
                 .HasForeignKey(pi => pi.IngredientId);
 
-            builder.Entity<OrderAddress>()
-                .HasKey(k => new { k.OrderId, k.UserAddressId });
+            builder.Entity<Order>()
+                .HasOne(o => o.OrderAddress)
+                .WithOne(oa => oa.Order)
+                .HasForeignKey<OrderAddress>(o => o.Id);
 
             builder.Entity<OrderProduct>()
-                .HasKey(k => new { k.OderId, k.ProductId });
+                .HasKey(k => new { k.OrderId, k.ProductId });
+
+            builder.Entity<Order>()
+                .HasOne(o => o.OrderAddress)
+                .WithOne(oa => oa.Order)
+                .HasForeignKey<OrderAddress>(oa => oa.OrderId);
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

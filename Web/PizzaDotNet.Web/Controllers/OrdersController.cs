@@ -54,39 +54,21 @@ namespace PizzaDotNet.Web.Controllers
 
         public async Task<IActionResult> PlaceOrder(CartViewModel inputModel)
         {
-            /*
-             * string UserId { get; set; }
-             * virtual ApplicationUser User { get; set; }
-             * OrderAddress Address { get; set; }
-             * int OrderStatusId { get; set; }
-             * virtual OrderStatus OrderStatus { get; set; }
-             * ICollection<OrderProduct> OrderProducts { get; set; }
-             * decimal? TotalPrice => this.OrderProducts.Select(p => p.Price * p.Quantity).Sum();
-             * int CouponCodeId { get; set; }
-             * virtual CouponCode CouponCode { get; set; }
-             * float DiscountPercent { get; set; }
-             * decimal? TotalPriceDiscounted 
-             * public string OrderNotes { get; set; }
-             */
-            var order = new Order();
+            /* Get User */
+            var user = await this.userManager.GetUserAsync(this.User);
+            var userId = user.Id;
 
-            var user = this.User;
-            var userId = this.userManager.GetUserId(this.User);
-
-            order.UserId = userId;
-
-            /* Map cart address to order address. Assign AddressId for use in composite key */
+            /* Map cart address to order address */
             var orderAddress = this.mapper.Map<OrderAddress>(inputModel.Address);
-            order.Address = orderAddress;
 
             /* Create/Update user address if box was checked */
-            // TODO Only if box is checked
             if (inputModel.UseAddress == true)
             {
                 var userAddress = this.addressesService.GetBaseByUserId(userId);
                 if (userAddress == null)
                 {
                     var newUserAddress = this.mapper.Map<UserAddress>(inputModel.Address);
+                    newUserAddress.User = user;
                     userAddress = await this.addressesService.CreateAddressAsync(newUserAddress);
                 }
                 else
@@ -95,13 +77,10 @@ namespace PizzaDotNet.Web.Controllers
                     var newUserAddress = this.mapper.Map(inputModel.Address, userAddress);
                     await this.addressesService.UpdateAddressAsync(newUserAddress);
                 }
-
-                orderAddress.UserAddressId = userAddress.Id;
             }
 
             /* Get order status of "Processing" */
             var orderStatus = this.orderStatusService.GetByName(OrderStatusEnum.Processing.ToString());
-            order.OrderStatus = orderStatus;
 
             /* Map order products */
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
@@ -128,31 +107,31 @@ namespace PizzaDotNet.Web.Controllers
                 orderProducts.Add(orderProduct);
             }
 
-            order.OrderProducts = orderProducts;
 
             /* Apply discount code */
+            CouponCode couponCode = null;
             var sessionCouponCode =
                 this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, "CouponCode");
             if (sessionCouponCode != null)
             {
-                var couponCode = this.couponCodeService.GetBaseByCode(sessionCouponCode.Code);
-                if (couponCode != null)
-                {
-                    order.CouponCode = couponCode;
-                    order.DiscountPercent = couponCode.DiscountPercent;
-                    order.CouponCodeString = couponCode.Code;
-                    order.DiscountPercent = couponCode.DiscountPercent;
-                }
+                couponCode = this.couponCodeService.GetBaseByCode(sessionCouponCode.Code);
             }
 
-            order.OrderNotes = inputModel.AdditionalNotes;
-
+            var order = new Order()
+            {
+                User = user,
+                OrderAddress = orderAddress,
+                OrderStatus = orderStatus,
+                OrderProducts = orderProducts,
+                CouponCode = couponCode,
+                OrderNotes = inputModel.AdditionalNotes,
+            };
             var orderEntity = await this.ordersService.CreateAsync(order);
 
             /* Disable coupon code */
-            if (orderEntity.Id != null)
+            if (couponCode != null)
             {
-                this.couponCodeService.UseCodeByCode(orderEntity.CouponCodeString);
+                this.couponCodeService.UseCodeByCode(inputModel.CouponCode);
             }
 
             var orderViewModel = this.mapper.Map<OrderViewModel>(orderEntity);

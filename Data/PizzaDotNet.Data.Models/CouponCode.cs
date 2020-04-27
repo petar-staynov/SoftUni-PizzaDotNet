@@ -5,7 +5,7 @@
 
     using PizzaDotNet.Data.Common.Models;
 
-    public class CouponCode : BaseDeletableModel<int>
+    public class CouponCode : BaseModel<int>
     {
         [StringLength(6, MinimumLength = 6)]
         public string Code { get; set; }

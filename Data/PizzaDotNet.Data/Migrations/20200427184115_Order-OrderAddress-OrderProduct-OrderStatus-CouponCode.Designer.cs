@@ -10,8 +10,8 @@ using PizzaDotNet.Data;
 namespace PizzaDotNet.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200427160434_SizeString-to-SizeName")]
-    partial class SizeStringtoSizeName
+    [Migration("20200427184115_Order-OrderAddress-OrderProduct-OrderStatus-CouponCode")]
+    partial class OrderOrderAddressOrderProductOrderStatusCouponCode
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -283,14 +283,8 @@ namespace PizzaDotNet.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("DiscountPercent")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsUsed")
                         .HasColumnType("bit");
@@ -302,8 +296,6 @@ namespace PizzaDotNet.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
 
                     b.ToTable("CouponCodes");
                 });
@@ -351,17 +343,11 @@ namespace PizzaDotNet.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CouponCodeId")
+                    b.Property<int?>("CouponCodeId")
                         .HasColumnType("int");
-
-                    b.Property<string>("CouponCodeString")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<float>("DiscountPercent")
-                        .HasColumnType("real");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -388,11 +374,10 @@ namespace PizzaDotNet.Data.Migrations
 
             modelBuilder.Entity("PizzaDotNet.Data.Models.OrderAddress", b =>
                 {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserAddressId")
-                        .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Apartment")
                         .HasColumnType("nvarchar(max)");
@@ -403,8 +388,23 @@ namespace PizzaDotNet.Data.Migrations
                     b.Property<string>("Building")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Floor")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PersonName")
                         .HasColumnType("nvarchar(max)");
@@ -415,19 +415,19 @@ namespace PizzaDotNet.Data.Migrations
                     b.Property<string>("Street")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("OrderId", "UserAddressId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("OrderId")
                         .IsUnique();
-
-                    b.HasIndex("UserAddressId");
 
                     b.ToTable("OrdersAddresses");
                 });
 
             modelBuilder.Entity("PizzaDotNet.Data.Models.OrderProduct", b =>
                 {
-                    b.Property<int>("OderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
@@ -435,9 +435,6 @@ namespace PizzaDotNet.Data.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -448,9 +445,7 @@ namespace PizzaDotNet.Data.Migrations
                     b.Property<string>("Size")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("OderId", "ProductId");
-
-                    b.HasIndex("OrderId");
+                    b.HasKey("OrderId", "ProductId");
 
                     b.HasIndex("ProductId");
 
@@ -753,9 +748,7 @@ namespace PizzaDotNet.Data.Migrations
                 {
                     b.HasOne("PizzaDotNet.Data.Models.CouponCode", "CouponCode")
                         .WithMany()
-                        .HasForeignKey("CouponCodeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CouponCodeId");
 
                     b.HasOne("PizzaDotNet.Data.Models.OrderStatus", "OrderStatus")
                         .WithMany()
@@ -771,14 +764,8 @@ namespace PizzaDotNet.Data.Migrations
             modelBuilder.Entity("PizzaDotNet.Data.Models.OrderAddress", b =>
                 {
                     b.HasOne("PizzaDotNet.Data.Models.Order", "Order")
-                        .WithOne("Address")
+                        .WithOne("OrderAddress")
                         .HasForeignKey("PizzaDotNet.Data.Models.OrderAddress", "OrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PizzaDotNet.Data.Models.UserAddress", "UserAddress")
-                        .WithMany()
-                        .HasForeignKey("UserAddressId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -787,7 +774,9 @@ namespace PizzaDotNet.Data.Migrations
                 {
                     b.HasOne("PizzaDotNet.Data.Models.Order", "Order")
                         .WithMany("OrderProducts")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("PizzaDotNet.Data.Models.Product", "Product")
                         .WithMany()

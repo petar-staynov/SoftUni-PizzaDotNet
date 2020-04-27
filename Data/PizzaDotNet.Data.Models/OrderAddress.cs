@@ -1,15 +1,12 @@
 ﻿namespace PizzaDotNet.Data.Models
 {
-    public class OrderAddress
+    using PizzaDotNet.Data.Common.Models;
+
+    public class OrderAddress : BaseDeletableModel<int>
     {
         public int OrderId { get; set; }
 
         public virtual Order Order { get; set; }
-
-        public int UserAddressId { get; set; }
-
-        public virtual UserAddress UserAddress { get; set; }
-
 
         /*
          * Create a copy of the address since the user can change his over time

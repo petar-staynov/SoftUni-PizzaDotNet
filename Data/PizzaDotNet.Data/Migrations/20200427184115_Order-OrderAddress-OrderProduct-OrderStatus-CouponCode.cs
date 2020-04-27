@@ -3,10 +3,38 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PizzaDotNet.Data.Migrations
 {
-    public partial class OrderOrderAddressOrderProductOrderStatus : Migration
+    public partial class OrderOrderAddressOrderProductOrderStatusCouponCode : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "Size",
+                table: "ProductSizes");
+
+            migrationBuilder.AddColumn<string>(
+                name: "Name",
+                table: "ProductSizes",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.CreateTable(
+                name: "CouponCodes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    Code = table.Column<string>(maxLength: 6, nullable: true),
+                    DiscountPercent = table.Column<int>(nullable: false),
+                    ValidUntil = table.Column<DateTime>(nullable: false),
+                    IsUsed = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CouponCodes", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "OrdersStatus",
                 columns: table => new
@@ -32,13 +60,18 @@ namespace PizzaDotNet.Data.Migrations
                     ModifiedOn = table.Column<DateTime>(nullable: true),
                     UserId = table.Column<string>(nullable: true),
                     OrderStatusId = table.Column<int>(nullable: false),
-                    TotalPrice = table.Column<decimal>(nullable: true),
-                    TotalPriceDiscounted = table.Column<decimal>(nullable: true),
+                    CouponCodeId = table.Column<int>(nullable: true),
                     OrderNotes = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_CouponCodes_CouponCodeId",
+                        column: x => x.CouponCodeId,
+                        principalTable: "CouponCodes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Orders_OrdersStatus_OrderStatusId",
                         column: x => x.OrderStatusId,
@@ -57,8 +90,13 @@ namespace PizzaDotNet.Data.Migrations
                 name: "OrdersAddresses",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
                     OrderId = table.Column<int>(nullable: false),
-                    UserAddressId = table.Column<int>(nullable: false),
                     PersonName = table.Column<string>(nullable: true),
                     Area = table.Column<string>(nullable: true),
                     Street = table.Column<string>(nullable: true),
@@ -69,17 +107,11 @@ namespace PizzaDotNet.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrdersAddresses", x => new { x.OrderId, x.UserAddressId });
+                    table.PrimaryKey("PK_OrdersAddresses", x => x.Id);
                     table.ForeignKey(
                         name: "FK_OrdersAddresses_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_OrdersAddresses_Addresses_UserAddressId",
-                        column: x => x.UserAddressId,
-                        principalTable: "Addresses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -88,17 +120,16 @@ namespace PizzaDotNet.Data.Migrations
                 name: "OrdersProducts",
                 columns: table => new
                 {
-                    OderId = table.Column<int>(nullable: false),
+                    OrderId = table.Column<int>(nullable: false),
                     ProductId = table.Column<int>(nullable: false),
-                    OrderId = table.Column<int>(nullable: true),
-                    ProductName = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
                     Size = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(nullable: false),
                     Quantity = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrdersProducts", x => new { x.OderId, x.ProductId });
+                    table.PrimaryKey("PK_OrdersProducts", x => new { x.OrderId, x.ProductId });
                     table.ForeignKey(
                         name: "FK_OrdersProducts_Orders_OrderId",
                         column: x => x.OrderId,
@@ -114,6 +145,11 @@ namespace PizzaDotNet.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_CouponCodeId",
+                table: "Orders",
+                column: "CouponCodeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_OrderStatusId",
                 table: "Orders",
                 column: "OrderStatusId");
@@ -124,20 +160,15 @@ namespace PizzaDotNet.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrdersAddresses_IsDeleted",
+                table: "OrdersAddresses",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrdersAddresses_OrderId",
                 table: "OrdersAddresses",
                 column: "OrderId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrdersAddresses_UserAddressId",
-                table: "OrdersAddresses",
-                column: "UserAddressId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrdersProducts_OrderId",
-                table: "OrdersProducts",
-                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrdersProducts_ProductId",
@@ -157,7 +188,21 @@ namespace PizzaDotNet.Data.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
+                name: "CouponCodes");
+
+            migrationBuilder.DropTable(
                 name: "OrdersStatus");
+
+            migrationBuilder.DropColumn(
+                name: "Name",
+                table: "ProductSizes");
+
+            migrationBuilder.AddColumn<string>(
+                name: "Size",
+                table: "ProductSizes",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
         }
     }
 }
