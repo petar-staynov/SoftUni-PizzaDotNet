@@ -1,4 +1,5 @@
-﻿using PizzaDotNet.Web.ViewModels.ProductSize;
+﻿using Microsoft.AspNetCore.Authorization;
+using PizzaDotNet.Web.ViewModels.ProductSize;
 
 namespace PizzaDotNet.Web.Controllers
 {
@@ -76,7 +77,7 @@ namespace PizzaDotNet.Web.Controllers
             return this.View(productViewModel);
         }
 
-        // [Authorize]
+        [Authorize(Roles = "administrator, manager")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -89,7 +90,7 @@ namespace PizzaDotNet.Web.Controllers
             return this.View(viewModel);
         }
 
-        // [Authorize]
+        [Authorize(Roles = "administrator, manager")]
         [HttpPost]
         public async Task<ActionResult> Create(ProductCreateInputModel inputModel)
         {
