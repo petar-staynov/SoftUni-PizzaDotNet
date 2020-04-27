@@ -16,7 +16,7 @@
 
         public ProductSizeViewModel Size { get; set; }
 
-        public string SizeString => this.Size.Size;
+        public string SizeString => this.Size.Name;
 
         public int Quantity { get; set; }
 

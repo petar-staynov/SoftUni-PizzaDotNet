@@ -1,10 +1,11 @@
 ﻿namespace PizzaDotNet.Web.ViewModels.ProductSize
 {
+    using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
 
-    public class ProductSizeViewModel : IMapFrom<Data.Models.ProductSize>
+    public class ProductSizeViewModel : IMapFrom<ProductSize>
     {
-        public string Size { get; set; }
+        public string Name { get; set; }
 
         public decimal Price { get; set; }
     }

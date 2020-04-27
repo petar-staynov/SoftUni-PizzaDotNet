@@ -110,15 +110,15 @@
                 var orderProduct = this.mapper.Map<OrderProduct>(product);
 
                 orderProduct.Product = product;
-                
+
                 /* Get product size */
                 var productSize =
-                    this.productSizeService.GetProductSizeBase(productDto.Id, productDto.SizeString);
-                orderProduct.Size = productSize.Size;
+                    this.productSizeService.GetProductSizeBase(productDto.Id, productDto.SizeName);
+                orderProduct.Size = productSize.Name;
 
                 /* Map price*/
                 orderProduct.Price = productSize.Price;
-                
+
                 /* Map Quantity, Size from Product DTO */
                 orderProduct = this.mapper.Map(productDto, orderProduct);
 

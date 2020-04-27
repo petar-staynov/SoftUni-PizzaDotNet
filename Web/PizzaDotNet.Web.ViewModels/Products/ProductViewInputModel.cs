@@ -23,7 +23,7 @@
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Please select a valid size")]
-        public string Size { get; set; }
+        public string SizeName { get; set; }
 
         public ICollection<ProductSizeViewModel> Sizes { get; set; }
 

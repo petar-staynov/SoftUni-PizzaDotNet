@@ -13,7 +13,7 @@
         public virtual Product Product { get; set; }
 
         [Required]
-        public string Size { get; set; }
+        public string Name { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18, 4)")]

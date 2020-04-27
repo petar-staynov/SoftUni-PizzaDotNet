@@ -23,7 +23,7 @@
             var productSize = new ProductSize
             {
                 ProductId = productId,
-                Size = size,
+                Name = size,
                 Price = price,
             };
 
@@ -48,7 +48,7 @@
         {
             var query = this.productSizeRepository
                 .All()
-                .Where(s => s.ProductId == productId && s.Size == sizeString);
+                .Where(s => s.ProductId == productId && s.Name == sizeString);
 
             var productSize = query.To<T>().FirstOrDefault();
 
@@ -59,7 +59,7 @@
         {
             var productSize = this.productSizeRepository
                 .All()
-                .FirstOrDefault(s => s.ProductId == productId && s.Size == sizeString);
+                .FirstOrDefault(s => s.ProductId == productId && s.Name == sizeString);
 
             return productSize;
         }

@@ -71,7 +71,7 @@
 
                 /* Get product size */
                 var productSize =
-                    this.productSizeService.GetProductSize<ProductSizeViewModel>(productDto.Id, productDto.SizeString);
+                    this.productSizeService.GetProductSize<ProductSizeViewModel>(productDto.Id, productDto.SizeName);
                 productViewModel.Size = productSize;
 
                 /* Map data (Quantity, Size) from Product DTO */
@@ -105,7 +105,13 @@
             return this.View(cartViewModel);
         }
 
-        // [Authorize]
+        // Redirect to Menu page in case user is logged in after trying to add item to cart
+        [HttpGet]
+        public async Task<ActionResult> AddItem()
+        {
+            return RedirectToAction("Index", "Categories");
+        }
+
         [HttpPost]
         public async Task<ActionResult> AddItem(ProductViewInputModel inputModel)
         {
@@ -138,7 +144,7 @@
         {
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
             cart.Products
-                .RemoveAll(p => p.Id == itemId && p.SizeString == itemSize);
+                .RemoveAll(p => p.Id == itemId && p.SizeName == itemSize);
 
             this.sessionService.Set(this.HttpContext.Session, "Cart", cart);
 
@@ -149,7 +155,7 @@
         {
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
             cart.Products
-                .FindAll(p => p.Id == itemId && p.SizeString == itemSize && p.Quantity < 10)
+                .FindAll(p => p.Id == itemId && p.SizeName == itemSize && p.Quantity < 10)
                 .ForEach(p => p.Quantity++);
 
             this.sessionService.Set(this.HttpContext.Session, "Cart", cart);
@@ -161,7 +167,7 @@
         {
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
             cart.Products
-                .FindAll(p => p.Id == itemId && p.SizeString == itemSize && p.Quantity > 1)
+                .FindAll(p => p.Id == itemId && p.SizeName == itemSize && p.Quantity > 1)
                 .ForEach(p => p.Quantity--);
 
             this.sessionService.Set(this.HttpContext.Session, "Cart", cart);
@@ -179,13 +185,13 @@
                     {
                         Id = 2,
                         Quantity = 1,
-                        SizeString = "Small",
+                        SizeName = "Small",
                     },
                     new SessionCartProductDto()
                     {
                         Id = 3,
                         Quantity = 2,
-                        SizeString = "Medium",
+                        SizeName = "Medium",
                     },
                 },
             };

@@ -178,17 +178,17 @@
                 {
                     new ProductSize()
                     {
-                        Size = "Small",
+                        Name = "Small",
                         Price = Rng.Next(5, 10),
                     },
                     new ProductSize()
                     {
-                        Size = "Medium",
+                        Name = "Medium",
                         Price = Rng.Next(10, 15),
                     },
                     new ProductSize()
                     {
-                        Size = "Large",
+                        Name = "Large",
                         Price = Rng.Next(15, 20),
                     },
                 };
@@ -221,7 +221,7 @@
                 {
                     new ProductSize()
                     {
-                        Size = "Default",
+                        Name = "Default",
                         Price = Rng.Next(4, 8),
                     },
                 };
@@ -266,7 +266,7 @@
                 {
                     new ProductSize()
                     {
-                        Size = "Default",
+                        Name = "Default",
                         Price = Rng.Next(3, 4),
                     },
                 };
@@ -317,7 +317,7 @@
                 {
                     new ProductSize()
                     {
-                        Size = "Default",
+                        Name = "Default",
                         Price = Rng.Next(2, 4),
                     },
                 };
@@ -362,7 +362,7 @@
                 {
                     new ProductSize()
                     {
-                        Size = "Default",
+                        Name = "Default",
                         Price = Rng.Next(2, 5),
                     },
                 };

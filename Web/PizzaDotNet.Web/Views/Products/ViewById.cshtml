@@ -6,7 +6,7 @@
     var productId = Model.Id;
 
     var sizesOrdered = Model.Sizes.OrderBy(x => x.Price).ToList();
-    var sizesDict = Json.Serialize(sizesOrdered.ToDictionary(k => k.Size, v => v.Price));
+    var sizesDict = Json.Serialize(sizesOrdered.ToDictionary(k => k.Name, v => v.Price));
 
     var imageUrl = Model.ImageUrl ?? "~/images/placeholders/320x320.png";
 
@@ -50,18 +50,18 @@
                 {
                     <div class="form-check form-check-inline">
                         <input
-                            id="product-size-@size.Size"
+                            id="product-size-@size.Name"
                             class="form-check-input"
                             type="radio"
-                            asp-for="Size"
-                            value="@size.Size">
-                        <label class="form-check-label" asp-for="@size.Size">@size.Size</label>
+                            asp-for="SizeName"
+                            value="@size.Name">
+                        <label class="form-check-label" asp-for="@size.Name">@size.Name</label>
                     </div>
                 }
             </div>
             <span>Price: <span id="selectedSizePrice">0</span></span>
             <br/>
-            <span asp-validation-for="Size" class="text-danger"></span>
+            <span asp-validation-for="SizeName" class="text-danger"></span>
             <hr/>
             <div class="form-group row">
                 <label asp-for="Quantity" class="col-2 col-form-label"></label>
@@ -94,7 +94,7 @@
     $(document).ready(() => {
         //Track for size or quantity change
         $('#productOrderForm').change(function (){
-            const selectedSize = $('input[name=Size]:checked').val();
+            const selectedSize = $('input[name=SizeName]:checked').val();
             
             let price = productSizes[selectedSize];
             let quantity = $('input[name=Quantity]').val();
