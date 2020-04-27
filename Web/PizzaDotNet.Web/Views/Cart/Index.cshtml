@@ -6,7 +6,9 @@
 
 @if (this.TempData["Message"] != null)
 {
-    <p class="text-white bg-@this.TempData["MessageType"]">@this.TempData["Message"]</p>
+    <div class="alert alert-@this.TempData["MessageType"] alert-dismissible fade show">
+        <span>@this.TempData["Message"]</span>
+    </div>
 }
 <div class="container">
     <div class="row cart-header-row">

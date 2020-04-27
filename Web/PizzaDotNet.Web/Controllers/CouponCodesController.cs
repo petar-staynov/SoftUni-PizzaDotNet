@@ -11,7 +11,7 @@
 
     public class CouponCodesController : BaseController
     {
-        private const string COUPON_EXPIRED = "Invalid coupon code";
+        private const string COUPON_EXPIRED = "Invalid or expired coupon code";
         private const string COUPON_REMOVED = "Successfuly removed coupon code";
         private const string COUPON_APPLIED = "Coupon code successfully applied";
 
