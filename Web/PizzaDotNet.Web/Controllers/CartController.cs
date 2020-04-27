@@ -1,4 +1,6 @@
-﻿namespace PizzaDotNet.Web.Controllers
+﻿using PizzaDotNet.Common;
+
+namespace PizzaDotNet.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -52,13 +54,13 @@
         // TODO Alert messages to separate variable and use global constants for css
         public IActionResult Index()
         {
-            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
 
             // TODO Remove dummy data
             if (cart == null || cart.Products.Count <= 0)
             {
                 this.SetTempCart();
-                cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+                cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             }
 
             var cartViewModel = this.mapper.Map<CartViewModel>(cart);
@@ -123,14 +125,14 @@
             }
 
             var cart = new SessionCartDto();
-            if (this.sessionService.TryGet(this.HttpContext.Session, "Cart"))
+            if (this.sessionService.TryGet(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY))
             {
-                cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+                cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             }
 
             var cartProductModel = this.mapper.Map<SessionCartProductDto>(inputModel);
             cart.Products.Add(cartProductModel);
-            this.sessionService.Set(this.HttpContext.Session, "Cart", cart);
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cart);
             this.TempData["Message"] = "Product added to cart";
             this.TempData["MessageType"] = "success";
             return this.RedirectToAction("ViewById", $"Products", new
@@ -142,35 +144,35 @@
         // [HttpPost]
         public async Task<ActionResult> RemoveItem(int itemId, string itemSize)
         {
-            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             cart.Products
                 .RemoveAll(p => p.Id == itemId && p.SizeName == itemSize);
 
-            this.sessionService.Set(this.HttpContext.Session, "Cart", cart);
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cart);
 
             return this.RedirectToAction("Index");
         }
 
         public async Task<ActionResult> IncreaseItemQuantity(int itemId, string itemSize)
         {
-            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             cart.Products
                 .FindAll(p => p.Id == itemId && p.SizeName == itemSize && p.Quantity < 10)
                 .ForEach(p => p.Quantity++);
 
-            this.sessionService.Set(this.HttpContext.Session, "Cart", cart);
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cart);
 
             return this.RedirectToAction("Index");
         }
 
         public async Task<ActionResult> DecreaseItemQuantity(int itemId, string itemSize)
         {
-            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             cart.Products
                 .FindAll(p => p.Id == itemId && p.SizeName == itemSize && p.Quantity > 1)
                 .ForEach(p => p.Quantity--);
 
-            this.sessionService.Set(this.HttpContext.Session, "Cart", cart);
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cart);
 
             return this.RedirectToAction("Index");
         }
@@ -195,7 +197,7 @@
                     },
                 },
             };
-            this.sessionService.Set(this.HttpContext.Session, "Cart", cartData);
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cartData);
         }
     }
 }

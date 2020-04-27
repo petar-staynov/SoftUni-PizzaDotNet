@@ -1,4 +1,6 @@
-﻿namespace PizzaDotNet.Web.Controllers
+﻿using PizzaDotNet.Common;
+
+namespace PizzaDotNet.Web.Controllers
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -68,6 +70,7 @@
              */
             var order = new Order();
 
+            var user = this.User;
             var userId = this.userManager.GetUserId(this.User);
 
             order.UserId = userId;
@@ -101,7 +104,7 @@
             order.OrderStatus = orderStatus;
 
             /* Map order products */
-            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             var orderProducts = new List<OrderProduct>();
             foreach (SessionCartProductDto productDto in cart.Products)
             {

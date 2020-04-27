@@ -1,4 +1,6 @@
-﻿namespace PizzaDotNet.Web.Controllers
+﻿using PizzaDotNet.Common;
+
+namespace PizzaDotNet.Web.Controllers
 {
     using System.Threading.Tasks;
 
@@ -23,7 +25,7 @@
         [HttpGet("NumberOfItems")]
         public async Task<CartItemsNumberResponseModel> GetNumberOfCartItems()
         {
-            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, "Cart");
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             if (cart == null)
             {
                 cart = new SessionCartDto();
