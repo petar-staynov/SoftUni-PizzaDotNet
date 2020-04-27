@@ -48,6 +48,15 @@
             return product;
         }
 
+        public Product GetBaseById(int id)
+        {
+            var product = this.productsRepository
+                .All()
+                .FirstOrDefault(x => x.Id == id);
+
+            return product;
+        }
+
         public IEnumerable<T> GetByCategoryId<T>(int categoryId)
         {
             var query = this.productsRepository

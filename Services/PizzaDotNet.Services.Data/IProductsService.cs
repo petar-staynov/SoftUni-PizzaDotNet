@@ -15,6 +15,8 @@
         // TODO Add DELETE
         T GetById<T>(int id);
 
+        Product GetBaseById(int id);
+
         IEnumerable<T> GetByCategoryId<T>(int categoryId);
 
         IEnumerable<T> GetByCategoryName<T>(string categoryName);
