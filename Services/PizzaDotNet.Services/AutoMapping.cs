@@ -48,6 +48,10 @@
             this.CreateMap<OrderProduct, SessionCartProductDto>();
             this.CreateMap<SessionCartProductDto, OrderProduct>();
 
+            /* Product <-> OrderProduct */
+            this.CreateMap<Product, OrderProduct>();
+            this.CreateMap<OrderProduct, Product>();
+
             /* Order <-> OrderViewModel */
             this.CreateMap<Order, OrderViewModel>();
             this.CreateMap<OrderViewModel, Order>();
