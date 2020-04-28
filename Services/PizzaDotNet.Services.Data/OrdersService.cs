@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using PizzaDotNet.Common;
-using PizzaDotNet.Data.Models.Enums;
-
-namespace PizzaDotNet.Services.Data
+﻿namespace PizzaDotNet.Services.Data
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore;
+    using PizzaDotNet.Common;
     using PizzaDotNet.Data.Common.Repositories;
     using PizzaDotNet.Data.Models;
+    using PizzaDotNet.Data.Models.Enums;
     using PizzaDotNet.Services.Mapping;
 
     public class OrdersService : IOrdersService
@@ -21,6 +20,24 @@ namespace PizzaDotNet.Services.Data
         {
             this.orderRepository = orderRepository;
             this.orderStatusService = orderStatusService;
+        }
+
+        public int GetCount()
+        {
+            int count = this.orderRepository
+                .All()
+                .Count();
+
+            return count;
+        }
+
+        public decimal? GetTotalProfit()
+        {
+            decimal? profit = this.orderRepository
+                .All()
+                .Sum(o => o.TotalPriceDiscounted);
+
+            return profit;
         }
 
         public async Task<Order> CreateAsync(Order order)
@@ -84,7 +101,7 @@ namespace PizzaDotNet.Services.Data
 
         public IEnumerable<T> GetByUserIdSorted<T>(string userId, string criteria)
         {
-            var orders = this.orderRepository
+            var ordersQuery = this.orderRepository
                 .All()
                 .Where(o => o.UserId == userId);
 
@@ -92,22 +109,22 @@ namespace PizzaDotNet.Services.Data
             switch (criteria)
             {
                 case SortingCriterias.ORDER_PRICE_HIGHEST_TO_LOWEST:
-                    orders = orders.OrderBy(o => o.TotalPrice);
+                    ordersQuery = ordersQuery.OrderBy(o => o.TotalPrice);
                     break;
                 case SortingCriterias.ORDER_PRICE_LOWEST_TO_HIGHEST:
-                    orders = orders.OrderByDescending(o => o.TotalPrice);
+                    ordersQuery = ordersQuery.OrderByDescending(o => o.TotalPrice);
                     break;
                 case SortingCriterias.ORDER_DATE_OLDEST_TO_NEWEST:
-                    orders = orders.OrderBy(o => o.CreatedOn);
+                    ordersQuery = ordersQuery.OrderBy(o => o.CreatedOn);
                     break;
                 case SortingCriterias.ORDER_DATE_NEWEST_TO_OLDEST:
-                    orders = orders.OrderByDescending(o => o.CreatedOn);
+                    ordersQuery = ordersQuery.OrderByDescending(o => o.CreatedOn);
                     break;
             }
 
-            var ordersList = orders.To<T>().ToList();
+            var orders = ordersQuery.To<T>().ToList();
 
-            return ordersList;
+            return orders;
         }
 
         public Order GetBaseByUserId(string userId)
@@ -117,6 +134,38 @@ namespace PizzaDotNet.Services.Data
                 .FirstOrDefault(o => o.UserId == userId);
 
             return order;
+        }
+
+        public IEnumerable<T> GetAll<T>(string sortCriteria = null, int? count = null)
+        {
+            var ordersQuery = this.orderRepository
+                .All();
+
+            switch (sortCriteria)
+            {
+                case SortingCriterias.ORDER_PRICE_HIGHEST_TO_LOWEST:
+                    ordersQuery = ordersQuery.OrderBy(o => o.TotalPrice);
+                    break;
+                case SortingCriterias.ORDER_PRICE_LOWEST_TO_HIGHEST:
+                    ordersQuery = ordersQuery.OrderByDescending(o => o.TotalPrice);
+                    break;
+                case SortingCriterias.ORDER_DATE_OLDEST_TO_NEWEST:
+                    ordersQuery = ordersQuery.OrderBy(o => o.CreatedOn);
+                    break;
+                case SortingCriterias.ORDER_DATE_NEWEST_TO_OLDEST:
+                    ordersQuery = ordersQuery.OrderByDescending(o => o.CreatedOn);
+                    break;
+                case SortingCriterias.ORDER_USENAME_DESCENDING:
+                    ordersQuery = ordersQuery.OrderByDescending(o => o.User.UserName);
+                    break;
+                case SortingCriterias.ORDER_USERNAME_ASCENDING:
+                    ordersQuery = ordersQuery.OrderBy(o => o.User.UserName);
+                    break;
+            }
+
+            var orders = ordersQuery.To<T>().ToList();
+
+            return orders;
         }
 
         public async Task<Order> ChangeStatus(int orderId, OrderStatusEnum statusEnum)
