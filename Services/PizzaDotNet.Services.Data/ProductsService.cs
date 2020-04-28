@@ -69,7 +69,13 @@ namespace PizzaDotNet.Services.Data
 
         public IEnumerable<T> GetByCategoryId<T>(int categoryId, string sortCriteria = null, int? count = null)
         {
-            throw new System.NotImplementedException();
+            var categoryProductsQuery = this.productsRepository
+                .All()
+                .Where(p => p.CategoryId == categoryId);
+
+            var categoryProducts = categoryProductsQuery.To<T>().ToList();
+
+            return categoryProducts;
         }
 
         public IEnumerable<T> GetAll<T>(string sortCriteria = null, int? count = null)
@@ -108,28 +114,6 @@ namespace PizzaDotNet.Services.Data
             var products = productsQuery.To<T>().ToList();
 
             return products;
-        }
-
-        public IEnumerable<T> GetByCategoryId<T>(int categoryId)
-        {
-            var query = this.productsRepository
-                .All()
-                .Where(p => p.CategoryId == categoryId);
-
-            var categoryProducts = query.To<T>().ToList();
-
-            return categoryProducts;
-        }
-
-        public IEnumerable<T> GetByCategoryName<T>(string categoryName)
-        {
-            var query = this.productsRepository
-                .All()
-                .Where(p => p.Category.Name == categoryName);
-
-            var categoryProducts = query.To<T>().ToList();;
-
-            return categoryProducts;
         }
     }
 }
