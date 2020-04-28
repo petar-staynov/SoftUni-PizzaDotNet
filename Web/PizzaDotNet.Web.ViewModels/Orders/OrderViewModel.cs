@@ -31,12 +31,9 @@
         public virtual CouponCode CouponCode { get; set; }
 
 
-        public decimal? TotalPrice =>
-            this.OrderProducts.Select(p => p.TotalPrice).Sum();
+        public decimal? TotalPrice { get; set; }
 
-        public decimal? TotalPriceDiscounted => this.CouponCodeId != null
-            ? this.TotalPrice * (decimal?) (1 - (this.CouponCode.DiscountPercent / 100))
-            : this.TotalPrice;
+        public decimal? TotalPriceDiscounted { get; set; }
 
 
         public string OrderNotes { get; set; }
