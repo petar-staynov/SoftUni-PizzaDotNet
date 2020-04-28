@@ -14,7 +14,9 @@
 
         Task<Order> CreateAsync(Order order);
 
-        Task<Order> UpdateAsync(Order order);
+        Task UpdateAsync(Order order);
+
+        void Update(Order order);
 
         Task<bool> DeleteAsync(int orderId);
 
@@ -29,6 +31,6 @@
         IEnumerable<T> GetAll<T>(string sortCriteria = null, int? count = null);
 
 
-        Task<Order> ChangeStatus(int orderId,OrderStatusEnum statusEnum);
+        Task<Order> ChangeStatus(int orderId, OrderStatusEnum statusEnum);
     }
 }

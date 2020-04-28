@@ -48,12 +48,16 @@
             return order;
         }
 
-        public async Task<Order> UpdateAsync(Order order)
+        public async Task UpdateAsync(Order order)
         {
             this.orderRepository.Update(order);
-            await this.orderRepository.SaveChangesAsync();
+            this.orderRepository.SaveChanges();
+        }
 
-            return order;
+        public void Update(Order order)
+        {
+            this.orderRepository.Update(order);
+            this.orderRepository.SaveChanges();
         }
 
         public async Task<bool> DeleteAsync(int orderId)
@@ -85,6 +89,10 @@
         {
             var order = this.orderRepository
                 .All()
+                .Include(o => o.User)
+                .Include(o => o.OrderProducts)
+                .Include(o => o.OrderAddress)
+                .Include(o => o.OrderStatus)
                 .FirstOrDefault(o => o.Id == id);
 
             return order;
