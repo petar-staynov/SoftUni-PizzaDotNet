@@ -45,15 +45,15 @@
                 <td>@product.RatingAverage</td>
                 <td>
                     <a type="button" class="btn btn-success btn-sm"
-                       asp-area="Administration" asp-controller="Orders" asp-action="View" asp-route-orderId="@product.Id">
+                       asp-area="Administration" asp-controller="Products" asp-action="View" asp-route-productId="@product.Id">
                         View
                     </a>
                     <a type="button" class="btn btn-warning btn-sm"
-                       asp-area="Administration" asp-controller="Orders" asp-action="Edit" asp-route-orderId="@product.Id">
+                       asp-area="Administration" asp-controller="Products" asp-action="Edit" asp-route-productId="@product.Id">
                         Edit
                     </a>
                     <a type="button" class="btn btn-danger btn-sm"
-                       asp-area="Administration" asp-controller="Orders" asp-action="Delete" asp-route-orderId="@product.Id">
+                       asp-area="Administration" asp-controller="Products" asp-action="Delete" asp-route-productId="@product.Id">
                         Delete
                     </a>
                 </td>
