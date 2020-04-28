@@ -61,16 +61,9 @@
             this.CreateMap<Order, OrderDto>();
             this.CreateMap<OrderDto, Order>();
 
-            /* OrderStatus <-> OrderStatusViewModel */
-            // this.CreateMap<OrderStatus, OrderStatusViewModel>();
-            // this.CreateMap<OrderStatusViewModel, OrderStatus>();
-
-            /* OrderProduct <-> OrderProductViewModel */
-            // this.CreateMap<OrderProduct, OrderProductViewModel>();
-
-            /* OrderAddress <-> OrderAddressViewModel */
-            // this.CreateMap<OrderAddress, OrderAddressViewModel>();
-            // this.CreateMap<OrderAddressViewModel, OrderAddress>();
+            /* OrderProduct <-> AdminOrderProductViewModel */
+            this.CreateMap<OrderProduct, AdminOrderProductViewModel>();
+            this.CreateMap<AdminOrderProductViewModel, OrderProduct>();
         }
     }
 }

@@ -1,13 +1,16 @@
-﻿using System.Threading.Tasks;
-using PizzaDotNet.Common;
-using PizzaDotNet.Web.ViewModels.Administration.Orders;
+﻿using System;
+using PizzaDotNet.Data.Models.Enums;
 
 namespace PizzaDotNet.Web.Areas.Administration.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
 
+    using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
+    using PizzaDotNet.Common;
     using PizzaDotNet.Services.Data;
+    using PizzaDotNet.Web.ViewModels.Administration.Orders;
     using PizzaDotNet.Web.ViewModels.Orders;
 
     public class OrdersController : AdministrationController
@@ -15,11 +18,18 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
         private static string CANNOT_DELETE_ORDER = "Orders can not be deleted";
         private static string CANNOT_EDIT_ORDER = "Feature not implemented yet";
 
+        private readonly IMapper mapper;
         private readonly IOrdersService ordersService;
+        private readonly IOrderStatusService orderStatusService;
 
-        public OrdersController(IOrdersService ordersService)
+        public OrdersController(
+            IMapper mapper,
+            IOrdersService ordersService,
+            IOrderStatusService orderStatusService)
         {
+            this.mapper = mapper;
             this.ordersService = ordersService;
+            this.orderStatusService = orderStatusService;
         }
 
 
@@ -59,11 +69,41 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
 
         public IActionResult Edit(int orderId)
         {
-            var orderViewModel = this.ordersService.GetById<AdminOrderViewModel>(orderId);
+            var order = this.ordersService.GetBaseById(orderId);
+            var statuses = this.orderStatusService.GetAll<AdminOrderStatusViewModel>();
+            var orderProducts = this.mapper.Map<List<AdminOrderProductViewModel>>(order.OrderProducts);
 
-            this.TempData["Message"] = CANNOT_EDIT_ORDER;
-            this.TempData["MessageType"] = AlertMessageTypes.Error;
-            return this.RedirectToAction("View", new { orderId = orderId });
+            var orderViewModel = new AdminOrderInputModel
+            {
+                Id = order.Id,
+                UserId = order.User.Id,
+                UserName = order.User.UserName,
+                OrderAddress = order.OrderAddress,
+                OrderStatusId = order.OrderStatusId,
+                OrderStatuses = statuses,
+                OrderProducts = orderProducts,
+                CouponCodeId = order.CouponCodeId,
+                CouponCode = order.CouponCode,
+                TotalPrice = order.TotalPrice,
+                TotalPriceDiscounted = order.TotalPriceDiscounted,
+                OrderNotes = order.OrderNotes,
+            };
+
+
+            return this.View(orderViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(AdminOrderInputModel inputModel)
+        {
+            var order = this.ordersService.GetBaseById(inputModel.Id);
+            var orderStatus = this.orderStatusService.GetById(inputModel.OrderStatusId);
+
+            order.OrderStatus = orderStatus;
+
+            this.ordersService.UpdateAsync(order);
+
+            return this.RedirectToAction("View", new { orderId = order.Id });
         }
 
         public IActionResult Delete(int orderId)
