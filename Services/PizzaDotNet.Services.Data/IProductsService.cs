@@ -10,17 +10,18 @@
     {
         int GetCount();
 
-        Task<Product> CreateAsync(string name, string description, int categoryId, List<ProductSize> sizes, string imageUrl, string imageStorageName);
+        Task<Product> CreateAsync(Product product);
 
-        // TODO Add EDIT
+        Task<Order> UpdateAsync(Order order);
 
-        // TODO Add DELETE
+        Task<bool> DeleteAsync(int orderId);
+
         T GetById<T>(int id);
 
         Product GetBaseById(int id);
 
-        IEnumerable<T> GetByCategoryId<T>(int categoryId);
+        IEnumerable<T> GetByCategoryId<T>(int categoryId, string sortCriteria = null, int? count = null);
 
-        IEnumerable<T> GetByCategoryName<T>(string categoryName);
+        IEnumerable<T> GetAll<T>(string sortCriteria = null, int? count = null);
     }
 }

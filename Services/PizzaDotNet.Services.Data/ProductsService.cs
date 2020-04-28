@@ -1,4 +1,6 @@
-﻿namespace PizzaDotNet.Services.Data
+﻿using PizzaDotNet.Common;
+
+namespace PizzaDotNet.Services.Data
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -27,23 +29,22 @@
             return count;
         }
 
-        // TODO Make method receive Product directly
-        public async Task<Product> CreateAsync(string name, string description, int categoryId, List<ProductSize> sizes, string imageUrl, string imageStorageName)
+        public async Task<Product> CreateAsync(Product product)
         {
-            Product product = new Product
-            {
-                Name = name,
-                Description = description,
-                CategoryId = categoryId,
-                Sizes = sizes,
-                ImageUrl = imageUrl,
-                ImageStorageName = imageStorageName,
-            };
-
             await this.productsRepository.AddAsync(product);
             await this.productsRepository.SaveChangesAsync();
 
             return product;
+        }
+
+        public Task<Order> UpdateAsync(Order order)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> DeleteAsync(int orderId)
+        {
+            throw new System.NotImplementedException();
         }
 
         public T GetById<T>(int id)
@@ -64,6 +65,49 @@
                 .FirstOrDefault(x => x.Id == id);
 
             return product;
+        }
+
+        public IEnumerable<T> GetByCategoryId<T>(int categoryId, string sortCriteria = null, int? count = null)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll<T>(string sortCriteria = null, int? count = null)
+        {
+            var productsQuery = this.productsRepository
+                .All();
+
+            switch (sortCriteria)
+            {
+                case SortingCriterias.PRODUCT_PRICE_LOWEST_TO_HIGHEST:
+                    productsQuery = productsQuery.OrderBy(p => p.Sizes.Select(s => s.Price).Sum());
+                    break;
+                case SortingCriterias.PRODUCT_PRICE_HIGHEST_TO_LOWEST:
+                    productsQuery = productsQuery.OrderByDescending(p => p.Sizes.Select(s => s.Price).Sum());
+                    break;
+                case SortingCriterias.PRODUCT_RATING_LOWEST_TO_HIGHEST:
+                    productsQuery = productsQuery.OrderBy(p => p.Ratings.Select(r => r.Value).Average());
+                    break;
+                case SortingCriterias.PRODUCT_RATING_HIGHEST_TO_LOWEST:
+                    productsQuery = productsQuery.OrderByDescending(p => p.Ratings.Select(r => r.Value).Average());
+                    break;
+                case SortingCriterias.PRODUCT_NAME_ASCENDING:
+                    productsQuery = productsQuery.OrderBy(p => p.Name);
+                    break;
+                case SortingCriterias.PRODUCT_NAME_DESCENDING:
+                    productsQuery = productsQuery.OrderByDescending(p => p.Name);
+                    break;
+                case SortingCriterias.PRODUCT_CATEGORY_NAME_ASCENDING:
+                    productsQuery = productsQuery.OrderBy(p => p.Category.Name);
+                    break;
+                case SortingCriterias.PRODUCT_CATEGORY_NAME_DESCENDING:
+                    productsQuery = productsQuery.OrderByDescending(p => p.Category.Name);
+                    break;
+            }
+
+            var products = productsQuery.To<T>().ToList();
+
+            return products;
         }
 
         public IEnumerable<T> GetByCategoryId<T>(int categoryId)
