@@ -152,7 +152,6 @@
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                app.UseStatusCodePagesWithRedirects("/Error/Code/{0}");
             }
             else
             {
