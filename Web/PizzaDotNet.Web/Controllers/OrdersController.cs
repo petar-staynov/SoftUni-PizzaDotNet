@@ -152,11 +152,12 @@ namespace PizzaDotNet.Web.Controllers
 
         public IActionResult ViewOrder(int orderId)
         {
+            var userIsAdmin = this.User.IsInRole(GlobalConstants.AdministratorRoleName);
             var userId = this.userManager.GetUserId(this.User);
             var orderViewModel = this.ordersService.GetById<OrderViewModel>(orderId);
 
-            /* Prevent people from viewing others orders */
-            if (userId != orderViewModel.UserId)
+            /* Prevent people (except admin) from viewing others orders */
+            if (!userIsAdmin && userId != orderViewModel.UserId)
             {
                 this.TempData["Message"] = ACCESS_DENY_VIEW_ORDER;
                 this.TempData["MessageType"] = AlertMessageTypes.Error;
@@ -168,11 +169,12 @@ namespace PizzaDotNet.Web.Controllers
 
         public async Task<IActionResult> CancelOrder(int orderId)
         {
+            var userIsAdmin = this.User.IsInRole(GlobalConstants.AdministratorRoleName);
             var userId = this.userManager.GetUserId(this.User);
             var order = this.ordersService.GetById<OrderDto>(orderId);
 
             /* Prevent people from cancelling others orders */
-            if (userId != order.UserId)
+            if (!userIsAdmin && userId != order.UserId)
             {
                 this.TempData["Message"] = ACCESS_DENY_VIEW_ORDER;
                 this.TempData["MessageType"] = AlertMessageTypes.Error;
