@@ -1,4 +1,6 @@
-﻿namespace PizzaDotNet.Web.Controllers
+﻿using System.Linq;
+
+namespace PizzaDotNet.Web.Controllers
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -110,14 +112,20 @@
                 orderProducts.Add(orderProduct);
             }
 
+            decimal orderTotalPrice = orderProducts.Select(p => p.Price).Sum();
+
 
             /* Apply discount code */
             CouponCode couponCode = null;
+            decimal? orderTotalDiscountPrice = orderTotalPrice;
             var sessionCouponCode =
                 this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, "CouponCode");
             if (sessionCouponCode != null)
             {
                 couponCode = this.couponCodeService.GetBaseByCode(sessionCouponCode.Code);
+
+                orderTotalDiscountPrice =
+                    orderTotalPrice * (decimal?)(1F - (couponCode.DiscountPercent / 100F));
             }
 
             var order = new Order()
@@ -126,7 +134,9 @@
                 OrderAddress = orderAddress,
                 OrderStatus = orderStatus,
                 OrderProducts = orderProducts,
+                TotalPrice = orderTotalPrice,
                 CouponCode = couponCode,
+                TotalPriceDiscounted = orderTotalDiscountPrice,
                 OrderNotes = inputModel.AdditionalNotes,
             };
             var orderEntity = await this.ordersService.CreateAsync(order);
@@ -134,10 +144,10 @@
             /* Disable coupon code */
             if (couponCode != null)
             {
-                this.couponCodeService.UseCodeByCode(inputModel.CouponCode);
+                this.couponCodeService.UseCodeByCode(couponCode.Code);
             }
 
-            return this.RedirectToAction("ViewOrder", orderEntity.Id);
+            return this.RedirectToAction("ViewOrder", new{ orderId = orderEntity.Id });
         }
 
         public IActionResult ViewOrder(int orderId)

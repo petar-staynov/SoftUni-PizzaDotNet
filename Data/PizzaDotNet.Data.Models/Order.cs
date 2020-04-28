@@ -27,17 +27,14 @@
 
         public ICollection<OrderProduct> OrderProducts { get; set; }
 
-        public decimal? TotalPrice => this.OrderProducts.Select(p => p.Price * p.Quantity).Sum();
-
 
         public int? CouponCodeId { get; set; }
 
         public virtual CouponCode CouponCode { get; set; }
 
-        public decimal? TotalPriceDiscounted => this.CouponCode != null
-        ? this.TotalPrice * (decimal?)(1 - (this.CouponCode.DiscountPercent / 100))
-        : this.TotalPrice;
+        public decimal? TotalPrice { get; set; }
 
+        public decimal? TotalPriceDiscounted { get; set; }
 
         public string OrderNotes { get; set; }
     }
