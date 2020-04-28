@@ -73,6 +73,28 @@ namespace PizzaDotNet.Services.Data
                 .All()
                 .Where(p => p.CategoryId == categoryId);
 
+            switch (sortCriteria)
+            {
+                case SortingCriterias.PRODUCT_PRICE_LOWEST_TO_HIGHEST:
+                    categoryProductsQuery = categoryProductsQuery.OrderBy(p => p.Sizes.Select(s => s.Price).Sum());
+                    break;
+                case SortingCriterias.PRODUCT_PRICE_HIGHEST_TO_LOWEST:
+                    categoryProductsQuery = categoryProductsQuery.OrderByDescending(p => p.Sizes.Select(s => s.Price).Sum());
+                    break;
+                case SortingCriterias.PRODUCT_RATING_LOWEST_TO_HIGHEST:
+                    categoryProductsQuery = categoryProductsQuery.OrderBy(p => p.Ratings.Select(r => r.Value).Average());
+                    break;
+                case SortingCriterias.PRODUCT_RATING_HIGHEST_TO_LOWEST:
+                    categoryProductsQuery = categoryProductsQuery.OrderByDescending(p => p.Ratings.Select(r => r.Value).Average());
+                    break;
+                case SortingCriterias.PRODUCT_NAME_ASCENDING:
+                    categoryProductsQuery = categoryProductsQuery.OrderBy(p => p.Name);
+                    break;
+                case SortingCriterias.PRODUCT_NAME_DESCENDING:
+                    categoryProductsQuery = categoryProductsQuery.OrderByDescending(p => p.Name);
+                    break;
+            }
+
             var categoryProducts = categoryProductsQuery.To<T>().ToList();
 
             return categoryProducts;

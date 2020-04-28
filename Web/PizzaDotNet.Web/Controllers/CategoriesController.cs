@@ -29,8 +29,9 @@
             return this.View(viewModel);
         }
 
+        [HttpGet]
         [Route("[controller]/{name}")]
-        public IActionResult Details(string name)
+        public IActionResult Details(string name, string sortingCriteria = null)
         {
             var categoryViewModel = this.categoriesService.GetByName<CategoryViewModel>(name);
             if (categoryViewModel == null)
@@ -40,9 +41,17 @@
 
             int categoryId = categoryViewModel.Id;
             categoryViewModel.Products =
-                this.productsService.GetByCategoryId<CategoryProductViewModel>(categoryId);
+                this.productsService.GetByCategoryId<CategoryProductViewModel>(categoryId, sortingCriteria);
 
             return this.View(categoryViewModel);
+        }
+
+        [HttpPost]
+        [Route("[controller]/{name}")]
+        public IActionResult Details(CategoryViewModel viewModel)
+        {
+            var sortingCriteria = viewModel.SortingCriteria;
+            return this.RedirectToAction("Details", new { sortingCriteria = sortingCriteria });
         }
     }
 }
