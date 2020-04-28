@@ -18,7 +18,16 @@
             this.productsRepository = productsRepository;
         }
 
-        // TODO Make method receive Product directly 
+        public int GetCount()
+        {
+            int count = this.productsRepository
+                .All()
+                .Count();
+
+            return count;
+        }
+
+        // TODO Make method receive Product directly
         public async Task<Product> CreateAsync(string name, string description, int categoryId, List<ProductSize> sizes, string imageUrl, string imageStorageName)
         {
             Product product = new Product

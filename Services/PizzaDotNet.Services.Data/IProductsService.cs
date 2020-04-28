@@ -8,6 +8,8 @@
 
     public interface IProductsService
     {
+        int GetCount();
+
         Task<Product> CreateAsync(string name, string description, int categoryId, List<ProductSize> sizes, string imageUrl, string imageStorageName);
 
         // TODO Add EDIT
