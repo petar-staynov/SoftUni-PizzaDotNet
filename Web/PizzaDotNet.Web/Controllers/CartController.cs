@@ -119,8 +119,9 @@ namespace PizzaDotNet.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
+                // TODO Move message to constant
                 this.TempData["Message"] = "Could not complete your request.";
-                this.TempData["MessageType"] = "danger";
+                this.TempData["MessageType"] = AlertMessageTypes.Error;
                 return this.RedirectToAction("ViewById", $"Products", new {id = inputModel.Id});
             }
 
@@ -133,8 +134,9 @@ namespace PizzaDotNet.Web.Controllers
             var cartProductModel = this.mapper.Map<SessionCartProductDto>(inputModel);
             cart.Products.Add(cartProductModel);
             this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cart);
+            // TODO Move message to constant
             this.TempData["Message"] = "Product added to cart";
-            this.TempData["MessageType"] = "success";
+            this.TempData["MessageType"] = AlertMessageTypes.Success;
             return this.RedirectToAction("ViewById", $"Products", new
             {
                 id = inputModel.Id
