@@ -122,6 +122,10 @@
                 .WithOne(oa => oa.Order)
                 .HasForeignKey<OrderAddress>(o => o.Id);
 
+            builder.Entity<OrderStatus>()
+                .HasMany(os => os.Orders)
+                .WithOne(o => o.OrderStatus);
+
             builder.Entity<OrderProduct>()
                 .HasKey(k => new { k.OrderId, k.ProductId });
 
