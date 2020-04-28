@@ -1,9 +1,11 @@
 ﻿namespace PizzaDotNet.Services.Data
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using PizzaDotNet.Data.Common.Repositories;
     using PizzaDotNet.Data.Models;
+    using PizzaDotNet.Services.Mapping;
 
     public class OrderStatusService : IOrderStatusService
     {
@@ -30,6 +32,14 @@
                 .FirstOrDefault(x => x.Status == name);
 
             return orderStatus;
+        }
+
+        public IEnumerable<T> GetAll<T>()
+        {
+            var query = this.orderStatusRepository
+                .All();
+
+            return query.To<T>().ToList();
         }
     }
 }
