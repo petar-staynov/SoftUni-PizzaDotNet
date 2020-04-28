@@ -1,4 +1,5 @@
 ﻿using PizzaDotNet.Web.ViewModels.Administration.Products;
+using PizzaDotNet.Web.ViewModels.ProductSize;
 
 namespace PizzaDotNet.Web.Areas.Administration.Controllers
 {
@@ -22,17 +23,23 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
         private readonly IGoogleCloudStorage googleCloudStorage;
         private readonly ICategoriesService categoriesService;
         private readonly IProductsService productsService;
+        private readonly IRatingsService ratingsService;
+        private readonly IProductSizeService productSizeService;
 
         public ProductsController(
             IMapper mapper,
             IGoogleCloudStorage googleCloudStorage,
             ICategoriesService categoriesService,
-            IProductsService productsService)
+            IProductsService productsService,
+            IRatingsService ratingsService,
+            IProductSizeService productSizeService)
         {
             this.mapper = mapper;
             this.googleCloudStorage = googleCloudStorage;
-            this.categoriesService = categoriesService;;
+            this.categoriesService = categoriesService;
             this.productsService = productsService;
+            this.ratingsService = ratingsService;
+            this.productSizeService = productSizeService;
         }
 
         private static string FormFileName(string title, string fileName)
@@ -42,7 +49,7 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
             return fileNameForStorage;
         }
 
-        private async Task UploadProductImage(ProductCreateInputModel product)
+        private async Task UploadProductImage(AdminProductCreateInputModel product)
         {
             string fileNameForStorage = FormFileName(product.Name, product.ImageFile.FileName);
             product.ImageUrl = await this.googleCloudStorage.UploadFileAsync(product.ImageFile, fileNameForStorage);
@@ -81,14 +88,14 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
             var categories =
                 this.categoriesService.GetAll<CategoryDropdownViewModel>();
 
-            var viewModel = new ProductCreateInputModel();
+            var viewModel = new AdminProductCreateInputModel();
             viewModel.Categories = categories;
 
             return this.View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ProductCreateInputModel inputModel)
+        public async Task<IActionResult> Create(AdminProductCreateInputModel inputModel)
         {
             if (!this.ModelState.IsValid)
             {
@@ -125,13 +132,28 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
         }
 
         [HttpGet]
+        public IActionResult View(int productId)
+        {
+            var productViewModel = this.productsService.GetById<AdminProductViewModel>(productId);
+            if (productViewModel == null)
+            {
+                return this.NotFound();
+            }
+
+            productViewModel.Rating = this.ratingsService.GetProductRating(productId);
+            productViewModel.Sizes = this.productSizeService.GetAllProductSizes<ProductSizeViewModel>(productId);
+
+            return this.View(productViewModel);
+        }
+
+        [HttpGet]
         public IActionResult Edit()
         {
             throw new NotImplementedException();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(ProductCreateInputModel inputModel)
+        public async Task<IActionResult> Edit(AdminProductCreateInputModel inputModel)
         {
             throw new NotImplementedException();
         }
@@ -143,7 +165,7 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(ProductCreateInputModel inputModel)
+        public async Task<IActionResult> Delete(AdminProductCreateInputModel inputModel)
         {
             throw new NotImplementedException();
         }

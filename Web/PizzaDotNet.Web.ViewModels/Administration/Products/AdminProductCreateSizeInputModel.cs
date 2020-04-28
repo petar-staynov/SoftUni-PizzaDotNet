@@ -1,15 +1,11 @@
-﻿namespace PizzaDotNet.Web.ViewModels.Products
+﻿namespace PizzaDotNet.Web.ViewModels.Administration.Products
 {
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    using PizzaDotNet.Data.Models;
-    using PizzaDotNet.Services.Mapping;
-
-    public class ProductCreateSizeInputModel
+    public class AdminProductCreateSizeInputModel
     {
-        public ProductCreateSizeInputModel()
+        public AdminProductCreateSizeInputModel()
         {
             this.Price = -1;
         }

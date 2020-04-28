@@ -1,23 +1,22 @@
-﻿namespace PizzaDotNet.Web.ViewModels.Products
+﻿namespace PizzaDotNet.Web.ViewModels.Administration.Products
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
 
     using Microsoft.AspNetCore.Http;
     using PizzaDotNet.Data.Common.CustomValidationAttributes;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
     using PizzaDotNet.Web.ViewModels.Categories;
+    using PizzaDotNet.Web.ViewModels.Products;
 
-    public class ProductCreateInputModel : IMapFrom<Product>
+    public class AdminProductCreateInputModel : IMapFrom<Product>
     {
-        private List<ProductCreateSizeInputModel> _sizes;
+        private List<AdminProductCreateSizeInputModel> _sizes;
 
-        public ProductCreateInputModel()
+        public AdminProductCreateInputModel()
         {
-            this.Sizes = new List<ProductCreateSizeInputModel>();
+            this.Sizes = new List<AdminProductCreateSizeInputModel>();
         }
 
         [Required]
@@ -26,8 +25,8 @@
         public string Description { get; set; }
 
         [Display(Name = "Sizes")]
-        [ProductSizesAttribute]
-        public List<ProductCreateSizeInputModel> Sizes { get; set; }
+        [ProductSizes]
+        public List<AdminProductCreateSizeInputModel> Sizes { get; set; }
 
         [Required]
         [Display(Name = "Category")]

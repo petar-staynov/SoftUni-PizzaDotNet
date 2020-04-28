@@ -3,6 +3,7 @@
     using AutoMapper;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Web.ViewModels.Addresses;
+    using PizzaDotNet.Web.ViewModels.Administration.Products;
     using PizzaDotNet.Web.ViewModels.Cart;
     using PizzaDotNet.Web.ViewModels.DTO;
     using PizzaDotNet.Web.ViewModels.Orders;
@@ -12,9 +13,9 @@
     {
         public AutoMapping()
         {
-            /* ProductSize <--> ProductCreateSizeInputModel*/
-            this.CreateMap<ProductSize, ProductCreateSizeInputModel>();
-            this.CreateMap<ProductCreateSizeInputModel, ProductSize>();
+            /* ProductSize <--> AdminProductCreateSizeInputModel*/
+            this.CreateMap<ProductSize, AdminProductCreateSizeInputModel>();
+            this.CreateMap<AdminProductCreateSizeInputModel, ProductSize>();
 
             /* ProductViewInputModel <--> SessionCartProductDto*/
             this.CreateMap<ProductViewInputModel, SessionCartProductDto>();
