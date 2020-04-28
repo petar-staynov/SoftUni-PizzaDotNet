@@ -17,9 +17,8 @@
 
         UserAddress GetBaseById(int id);
 
-        // TODO Rename to CreateAsync and UpdateAsync
-        Task<UserAddress> CreateAddressAsync(UserAddress address);
+        Task<UserAddress> CreateAsync(UserAddress address);
 
-        Task<UserAddress> UpdateAddressAsync(UserAddress address);
+        Task<UserAddress> UpdateAsync(UserAddress address);
     }
 }

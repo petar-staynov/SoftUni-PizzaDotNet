@@ -71,7 +71,7 @@
             return address;
         }
 
-        public async Task<UserAddress> CreateAddressAsync(UserAddress address)
+        public async Task<UserAddress> CreateAsync(UserAddress address)
         {
             await this.addressesRepository.AddAsync(address);
             await this.addressesRepository.SaveChangesAsync();
@@ -79,7 +79,7 @@
             return address;
         }
 
-        public async Task<UserAddress> UpdateAddressAsync(UserAddress address)
+        public async Task<UserAddress> UpdateAsync(UserAddress address)
         {
             this.addressesRepository.Update(address);
             await this.addressesRepository.SaveChangesAsync();

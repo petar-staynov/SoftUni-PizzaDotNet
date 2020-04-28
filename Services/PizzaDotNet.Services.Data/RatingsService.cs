@@ -18,7 +18,6 @@
 
         public async Task RateProductAsync(int productId, string userId, int value)
         {
-            // TODO maybe add check for 1-5 range of rating value
             var rating = this.ratingsRepository
                 .All()
                 .FirstOrDefault(x => x.ProductId == productId && x.UserId == userId);
