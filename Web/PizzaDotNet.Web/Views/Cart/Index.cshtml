@@ -4,12 +4,6 @@
     this.ViewData["Title"] = "Cart";
 }
 
-@if (this.TempData["Message"] != null)
-{
-    <div class="alert alert-@this.TempData["MessageType"] alert-dismissible fade show">
-        <span>@this.TempData["Message"]</span>
-    </div>
-}
 <div class="container">
     <div class="row cart-header-row">
         <div class="col-2 d-none d-md-block">

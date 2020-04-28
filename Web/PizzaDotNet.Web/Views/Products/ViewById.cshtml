@@ -74,10 +74,6 @@
             <p class="h5">
                 Total: <span id="product-price">1</span> x <span id="product-quantity"></span> = <span id="product-total"></span>
             </p>
-            @if (this.TempData["Message"] != null)
-            {
-                <p class="text-white bg-@this.TempData["MessageType"]">@this.TempData["Message"]</p>
-            }
             <input type="submit" value="Add to cart" class="btn btn btn-outline-secondary"/>
             <hr/>
             <div asp-validation-summary="All"></div>

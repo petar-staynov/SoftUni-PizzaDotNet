@@ -1,0 +1,12 @@
+﻿@if (this.TempData["Message"] != null)
+{
+    <div class="alert alert-@this.TempData["MessageType"] alert-dismissible fade show" role="alert">
+        <span>@this.TempData["Message"]</span>
+        <button type="button" class="accept-policy close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">Close</span>
+        </button>
+    </div>
+}
+<script>
+console.log('partial')
+</script>
