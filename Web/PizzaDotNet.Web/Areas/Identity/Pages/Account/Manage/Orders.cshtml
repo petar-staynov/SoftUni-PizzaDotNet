@@ -1,0 +1,49 @@
+﻿@page
+@model OrdersModel
+
+@{
+    ViewData["Title"] = "Orders";
+    ViewData["ActivePage"] = ManageNavPages.Addresses;
+}
+
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage"/>
+<form method="post">
+    <div class="form-inline">
+        <div class="form-group mb-2">
+            <label asp-for="@Model.Input.SortingCriterias"></label>
+        </div>
+        <div class="form-group mx-sm-3">
+            <select asp-for="@Model.SortingCriteria" asp-items="@Model.Input.SortingCriterias" class="form-control"></select>
+        </div>
+        <div class="form-group mb-2">
+            <input type="submit" value="Sort" class="btn btn-outline-secondary"/>
+        </div>
+    </div>
+</form>
+
+<table class="table table-sm table-hover">
+    <thead>
+    <tr>
+        <th scope="col">Number</th>
+        <th scope="col">Date</th>
+        <th scope="col">Status</th>
+        <th scope="col">Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var order in Model.Orders)
+    {
+        <tr style="cursor: pointer;" onclick="window.location='/Orders/ViewOrder/?orderId=@order.Id';">
+            <td>@order.Id</td>
+            <td>@order.CreatedOn</td>
+            <td>@order.OrderStatus.Status</td>
+            <td>@order.TotalPriceDiscounted</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

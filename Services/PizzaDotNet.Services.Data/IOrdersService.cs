@@ -1,5 +1,6 @@
 ﻿namespace PizzaDotNet.Services.Data
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using PizzaDotNet.Data.Models;
@@ -15,7 +16,9 @@
 
         Order GetBaseById(int id);
 
-        T GetByUserId<T>(string userId);
+        IEnumerable<T> GetByUserId<T>(string userId);
+
+        IEnumerable<T> GetByUserIdSorted<T>(string userId, string criteria);
 
         Order GetBaseByUserId(string userId);
 

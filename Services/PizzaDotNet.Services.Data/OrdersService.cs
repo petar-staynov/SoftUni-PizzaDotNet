@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using PizzaDotNet.Common;
 using PizzaDotNet.Data.Models.Enums;
 
 namespace PizzaDotNet.Services.Data
@@ -69,15 +71,43 @@ namespace PizzaDotNet.Services.Data
             return order;
         }
 
-        public T GetByUserId<T>(string userId)
+        public IEnumerable<T> GetByUserId<T>(string userId)
         {
-            var order = this.orderRepository
+            var orders = this.orderRepository
                 .All()
                 .Where(o => o.UserId == userId)
                 .To<T>()
-                .FirstOrDefault();
+                .ToList();
 
-            return order;
+            return orders;
+        }
+
+        public IEnumerable<T> GetByUserIdSorted<T>(string userId, string criteria)
+        {
+            var orders = this.orderRepository
+                .All()
+                .Where(o => o.UserId == userId);
+
+
+            switch (criteria)
+            {
+                case SortingCriterias.ORDER_PRICE_HIGHEST_TO_LOWEST:
+                    orders.OrderBy(o => o.TotalPrice);
+                    break;
+                case SortingCriterias.ORDER_PRICE_LOWEST_TO_HIGHEST:
+                    orders.OrderByDescending(o => o.TotalPrice);
+                    break;
+                case SortingCriterias.ORDER_DATE_OLDEST_TO_NEWEST:
+                    orders.OrderBy(o => o.CreatedOn);
+                    break;
+                case SortingCriterias.ORDER_DATE_NEWEST_TO_OLDEST:
+                    orders.OrderByDescending(o => o.CreatedOn);
+                    break;
+            }
+
+            var ordersList = orders.To<T>().ToList();
+
+            return ordersList;
         }
 
         public Order GetBaseByUserId(string userId)

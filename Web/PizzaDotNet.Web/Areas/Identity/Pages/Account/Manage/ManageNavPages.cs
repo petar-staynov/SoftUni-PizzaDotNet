@@ -14,6 +14,8 @@ namespace PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage
 
         public static string Addresses => "Addresses";
 
+        public static string Orders => "Orders";
+
         public static string ChangePassword => "ChangePassword";
 
         public static string ExternalLogins => "ExternalLogins";
@@ -25,6 +27,8 @@ namespace PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
         public static string AddressesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Addresses);
+
+        public static string OrdersNavClass(ViewContext viewContext) => PageNavClass(viewContext, Orders);
 
         public static string EmailNavClass(ViewContext viewContext) => PageNavClass(viewContext, Email);
 

@@ -1,18 +1,17 @@
-﻿using AutoMapper;
-using PizzaDotNet.Web.ViewModels.DTO;
-
-namespace PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage
+﻿namespace PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage
 {
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
 
+    using AutoMapper;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Data;
     using PizzaDotNet.Web.ViewModels.Addresses;
+    using PizzaDotNet.Web.ViewModels.DTO;
 
     public partial class AddressesModel : PageModel
     {
