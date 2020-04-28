@@ -92,16 +92,16 @@ namespace PizzaDotNet.Services.Data
             switch (criteria)
             {
                 case SortingCriterias.ORDER_PRICE_HIGHEST_TO_LOWEST:
-                    orders.OrderBy(o => o.TotalPrice);
+                    orders = orders.OrderBy(o => o.TotalPrice);
                     break;
                 case SortingCriterias.ORDER_PRICE_LOWEST_TO_HIGHEST:
-                    orders.OrderByDescending(o => o.TotalPrice);
+                    orders = orders.OrderByDescending(o => o.TotalPrice);
                     break;
                 case SortingCriterias.ORDER_DATE_OLDEST_TO_NEWEST:
-                    orders.OrderBy(o => o.CreatedOn);
+                    orders = orders.OrderBy(o => o.CreatedOn);
                     break;
                 case SortingCriterias.ORDER_DATE_NEWEST_TO_OLDEST:
-                    orders.OrderByDescending(o => o.CreatedOn);
+                    orders = orders.OrderByDescending(o => o.CreatedOn);
                     break;
             }
 
