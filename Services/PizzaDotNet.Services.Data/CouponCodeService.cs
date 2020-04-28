@@ -99,12 +99,13 @@
             return code;
         }
 
-        public void UseCodeByCode(string codeString)
+        public async void UseCodeByCode(string codeString)
         {
             var code = this.GetBaseByCode(codeString);
             code.IsUsed = true;
 
             this.couponCodeRepository.Update(code);
+            await this.couponCodeRepository.SaveChangesAsync();
         }
     }
 }
