@@ -11,6 +11,10 @@
 
     public class OrderViewModel : IMapFrom<Order>
     {
+        public int Id { get; set; }
+
+        public string UserId { get; set; }
+
         public OrderAddressViewModel OrderAddress { get; set; }
 
 

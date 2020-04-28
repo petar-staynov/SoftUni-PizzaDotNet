@@ -1,6 +1,7 @@
 ﻿namespace PizzaDotNet.Services.Data
 {
     using PizzaDotNet.Data.Models;
+    using PizzaDotNet.Data.Models.Enums;
 
     public interface IOrderStatusService
     {

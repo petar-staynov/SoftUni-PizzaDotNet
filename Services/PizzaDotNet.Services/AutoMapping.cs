@@ -56,6 +56,10 @@
             this.CreateMap<Order, OrderViewModel>();
             this.CreateMap<OrderViewModel, Order>();
 
+            /* Order <-> OrderDto */
+            this.CreateMap<Order, OrderDto>();
+            this.CreateMap<OrderDto, Order>();
+
             /* OrderStatus <-> OrderStatusViewModel */
             // this.CreateMap<OrderStatus, OrderStatusViewModel>();
             // this.CreateMap<OrderStatusViewModel, OrderStatus>();

@@ -1,7 +1,91 @@
-﻿@model PizzaDotNet.Web.ViewModels.Orders.OrderViewModel
+﻿@using PizzaDotNet.Data.Models.Enums
+@model PizzaDotNet.Web.ViewModels.Orders.OrderViewModel
 
 @{
-    Layout = null;
+    this.ViewData["Title"] = "Order Details";
+
+    string orderStatusMessage = "Error parsing order status";
+    var addressStringArr = new string[]
+    {
+        Model.OrderAddress.Area,
+        Model.OrderAddress.Street,
+        Model.OrderAddress.Building,
+        Model.OrderAddress.Floor,
+        Model.OrderAddress.Apartment,
+    };
+    if (Model.OrderStatus.Status == OrderStatusEnum.Processing.ToString())
+    {
+        orderStatusMessage = $"This order is being processed. Refresh the page for updates.";
+    }
+    else if (Model.OrderStatus.Status == OrderStatusEnum.Delivered.ToString())
+    {
+        orderStatusMessage = $"This order is on its way to {string.Join(",", addressStringArr)}";
+    }
+    else if (Model.OrderStatus.Status == OrderStatusEnum.Delivered.ToString())
+    {
+        orderStatusMessage = $"This order has been delivered to {string.Join(",", addressStringArr)}";
+    }
+    else if (Model.OrderStatus.Status == OrderStatusEnum.Cancelled.ToString())
+    {
+        orderStatusMessage = $"This order has been cancelled";
+    }
+    else if (Model.OrderStatus.Status == OrderStatusEnum.Refunded.ToString())
+    {
+        orderStatusMessage = $"This order has been refunded";
+    }
 }
 
-<h1>WORKS</h1>
+<div class="text-center">
+    <h5>@orderStatusMessage</h5>
+    <small class="text-muted">Order number: @Model.Id</small>
+    <hr/>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Total price</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var product in Model.OrderProducts)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>@product.Quantity</td>
+                <td>@product.Price</td>
+                <td>@product.TotalPrice</td>
+            </tr>
+        }
+        <tr>
+            <th scope="row" colspan="3" class="text-right">Total: </th>
+            <th scope="row">@Model.TotalPrice</th>
+        </tr>
+        <tr>
+            <th scope="row" colspan="3" class="text-right">Total with discount: </th>
+            <th scope="row">@Model.TotalPriceDiscounted</th>
+        </tr>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <p>
+            <a role="button" class="btn btn-outline-secondary"
+               href="/Identity/Account/Manage">
+                View orders
+            </a>
+        </p>
+        <p>
+            <a role="button" class="btn btn-outline-secondary"
+               asp-controller="Home" asp-action="Index">
+                Go to the Home page
+            </a>
+        </p>
+        <hr/>
+        @if (Model.OrderStatus.Status == OrderStatusEnum.Processing.ToString())
+        {
+            <a role="button" class="btn btn-danger"
+               asp-controller="Orders" asp-action="CancelOrder" asp-route-orderId="@Model.Id">Cancel order</a>
+        }
+    </div>
+</div>

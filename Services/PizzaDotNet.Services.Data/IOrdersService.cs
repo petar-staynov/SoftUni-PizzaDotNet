@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
 
     using PizzaDotNet.Data.Models;
+    using PizzaDotNet.Data.Models.Enums;
 
     public interface IOrdersService
     {
@@ -17,5 +18,7 @@
         T GetByUserId<T>(string userId);
 
         Order GetBaseByUserId(string userId);
+
+        Task<Order> ChangeStatus(int orderId,OrderStatusEnum statusEnum);
     }
 }

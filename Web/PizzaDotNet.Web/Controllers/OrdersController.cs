@@ -19,6 +19,10 @@
     [Authorize]
     public class OrdersController : BaseController
     {
+        private const string ACCESS_DENY_VIEW_ORDER = "You're not allowed to view this order";
+        private const string ORDER_CANCELLED = "Your has been cancelled";
+        private const string ORDER_CANT_CANCEL = "This order cannot be canceled";
+
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMapper mapper;
         private readonly IAddressesService addressesService;
@@ -138,8 +142,47 @@
 
         public IActionResult ViewOrder(int orderId)
         {
+            var userId = this.userManager.GetUserId(this.User);
             var orderViewModel = this.ordersService.GetById<OrderViewModel>(orderId);
+
+            /* Prevent people from viewing others orders */
+            if (userId != orderViewModel.UserId)
+            {
+                this.TempData["Message"] = ACCESS_DENY_VIEW_ORDER;
+                this.TempData["MessageType"] = AlertMessageTypes.Error;
+                return this.RedirectToAction("Index", "Home");
+            }
+
             return this.View(orderViewModel);
+        }
+
+        public async Task<IActionResult> CancelOrder(int orderId)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            var order = this.ordersService.GetById<OrderDto>(orderId);
+
+            /* Prevent people from cancelling others orders */
+            if (userId != order.UserId)
+            {
+                this.TempData["Message"] = ACCESS_DENY_VIEW_ORDER;
+                this.TempData["MessageType"] = AlertMessageTypes.Error;
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            var orderStatus = order.OrderStatus;
+            if (orderStatus.Status != OrderStatusEnum.Processing.ToString())
+            {
+                this.TempData["Message"] = ORDER_CANT_CANCEL;
+                this.TempData["MessageType"] = AlertMessageTypes.Error;
+                return this.RedirectToAction("ViewOrder", new { orderId = orderId });
+            }
+
+            await this.ordersService.ChangeStatus(orderId, OrderStatusEnum.Cancelled);
+
+
+            this.TempData["Message"] = ORDER_CANCELLED;
+            this.TempData["MessageType"] = AlertMessageTypes.Error;
+            return this.RedirectToAction("ViewOrder", new { orderId = orderId });
         }
     }
 }
