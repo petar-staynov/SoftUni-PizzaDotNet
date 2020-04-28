@@ -1,16 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using PizzaDotNet.Common;
-
-namespace PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage
+﻿namespace PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
 
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using PizzaDotNet.Common;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Data;
     using PizzaDotNet.Web.ViewModels.Addresses;
@@ -68,6 +67,7 @@ namespace PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage
             {
                 SortingCriterias = new List<SelectListItem>()
                 {
+                    new SelectListItem("none", null),
                     new SelectListItem("Price descending", SortingCriterias.ORDER_PRICE_HIGHEST_TO_LOWEST),
                     new SelectListItem("Price ascending", SortingCriterias.ORDER_PRICE_LOWEST_TO_HIGHEST),
                     new SelectListItem("Date descending", SortingCriterias.ORDER_DATE_NEWEST_TO_OLDEST),
@@ -76,7 +76,7 @@ namespace PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage
             };
         }
 
-        public async Task<IActionResult> OnGetAsync(string sortCriteria = SortingCriterias.ORDER_DATE_NEWEST_TO_OLDEST)
+        public async Task<IActionResult> OnGetAsync(string sortCriteria = null)
         {
             var user = await this.userManager.GetUserAsync(User);
             if (user == null)
