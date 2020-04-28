@@ -16,6 +16,15 @@
             this.categoriesRepository = categoriesRepository;
         }
 
+        public int GetCount()
+        {
+            int count = this.categoriesRepository
+                .All()
+                .Count();
+
+            return count;
+        }
+
         public IEnumerable<T> GetAll<T>(int? count = null)
         {
             IQueryable<Category> query = this.categoriesRepository.All();

@@ -4,6 +4,8 @@
 
     public interface ICategoriesService
     {
+        int GetCount();
+
         IEnumerable<T> GetAll<T>(int? count = null);
 
         T GetById<T>(int id);
