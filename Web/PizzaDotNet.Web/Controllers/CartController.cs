@@ -122,7 +122,7 @@ namespace PizzaDotNet.Web.Controllers
                 // TODO Move message to constant
                 this.TempData["Message"] = "Could not complete your request.";
                 this.TempData["MessageType"] = AlertMessageTypes.Error;
-                return this.RedirectToAction("ViewById", $"Products", new {id = inputModel.Id});
+                return this.RedirectToAction("View", $"Products", new {id = inputModel.Id});
             }
 
             var cart = new SessionCartDto();
@@ -137,7 +137,7 @@ namespace PizzaDotNet.Web.Controllers
             // TODO Move message to constant
             this.TempData["Message"] = "Product added to cart";
             this.TempData["MessageType"] = AlertMessageTypes.Success;
-            return this.RedirectToAction("ViewById", $"Products", new
+            return this.RedirectToAction("View", $"Products", new
             {
                 id = inputModel.Id
             });

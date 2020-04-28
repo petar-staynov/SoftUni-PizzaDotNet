@@ -86,7 +86,7 @@
             {
                 userAddress = this.mapper.Map<UserAddress>(this.Input);
                 userAddress.UserId = userId;
-                await this.addressesService.CreateAddressAsync(userAddress);
+                await this.addressesService.CreateAsync(userAddress);
 
                 this.StatusMessage = "Your address has been updated";
                 return this.RedirectToPage();
@@ -94,7 +94,7 @@
 
             userAddress = this.mapper.Map(this.Input, userAddress);
 
-            await this.addressesService.UpdateAddressAsync(userAddress);
+            await this.addressesService.UpdateAsync(userAddress);
             this.StatusMessage = "Your address has been updated";
             return this.RedirectToPage();
         }

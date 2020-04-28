@@ -16,14 +16,13 @@
 
         Task<Order> UpdateAsync(Order order);
 
+        Task<bool> DeleteAsync(int orderId);
+
         T GetById<T>(int id);
 
         Order GetBaseById(int id);
 
-        // TODO Make GetByUserIdSorted the default and only method
-        IEnumerable<T> GetByUserId<T>(string userId);
-
-        IEnumerable<T> GetByUserIdSorted<T>(string userId, string criteria);
+        IEnumerable<T> GetByUserId<T>(string userId, string sortCriteria = null);
 
         Order GetBaseByUserId(string userId);
 

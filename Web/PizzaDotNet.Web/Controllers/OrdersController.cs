@@ -1,8 +1,7 @@
-﻿using System.Linq;
-
-namespace PizzaDotNet.Web.Controllers
+﻿namespace PizzaDotNet.Web.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -74,13 +73,13 @@ namespace PizzaDotNet.Web.Controllers
                 {
                     var newUserAddress = this.mapper.Map<UserAddress>(inputModel.Address);
                     newUserAddress.User = user;
-                    userAddress = await this.addressesService.CreateAddressAsync(newUserAddress);
+                    userAddress = await this.addressesService.CreateAsync(newUserAddress);
                 }
                 else
                 {
                     /* Map from view model to model without losing data*/
                     var newUserAddress = this.mapper.Map(inputModel.Address, userAddress);
-                    await this.addressesService.UpdateAddressAsync(newUserAddress);
+                    await this.addressesService.UpdateAsync(newUserAddress);
                 }
             }
 

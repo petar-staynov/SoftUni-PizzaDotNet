@@ -59,7 +59,7 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var userOrders =
-                this.ordersService.GetByUserIdSorted<OrderListItemViewModel>(userId, this.SortingCriteria);
+                this.ordersService.GetByUserId<OrderListItemViewModel>(userId, this.SortingCriteria);
 
             this.Orders = userOrders;
 

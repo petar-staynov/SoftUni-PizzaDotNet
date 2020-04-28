@@ -56,6 +56,20 @@
             return order;
         }
 
+        public async Task<bool> DeleteAsync(int orderId)
+        {
+            var order = this.orderRepository
+                .All()
+                .FirstOrDefault(o => o.Id == orderId);
+
+            this.orderRepository
+                .Delete(order);
+
+            var result = await this.orderRepository.SaveChangesAsync();
+
+            return result > 0;
+        }
+
         public T GetById<T>(int id)
         {
             var order = this.orderRepository
@@ -63,18 +77,6 @@
                 .Where(o => o.Id == id)
                 .To<T>()
                 .FirstOrDefault();
-
-            // TODO REMOVE THESE
-            var baseEnt = this.orderRepository
-                .All()
-                .FirstOrDefault(o => o.Id == id);
-
-            var fullEnt = this.orderRepository
-                .All()
-                .Include(o => o.OrderStatus)
-                .Include(o => o.OrderProducts)
-                .Include(o => o.OrderAddress)
-                .FirstOrDefault(o => o.Id == id);
 
             return order;
         }
@@ -88,25 +90,14 @@
             return order;
         }
 
-        public IEnumerable<T> GetByUserId<T>(string userId)
-        {
-            var orders = this.orderRepository
-                .All()
-                .Where(o => o.UserId == userId)
-                .To<T>()
-                .ToList();
-
-            return orders;
-        }
-
-        public IEnumerable<T> GetByUserIdSorted<T>(string userId, string criteria)
+        public IEnumerable<T> GetByUserId<T>(string userId, string sortCriteria = null)
         {
             var ordersQuery = this.orderRepository
                 .All()
                 .Where(o => o.UserId == userId);
 
 
-            switch (criteria)
+            switch (sortCriteria)
             {
                 case SortingCriterias.ORDER_PRICE_HIGHEST_TO_LOWEST:
                     ordersQuery = ordersQuery.OrderBy(o => o.TotalPrice);

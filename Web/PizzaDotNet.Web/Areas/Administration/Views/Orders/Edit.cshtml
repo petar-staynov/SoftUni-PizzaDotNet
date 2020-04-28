@@ -1,0 +1,115 @@
+﻿@model PizzaDotNet.Web.ViewModels.Orders.AdminOrderViewModel
+
+<div class="table-responsive-sm">
+    <table class="table table-bordered">
+        <thead hidden>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="1">User: </td>
+            <td colspan="3">@Model.User.UserName</td>
+        </tr>
+        <tr>
+            <td colspan="1">User Id:</td>
+            <td colspan="3">@Model.User.Id</td>
+        </tr>
+        <tr>
+            <td colspan="1">Status:</td>
+            <td colspan="4">@Model.OrderStatus.Status</td>
+        </tr>
+        @if (Model.CouponCode != null)
+        {
+            <tr>
+                <td colspan="1">Coupon code:</td>
+                <td colspan="3">@Model.CouponCode.Code</td>
+            </tr>
+            <tr>
+                <td colspan="1">Discount %:</td>
+                <td colspan="3">@Model.CouponCode.DiscountPercent</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td colspan="1">Coupon code:</td>
+                <td colspan="3">none</td>
+            </tr>
+            <tr>
+                <td colspan="1">Discount %:</td>
+                <td colspan="3">none</td>
+            </tr>
+        }
+        <tr class="font-weight-bold">
+            <td scope="col">Product</td>
+            <td scope="col">Quantity</td>
+            <td scope="col">Price</td>
+            <td scope="col">Total price</td>
+        </tr>
+        @foreach (var product in Model.OrderProducts)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>@product.Quantity</td>
+                <td>@product.Price</td>
+                <td>@product.TotalPrice</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="1">Price:</td>
+            <td colspan="3">@Model.TotalPrice</td>
+        </tr>
+        <tr>
+            <td colspan="1">Price (with discount):</td>
+            <td colspan="3">@Model.TotalPriceDiscounted</td>
+        </tr>
+        <tr>
+            <td colspan="1">Name:</td>
+            <td colspan="3">@Model.OrderAddress.PersonName</td>
+        </tr>
+        <tr>
+            <td colspan="1">Area:</td>
+            <td colspan="3">@Model.OrderAddress.Area</td>
+        </tr>
+        <tr>
+            <td colspan="1">Street:</td>
+            <td colspan="3">@Model.OrderAddress.Street</td>
+        </tr>
+        <tr>
+            <td colspan="1">Building:</td>
+            <td colspan="3">@Model.OrderAddress.Building</td>
+        </tr>
+        <tr>
+            <td colspan="1">Floor:</td>
+            <td colspan="3">@Model.OrderAddress.Floor</td>
+        </tr>
+        <tr>
+            <td colspan="1">Apartment:</td>
+            <td colspan="3">@Model.OrderAddress.Apartment</td>
+        </tr>
+        <tr>
+            <td colspan="1">PhoneNumber:</td>
+            <td colspan="3">@Model.OrderAddress.PhoneNumber</td>
+        </tr>
+        <tr>
+            <td colspan="1">Notes:</td>
+            <td colspan="3">@Model.OrderNotes</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="text-center">
+    <a type="button" class="btn btn-warning btn-lg w-25"
+       asp-area="Administration" asp-controller="Orders" asp-action="Edit" asp-route-orderId="@Model.Id">
+        Edit
+    </a>
+    <a type="button" class="btn btn-danger btn-lg w-25"
+       asp-area="Administration" asp-controller="Orders" asp-action="Delete" asp-route-orderId="@Model.Id">
+        Delete
+    </a>
+</div>
