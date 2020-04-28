@@ -79,7 +79,7 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
         public IActionResult Create()
         {
             var categories =
-                this.productsService.GetAll<CategoryDropdownViewModel>();
+                this.categoriesService.GetAll<CategoryDropdownViewModel>();
 
             var viewModel = new ProductCreateInputModel();
             viewModel.Categories = categories;
@@ -93,7 +93,9 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
             if (!this.ModelState.IsValid)
             {
                 // Pass back the categories list because POST Requests lose Collections
-                inputModel.Categories = this.productsService.GetAll<CategoryDropdownViewModel>();
+                var categories =
+                    this.categoriesService.GetAll<CategoryDropdownViewModel>();
+                inputModel.Categories = categories;
                 return this.View(inputModel);
             }
 
@@ -103,7 +105,7 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
             }
 
             var filteredSizesInputs = inputModel.Sizes
-                .Where(s => !String.IsNullOrEmpty(s.Size) && s.Price >= 0M).ToList();
+                .Where(s => !string.IsNullOrEmpty(s.Name) && s.Price >= 0M).ToList();
 
             List<ProductSize> sizes = this.mapper.Map<List<ProductSize>>(filteredSizesInputs);
 

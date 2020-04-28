@@ -16,14 +16,19 @@
             foreach (object obj in itemsList)
             {
                 Type objType = obj.GetType();
-                PropertyInfo sizeProp = objType.GetProperty("Size");
+                PropertyInfo sizeProp = objType.GetProperty("Name");
                 PropertyInfo priceProp = objType.GetProperty("Price");
 
+                if (sizeProp == null || priceProp == null)
+                {
+                    continue;
+                }
+
                 var sizeValue = sizeProp.GetValue(obj);
-                string sizeString = (string) sizeValue;
+                string sizeString = (string)sizeValue;
 
                 var priceValue = priceProp.GetValue(obj);
-                decimal priceDecimal = (decimal) priceValue;
+                decimal priceDecimal = (decimal)priceValue;
 
                 if (String.IsNullOrEmpty(sizeString))
                 {
@@ -42,11 +47,7 @@
                     return new ValidationResult(this.InvalidSizeNameMessage());
                 }
 
-
-                if (sizeString.Length > 0 || priceDecimal >= 0M)
-                {
-                    atLeastOneValid = true;
-                }
+                 atLeastOneValid = true;
             }
 
             return atLeastOneValid

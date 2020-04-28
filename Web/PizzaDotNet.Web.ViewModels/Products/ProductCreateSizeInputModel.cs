@@ -14,7 +14,7 @@
             this.Price = -1;
         }
 
-        public string Size { get; set; }
+        public string Name { get; set; }
 
         [Column(TypeName = "decimal(18, 4)")]
         [Range(-1, 999.99)]

@@ -36,7 +36,7 @@
             @for (int i = 0; i < maxNumberOfSizes; i++)
             {
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Size" asp-for="@Model.Sizes[i].Size">
+                    <input type="text" class="form-control" placeholder="Size" asp-for="@Model.Sizes[i].Name">
                     <input type="number" class="form-control" placeholder="Price" asp-for="@Model.Sizes[i].Price">
                     <span asp-validation-for="@Model.Sizes[i]"></span>
                 </div>
