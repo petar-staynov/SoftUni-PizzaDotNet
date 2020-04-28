@@ -113,6 +113,10 @@ body {
     margin-top: 20px;
 }
 
+.product-view-image {
+    max-height: 256px;
+}
+
 /* Cart icon
 -------------------------------------------------- 
 */
