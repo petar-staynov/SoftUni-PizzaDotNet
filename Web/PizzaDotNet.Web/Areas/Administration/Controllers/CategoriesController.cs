@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace PizzaDotNet.Web.Areas.Administration.Controllers
+﻿namespace PizzaDotNet.Web.Areas.Administration.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+
     public class CategoriesController : AdministrationController
     {
         // GET
         public IActionResult Index()
         {
-            return View();
+            return this.View();
         }
     }
 }

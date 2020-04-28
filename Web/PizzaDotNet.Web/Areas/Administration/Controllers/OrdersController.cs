@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using PizzaDotNet.Common;
+using PizzaDotNet.Web.ViewModels.Administration.Orders;
 
 namespace PizzaDotNet.Web.Areas.Administration.Controllers
 {
