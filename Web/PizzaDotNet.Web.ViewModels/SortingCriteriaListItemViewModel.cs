@@ -1,8 +1,8 @@
-﻿namespace PizzaDotNet.Web.ViewModels.Orders
+﻿namespace PizzaDotNet.Web.ViewModels
 {
-    public class OrderSortingCriteriaListItemViewModel
+    public class SortingCriteriaListItemViewModel
     {
-        public OrderSortingCriteriaListItemViewModel(string description, string name)
+        public SortingCriteriaListItemViewModel(string description, string name)
         {
             this.Name = name;
             this.Description = description;
