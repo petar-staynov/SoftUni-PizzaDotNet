@@ -17,6 +17,7 @@
             this.productsService = productsService;
         }
 
+        [Route("[controller]")]
         public IActionResult Index()
         {
             var viewModel = new CategoriesViewModel
