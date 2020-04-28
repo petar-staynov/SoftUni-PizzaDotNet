@@ -56,13 +56,13 @@
             {
                 facebookOptions.AppId = this.configuration.GetValue<string>("FacebookAppId");
                 facebookOptions.AppSecret = this.configuration.GetValue<string>("FacebookAppSecret");
-                facebookOptions.AccessDeniedPath = "/Home/LoginFailed";
+                facebookOptions.AccessDeniedPath = "/Error/LoginFailed";
             });
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
                 googleOptions.ClientId = this.configuration.GetValue<string>("GoogleAppId");
                 googleOptions.ClientSecret = this.configuration.GetValue<string>("GoogleAppSecret");
-                googleOptions.AccessDeniedPath = "/Home/LoginFailed";
+                googleOptions.AccessDeniedPath = "/Error/LoginFailed";
             });
 
             services.Configure<CookiePolicyOptions>(
@@ -92,7 +92,7 @@
                 options.Cookie.IsEssential = true;
             });
 
-            //Antiforgery token configuration
+            // Antiforgery token configuration
             services.AddAntiforgery(options =>
             {
                 options.HeaderName = this.configuration.GetValue<string>("AntiforgeryHeader");
@@ -102,7 +102,7 @@
             services.AddAutoMapper(c => c.AddProfile<AutoMapping>(), typeof(Startup));
 
             services.AddRazorPages()
-                .AddSessionStateTempDataProvider();;
+                .AddSessionStateTempDataProvider();
 
             services.AddSingleton(this.configuration);
 
@@ -152,10 +152,12 @@
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                app.UseStatusCodePagesWithRedirects("/Error/Code/{0}");
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error/Error");
+                app.UseStatusCodePagesWithRedirects("/Error/Code/{0}");
                 app.UseHsts();
             }
 
@@ -176,8 +178,6 @@
                 {
                     endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                     endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-                    // endpoints.MapControllerRoute("categories", "{controller=Categories}/{name}",
-                    //     new { controller = "Categories", action = "Details"});
                     endpoints.MapRazorPages();
                 });
         }

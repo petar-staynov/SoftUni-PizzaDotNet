@@ -1,0 +1,13 @@
+﻿@{
+    this.ViewData["Title"] = "Error 404";
+}
+
+<div class="text-center">
+    <h1>Error @ViewData["ErrorCode"]</h1>
+    <h5>@ViewData["ErrorMessage"]</h5>
+    <hr/>
+    <a type="button" class="btn btn-lg btn-outline-secondary"
+       asp-controller="Home" asp-action="Index">
+        Go to Home page
+    </a>
+</div>
