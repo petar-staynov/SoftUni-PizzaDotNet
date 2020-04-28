@@ -76,7 +76,7 @@ namespace PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage
             };
         }
 
-        public async Task<IActionResult> OnGetAsync(string sortCriteria = null)
+        public async Task<IActionResult> OnGetAsync(string sortCriteria = SortingCriterias.ORDER_DATE_NEWEST_TO_OLDEST)
         {
             var user = await this.userManager.GetUserAsync(User);
             if (user == null)
