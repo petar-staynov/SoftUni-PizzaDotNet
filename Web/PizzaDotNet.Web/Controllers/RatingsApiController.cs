@@ -1,7 +1,7 @@
 ﻿namespace PizzaDotNet.Web.Controllers
 {
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Authorization;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using PizzaDotNet.Data.Models;
@@ -47,7 +47,6 @@
         [HttpGet("UserRating/{productId}")]
         public async Task<UserRatingResponseModel> GetUserRating(int productId)
         {
-            // TODO Make this async. Maybe inject UserManager to get user
             var userId = this.userManager.GetUserId(this.User);
 
             var productUserRating = await this.ratingsService.GetProductUserRating(productId, userId);
@@ -68,8 +67,6 @@
             await this.ratingsService.RateProductAsync(inputModel.ProductId, userId, inputModel.Value);
 
             return this.Ok(new { response = "200 OK" });
-
-            // TODO maybe return product average rating
         }
     }
 }

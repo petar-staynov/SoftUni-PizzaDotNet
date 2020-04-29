@@ -11,8 +11,6 @@
 
         Task<double> GetProductAverageRating(int productId);
 
-        Task<double> GetProductUserRating(int productId, string userId);
-
-        Task<ICollection<ApplicationUser>> GetProductVotedUsers(int productId);
+        Task<double> GetProductUserRating(int productId, string userId); 
     }
 }

@@ -26,7 +26,7 @@
             this.couponCodeService = couponCodeService;
         }
 
-        public async Task<ActionResult> ApplyCode(CartViewModel inputModel)
+        public async Task<IActionResult> ApplyCode(CartViewModel inputModel)
         {
             string couponCodeString = inputModel.CouponCode;
             if (string.IsNullOrEmpty(couponCodeString))
@@ -53,12 +53,12 @@
                 return this.RedirectToAction("Index", "Cart");
             }
 
-            var SessionCartProductDto = new SessionCouponCodeDto()
+            var sessionCartProductDto = new SessionCouponCodeDto()
             {
                 Code = couponCode.Code,
             };
 
-            this.sessionService.Set(this.HttpContext.Session, "CouponCode", SessionCartProductDto);
+            this.sessionService.Set(this.HttpContext.Session, "CouponCode", sessionCartProductDto);
 
             this.TempData["Message"] = COUPON_APPLIED;
             this.TempData["MessageType"] = AlertMessageTypes.Success;

@@ -24,6 +24,10 @@
     [Authorize]
     public class CartController : BaseController
     {
+        private const string CART_ADD_PRODUCT = "Product added to cart";
+        private const string CART_REMOVE_PRODUCT = "Product added to cart";
+        private const string CART_INVALID_ITEM = "Invalid item";
+
         private readonly IProductsService productsService;
         private readonly IAddressesService addressesService;
         private readonly IProductSizeService productSizeService;
@@ -62,13 +66,11 @@
                 cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             }
 
-            // TODO Remove dummy data
             // if (cart == null || cart.Products.Count <= 0)
             // {
             //     this.SetTempCart();
             //     cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             // }
-
 
             var cartViewModel = this.mapper.Map<CartViewModel>(cart);
 
@@ -116,20 +118,19 @@
 
         // Redirect to Menu page in case user is logged in after trying to add item to cart
         [HttpGet]
-        public async Task<ActionResult> AddItem()
+        public IActionResult AddItem()
         {
-            return RedirectToAction("Index", "Categories");
+            return this.RedirectToAction("Index", "Categories");
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddItem(ProductViewInputModel inputModel)
+        public IActionResult AddItem(ProductViewInputModel inputModel)
         {
             if (!this.ModelState.IsValid)
             {
-                // TODO Move message to constant
-                this.TempData["Message"] = "Could not complete your request.";
+                this.TempData["Message"] = CART_INVALID_ITEM;
                 this.TempData["MessageType"] = AlertMessageTypes.Error;
-                return this.RedirectToAction("View", $"Products", new {id = inputModel.Id});
+                return this.RedirectToAction("View", $"Products", new { id = inputModel.Id });
             }
 
             var cart = new SessionCartDto();
@@ -141,17 +142,16 @@
             var cartProductModel = this.mapper.Map<SessionCartProductDto>(inputModel);
             cart.Products.Add(cartProductModel);
             this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cart);
-            // TODO Move message to constant
-            this.TempData["Message"] = "Product added to cart";
+
+            this.TempData["Message"] = CART_ADD_PRODUCT;
             this.TempData["MessageType"] = AlertMessageTypes.Success;
             return this.RedirectToAction("View", $"Products", new
             {
-                id = inputModel.Id
+                id = inputModel.Id,
             });
         }
 
-        // [HttpPost]
-        public async Task<ActionResult> RemoveItem(int itemId, string itemSize)
+        public IActionResult RemoveItem(int itemId, string itemSize)
         {
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             cart.Products
@@ -162,7 +162,7 @@
             return this.RedirectToAction("Index");
         }
 
-        public async Task<ActionResult> IncreaseItemQuantity(int itemId, string itemSize)
+        public IActionResult IncreaseItemQuantity(int itemId, string itemSize)
         {
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             cart.Products
@@ -174,7 +174,7 @@
             return this.RedirectToAction("Index");
         }
 
-        public async Task<ActionResult> DecreaseItemQuantity(int itemId, string itemSize)
+        public IActionResult DecreaseItemQuantity(int itemId, string itemSize)
         {
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             cart.Products

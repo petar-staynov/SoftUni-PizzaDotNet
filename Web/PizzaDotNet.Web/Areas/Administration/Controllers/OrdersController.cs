@@ -13,9 +13,8 @@
 
     public class OrdersController : AdministrationController
     {
-        private static string CANNOT_DELETE_ORDER = "Orders can not be deleted";
-        private static string CANCEL_EDIT = "Editing canceled";
-        private static string ORDER_DOESNT_EXIST = "Order does not exist";
+        private const string CANNOT_DELETE_ORDER = "Orders can not be deleted";
+        private const string CANCEL_EDIT = "Editing canceled";
 
         private readonly IMapper mapper;
         private readonly IOrdersService ordersService;
@@ -30,7 +29,6 @@
             this.ordersService = ordersService;
             this.orderStatusService = orderStatusService;
         }
-
 
         public IActionResult Index()
         {
@@ -57,7 +55,6 @@
             var sortingCriteria = inputModel.SortingCriteria;
             return this.RedirectToAction("All", new { sortingCriteria = sortingCriteria });
         }
-
 
         public async Task<IActionResult> View(int orderId)
         {
@@ -87,7 +84,6 @@
                 TotalPriceDiscounted = order.TotalPriceDiscounted,
                 OrderNotes = order.OrderNotes,
             };
-
 
             return this.View(orderViewModel);
         }

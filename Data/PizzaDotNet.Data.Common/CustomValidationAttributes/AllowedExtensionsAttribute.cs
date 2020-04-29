@@ -29,8 +29,6 @@
 
             return ValidationResult.Success;
         }
-
-        //TODO Move error message to separate file
         public string GetErrorMessage()
         {
             return $"Invalid file extension!";

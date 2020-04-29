@@ -52,10 +52,10 @@
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await this.userManager.GetUserAsync(User);
+            var user = await this.userManager.GetUserAsync(this.User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
             }
 
             this.UserId = user.Id;
@@ -67,16 +67,20 @@
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-            if (user == null)
+            var claimsPrincipal = this.User;
+            if (claimsPrincipal != null)
             {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
-            }
+                var user = await this.userManager.GetUserAsync(claimsPrincipal);
+                if (user == null)
+                {
+                    return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(claimsPrincipal)}'.");
+                }
 
-            if (!this.ModelState.IsValid)
-            {
-                await this.LoadAsync(user);
-                return this.Page();
+                if (!this.ModelState.IsValid)
+                {
+                    await this.LoadAsync(user);
+                    return this.Page();
+                }
             }
 
             var userId = this.userManager.GetUserId(this.User);

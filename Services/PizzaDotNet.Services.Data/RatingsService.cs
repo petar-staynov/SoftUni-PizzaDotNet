@@ -72,10 +72,5 @@ namespace PizzaDotNet.Services.Data
 
             return userRating.Value;
         }
-
-        public async Task<ICollection<ApplicationUser>> GetProductVotedUsers(int productId)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

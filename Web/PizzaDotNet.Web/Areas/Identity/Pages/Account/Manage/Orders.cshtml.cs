@@ -78,10 +78,10 @@
 
         public async Task<IActionResult> OnGetAsync(string sortCriteria = null)
         {
-            var user = await this.userManager.GetUserAsync(User);
+            var user = await this.userManager.GetUserAsync(this.User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
             }
 
             this.UserId = user.Id;

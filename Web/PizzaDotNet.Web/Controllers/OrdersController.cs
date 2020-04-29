@@ -117,7 +117,6 @@
 
             decimal orderTotalPrice = orderProducts.Select(p => p.Price).Sum();
 
-
             /* Apply discount code */
             CouponCode couponCode = null;
             decimal? orderTotalDiscountPrice = orderTotalPrice;
@@ -205,7 +204,6 @@
             }
 
             await this.ordersService.ChangeStatus(orderId, OrderStatusEnum.Cancelled);
-
 
             this.TempData["Message"] = ORDER_CANCELLED;
             this.TempData["MessageType"] = AlertMessageTypes.Error;

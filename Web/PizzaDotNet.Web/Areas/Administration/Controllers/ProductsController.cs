@@ -18,9 +18,9 @@
 
     public class ProductsController : AdministrationController
     {
-        private static string CANCEL_EDIT = "Editing canceled";
-        private static string CANCEL_DELETE = "Deleting canceled";
-        private static string PRODUCT_DOESNT_EXIST = "Product does not exist";
+        private const string CANCEL_EDIT = "Editing canceled";
+        private const string CANCEL_DELETE = "Deleting canceled";
+        private const string PRODUCT_DOESNT_EXIST = "Product does not exist";
 
         private readonly IMapper mapper;
         private readonly IGoogleCloudStorage googleCloudStorage;
@@ -210,7 +210,8 @@
             await this.productsService.UpdateAsync(product);
 
             // Custom route redirect because it matches the normal ProductsController action
-            return this.RedirectToRoute(new {
+            return this.RedirectToRoute(new
+            {
                 area = "Administration",
                 controller = "Products",
                 action = "View",
@@ -225,9 +226,8 @@
             return this.RedirectToAction("View", new { productId = productId });
         }
 
-
         [HttpGet]
-        public async Task<ActionResult> Delete(int productId)
+        public async Task<IActionResult> Delete(int productId)
         {
             var productInputModel = await this.productsService.GetById<AdminProductDeleteInputModel>(productId);
 
@@ -235,7 +235,7 @@
             productInputModel.ImageModel = imageModel;
 
             var categories =
-              await  this.categoriesService.GetAll<CategoryDropdownViewModel>();
+              await this.categoriesService.GetAll<CategoryDropdownViewModel>();
             productInputModel.Categories = categories;
 
             return this.View(productInputModel);
