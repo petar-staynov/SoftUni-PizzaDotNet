@@ -24,6 +24,7 @@
         public string Apartment { get; set; }
 
         [Required]
+        [Phone]
         [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; }
     }
