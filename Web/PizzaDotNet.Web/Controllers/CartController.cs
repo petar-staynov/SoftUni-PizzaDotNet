@@ -52,7 +52,7 @@ namespace PizzaDotNet.Web.Controllers
         }
 
         // TODO Alert messages to separate variable and use global constants for css
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
 
@@ -69,7 +69,7 @@ namespace PizzaDotNet.Web.Controllers
             foreach (SessionCartProductDto productDto in cart.Products)
             {
                 /* Create view model */
-                var productViewModel = this.productsService.GetById<CartProductViewModel>(productDto.Id);
+                var productViewModel = await this.productsService.GetById<CartProductViewModel>(productDto.Id);
 
                 /* Get product size */
                 var productSize =

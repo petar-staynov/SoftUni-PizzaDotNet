@@ -19,6 +19,7 @@
     public class ProductsController : AdministrationController
     {
         private static string CANCEL_EDIT = "Editing canceled";
+        private static string CANCEL_DELETE = "Deleting canceled";
         private static string PRODUCT_DOESNT_EXIST = "Product does not exist";
 
         private readonly IMapper mapper;
@@ -85,9 +86,9 @@
         }
 
         [HttpGet]
-        public IActionResult View(int productId)
+        public async Task<IActionResult> View(int productId)
         {
-            var productViewModel = this.productsService.GetById<AdminProductViewModel>(productId);
+            var productViewModel = await this.productsService.GetById<AdminProductViewModel>(productId);
             if (productViewModel == null)
             {
                 return this.NotFound();
@@ -151,11 +152,11 @@
         }
 
         [HttpGet]
-        public IActionResult Edit(int productId)
+        public async Task<IActionResult> Edit(int productId)
         {
-            var productInputModel = this.productsService.GetById<AdminProductEditInputModel>(productId);
+            var productInputModel = await this.productsService.GetById<AdminProductEditInputModel>(productId);
 
-            var imageModel = this.productsService.GetById<ImageUploadInputModel>(productId);
+            var imageModel = await this.productsService.GetById<ImageUploadInputModel>(productId);
             productInputModel.ImageModel = imageModel;
 
             var categories =
@@ -178,7 +179,7 @@
                 return this.View(inputModel);
             }
 
-            var product = this.productsService.GetBaseById(inputModel.Id);
+            var product = await this.productsService.GetBaseById(inputModel.Id);
             product.Name = inputModel.Name;
             product.Description = inputModel.Description;
             product.CategoryId = inputModel.CategoryId;
@@ -226,15 +227,39 @@
 
 
         [HttpGet]
-        public IActionResult Delete(int productId)
+        public async Task<ActionResult> Delete(int productId)
         {
-            throw new NotImplementedException();
+            var productInputModel = await this.productsService.GetById<AdminProductDeleteInputModel>(productId);
+
+            var imageModel = await this.productsService.GetById<ImageUploadInputModel>(productId);
+            productInputModel.ImageModel = imageModel;
+
+            var categories =
+                this.categoriesService.GetAll<CategoryDropdownViewModel>();
+            productInputModel.Categories = categories;
+
+            return this.View(productInputModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(AdminProductCreateInputModel inputModel)
+        public async Task<IActionResult> Delete(AdminProductDeleteInputModel inputModel)
         {
-            throw new NotImplementedException();
+            var productId = inputModel.Id;
+
+            /* Delete product sizes */
+            await this.productSizeService.DeleteProductSizes(productId);
+
+            /* Delete product */
+            await this.productsService.DeleteAsync(productId);
+
+            return this.RedirectToAction("All");
+        }
+
+        public IActionResult DeleteCancel(int productId)
+        {
+            this.TempData["Message"] = CANCEL_DELETE;
+            this.TempData["MessageType"] = AlertMessageTypes.Error;
+            return this.RedirectToAction("View", new { productId = productId });
         }
     }
 }

@@ -92,7 +92,7 @@
             foreach (SessionCartProductDto productDto in cart.Products)
             {
                 /* Create OrderProduct */
-                var product = this.productsService.GetBaseById(productDto.Id);
+                var product = await this.productsService.GetBaseById(productDto.Id);
                 var orderProduct = this.mapper.Map<OrderProduct>(product);
 
                 orderProduct.Product = product;

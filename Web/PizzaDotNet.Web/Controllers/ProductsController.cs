@@ -1,5 +1,7 @@
 ﻿namespace PizzaDotNet.Web.Controllers
 {
+    using System.Threading.Tasks;
+
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using PizzaDotNet.Services;
@@ -28,16 +30,15 @@
         }
 
         [Route("[controller]/{id}")]
-        public IActionResult View(int id)
+        public async Task<IActionResult> View(int id)
         {
-            var productViewModel = this.productsService.GetById<ProductViewInputModel>(id);
+            var productViewModel = await this.productsService.GetById<ProductViewInputModel>(id);
             if (productViewModel == null)
             {
                 return this.NotFound();
             }
 
             productViewModel.Rating = this.ratingsService.GetProductAverageRating(id);
-            // productViewModel.Sizes = this.productSizeService.GetAllProductSizes<ProductSizeViewModel>(id);
 
             return this.View(productViewModel);
         }

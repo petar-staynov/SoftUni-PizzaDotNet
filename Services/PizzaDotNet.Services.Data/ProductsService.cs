@@ -1,12 +1,12 @@
-﻿using PizzaDotNet.Common;
-
-namespace PizzaDotNet.Services.Data
+﻿namespace PizzaDotNet.Services.Data
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
+    using Microsoft.EntityFrameworkCore;
+    using PizzaDotNet.Common;
     using PizzaDotNet.Data.Common.Repositories;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
@@ -45,27 +45,34 @@ namespace PizzaDotNet.Services.Data
             return product;
         }
 
-        public Task<bool> DeleteAsync(int orderId)
+        public async Task<bool> DeleteAsync(int productId)
         {
-            throw new System.NotImplementedException();
+            var product = await this.productsRepository
+                .All()
+                .FirstOrDefaultAsync(p => p.Id == productId);
+
+            this.productsRepository.Delete(product);
+            var result = await this.productsRepository.SaveChangesAsync();
+
+            return result > 0;
         }
 
-        public T GetById<T>(int id)
+        public async Task<T> GetById<T>(int id)
         {
-            var product = this.productsRepository
+            var product = await this.productsRepository
                 .All()
                 .Where(x => x.Id == id)
                 .To<T>()
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             return product;
         }
 
-        public Product GetBaseById(int id)
+        public async Task<Product> GetBaseById(int id)
         {
-            var product = this.productsRepository
+            var product = await this.productsRepository
                 .All()
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return product;
         }

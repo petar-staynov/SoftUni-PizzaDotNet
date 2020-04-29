@@ -14,11 +14,11 @@
 
         Task<Product> UpdateAsync(Product product);
 
-        Task<bool> DeleteAsync(int orderId);
+        Task<bool> DeleteAsync(int productId);
 
-        T GetById<T>(int id);
+        Task<T> GetById<T>(int id);
 
-        Product GetBaseById(int id);
+        Task<Product> GetBaseById(int id);
 
         IEnumerable<T> GetByCategoryId<T>(int categoryId, string sortCriteria = null, int? count = null);
 
