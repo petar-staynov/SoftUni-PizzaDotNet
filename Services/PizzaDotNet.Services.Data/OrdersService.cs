@@ -33,9 +33,9 @@
 
         public async Task<decimal?> GetTotalProfit()
         {
-            decimal? profit = await this.orderRepository
+            decimal? profit = this.orderRepository
                 .All()
-                .SumAsync(o => o.TotalPriceDiscounted);
+                .Sum(o => o.TotalPriceDiscounted);
 
             return profit;
         }
@@ -60,20 +60,6 @@
             this.orderRepository.SaveChanges();
         }
 
-        public async Task<bool> DeleteAsync(int orderId)
-        {
-            var order = this.orderRepository
-                .All()
-                .FirstOrDefault(o => o.Id == orderId);
-
-            this.orderRepository
-                .Delete(order);
-
-            var result = await this.orderRepository.SaveChangesAsync();
-
-            return result > 0;
-        }
-
         public async Task<T> GetById<T>(int id)
         {
             var order = await this.orderRepository
@@ -87,13 +73,14 @@
 
         public async Task<Order> GetBaseById(int id)
         {
-            var order = await this.orderRepository
+            var order = this.orderRepository
                 .All()
+                .Where(o => o.Id == id)
                 .Include(o => o.User)
                 .Include(o => o.OrderProducts)
                 .Include(o => o.OrderAddress)
                 .Include(o => o.OrderStatus)
-                .FirstOrDefaultAsync(o => o.Id == id);
+                .FirstOrDefault();
 
             return order;
         }
