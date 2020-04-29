@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\PizzaDotNet.Data\PizzaDotNet.Data.csproj" />
     <ProjectReference Include="..\..\Services\PizzaDotNet.Services.Data\PizzaDotNet.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Web\PizzaDotNet.Web.ViewModels\PizzaDotNet.Web.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

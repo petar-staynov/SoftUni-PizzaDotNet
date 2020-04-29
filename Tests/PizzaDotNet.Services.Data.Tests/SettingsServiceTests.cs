@@ -18,7 +18,7 @@
     public class SettingsServiceTests
     {
         [Fact]
-        public void GetCountShouldReturnCorrectNumber()
+        public void GetCountShouldReturnCorrect()
         {
             var repository = new Mock<IDeletableEntityRepository<Setting>>();
             repository.Setup(r => r.All()).Returns(new List<Setting>
