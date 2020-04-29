@@ -64,10 +64,10 @@
             return this.View();
         }
 
-        public IActionResult All(string sortingCriteria = null)
+        public async Task<IActionResult> All(string sortingCriteria = null)
         {
             var products =
-                this.productsService.GetAll<AdminProductsProductViewModel>(sortingCriteria);
+                await this.productsService.GetAll<AdminProductsProductViewModel>(sortingCriteria);
 
             var viewModel = new AdminProductsViewModel()
             {
@@ -98,10 +98,10 @@
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             var categories =
-                this.categoriesService.GetAll<CategoryDropdownViewModel>();
+                await this.categoriesService.GetAll<CategoryDropdownViewModel>();
 
             var viewModel = new AdminProductCreateInputModel();
             viewModel.Categories = categories;
@@ -116,7 +116,7 @@
             {
                 // Pass back the categories list because POST Requests lose Collections
                 var categories =
-                    this.categoriesService.GetAll<CategoryDropdownViewModel>();
+                    await this.categoriesService.GetAll<CategoryDropdownViewModel>();
                 inputModel.Categories = categories;
                 return this.View(inputModel);
             }
@@ -160,7 +160,7 @@
             productInputModel.ImageModel = imageModel;
 
             var categories =
-                this.categoriesService.GetAll<CategoryDropdownViewModel>();
+                await this.categoriesService.GetAll<CategoryDropdownViewModel>();
             productInputModel.Categories = categories;
 
             return this.View(productInputModel);
@@ -173,7 +173,7 @@
             {
                 // Pass back the categories and Sizes list because POST Requests lose Collections
                 var categories =
-                    this.categoriesService.GetAll<CategoryDropdownViewModel>();
+                   await this.categoriesService.GetAll<CategoryDropdownViewModel>();
 
                 inputModel.Categories = categories;
                 return this.View(inputModel);
@@ -235,7 +235,7 @@
             productInputModel.ImageModel = imageModel;
 
             var categories =
-                this.categoriesService.GetAll<CategoryDropdownViewModel>();
+              await  this.categoriesService.GetAll<CategoryDropdownViewModel>();
             productInputModel.Categories = categories;
 
             return this.View(productInputModel);

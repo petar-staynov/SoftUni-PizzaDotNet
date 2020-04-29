@@ -13,6 +13,7 @@
     using PizzaDotNet.Data.Models.Enums;
     using PizzaDotNet.Services;
     using PizzaDotNet.Services.Data;
+    using PizzaDotNet.Services.Messaging;
     using PizzaDotNet.Web.ViewModels.Cart;
     using PizzaDotNet.Web.ViewModels.DTO;
     using PizzaDotNet.Web.ViewModels.Orders;
@@ -24,6 +25,7 @@
         private const string ORDER_CANCELLED = "Your has been cancelled";
         private const string ORDER_CANT_CANCEL = "This order cannot be canceled";
 
+        private readonly IEmailSender emailSender;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMapper mapper;
         private readonly IAddressesService addressesService;
@@ -35,6 +37,7 @@
         private readonly ICouponCodeService couponCodeService;
 
         public OrdersController(
+            IEmailSender emailSender,
             UserManager<ApplicationUser> userManager,
             IMapper mapper,
             IAddressesService addressesService,
@@ -45,6 +48,7 @@
             IProductSizeService productSizeService,
             ICouponCodeService couponCodeService)
         {
+            this.emailSender = emailSender;
             this.userManager = userManager;
             this.mapper = mapper;
             this.addressesService = addressesService;
@@ -68,7 +72,7 @@
             /* Create/Update user address if box was checked */
             if (inputModel.UseAddress == true)
             {
-                var userAddress = this.addressesService.GetBaseByUserId(userId);
+                var userAddress = await this.addressesService.GetBaseByUserId(userId);
                 if (userAddress == null)
                 {
                     var newUserAddress = this.mapper.Map<UserAddress>(inputModel.Address);
@@ -84,7 +88,7 @@
             }
 
             /* Get order status of "Processing" */
-            var orderStatus = this.orderStatusService.GetByName(OrderStatusEnum.Processing.ToString());
+            var orderStatus = await this.orderStatusService.GetByName(OrderStatusEnum.Processing.ToString());
 
             /* Map order products */
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
@@ -99,7 +103,7 @@
 
                 /* Get product size */
                 var productSize =
-                    this.productSizeService.GetProductSizeBase(productDto.Id, productDto.SizeName);
+                    await this.productSizeService.GetProductSizeBase(productDto.Id, productDto.SizeName);
                 orderProduct.Size = productSize.Name;
 
                 /* Map price*/
@@ -121,7 +125,7 @@
                 this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, "CouponCode");
             if (sessionCouponCode != null)
             {
-                couponCode = this.couponCodeService.GetBaseByCode(sessionCouponCode.Code);
+                couponCode = await this.couponCodeService.GetBaseByCode(sessionCouponCode.Code);
 
                 orderTotalDiscountPrice =
                     orderTotalPrice * (decimal?)(1F - (couponCode.DiscountPercent / 100F));
@@ -146,14 +150,26 @@
                 this.couponCodeService.UseCodeByCode(couponCode.Code);
             }
 
+            /* Send email*/
+            await this.emailSender.SendEmailAsync(
+                "pizzadotnet@sendgrid.com",
+                "PizzaDotNet",
+                "petar.staynov@gmail.com",
+                "Test email",
+                null,
+                null);
+
+            /* Clear session */
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, new SessionCartDto());
+
             return this.RedirectToAction("View", new { orderId = orderEntity.Id });
         }
 
-        public IActionResult View(int orderId)
+        public async Task<IActionResult> View(int orderId)
         {
             var userIsAdmin = this.User.IsInRole(GlobalConstants.AdministratorRoleName);
             var userId = this.userManager.GetUserId(this.User);
-            var orderViewModel = this.ordersService.GetById<OrderViewModel>(orderId);
+            var orderViewModel = await this.ordersService.GetById<OrderViewModel>(orderId);
 
             /* Prevent people (except admin) from viewing others orders */
             if (!userIsAdmin && userId != orderViewModel.UserId)
@@ -170,7 +186,7 @@
         {
             var userIsAdmin = this.User.IsInRole(GlobalConstants.AdministratorRoleName);
             var userId = this.userManager.GetUserId(this.User);
-            var order = this.ordersService.GetById<OrderDto>(orderId);
+            var order = await this.ordersService.GetById<OrderDto>(orderId);
 
             /* Prevent people from cancelling others orders */
             if (!userIsAdmin && userId != order.UserId)

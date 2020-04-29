@@ -22,20 +22,20 @@
             this.orderStatusService = orderStatusService;
         }
 
-        public int GetCount()
+        public async Task<int> GetCount()
         {
-            int count = this.orderRepository
+            int count = await this.orderRepository
                 .All()
-                .Count();
+                .CountAsync();
 
             return count;
         }
 
-        public decimal? GetTotalProfit()
+        public async Task<decimal?> GetTotalProfit()
         {
-            decimal? profit = this.orderRepository
+            decimal? profit = await this.orderRepository
                 .All()
-                .Sum(o => o.TotalPriceDiscounted);
+                .SumAsync(o => o.TotalPriceDiscounted);
 
             return profit;
         }
@@ -51,7 +51,7 @@
         public async Task UpdateAsync(Order order)
         {
             this.orderRepository.Update(order);
-            this.orderRepository.SaveChanges();
+            await this.orderRepository.SaveChangesAsync();
         }
 
         public void Update(Order order)
@@ -74,31 +74,31 @@
             return result > 0;
         }
 
-        public T GetById<T>(int id)
+        public async Task<T> GetById<T>(int id)
         {
-            var order = this.orderRepository
+            var order = await this.orderRepository
                 .All()
                 .Where(o => o.Id == id)
                 .To<T>()
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             return order;
         }
 
-        public Order GetBaseById(int id)
+        public async Task<Order> GetBaseById(int id)
         {
-            var order = this.orderRepository
+            var order = await this.orderRepository
                 .All()
                 .Include(o => o.User)
                 .Include(o => o.OrderProducts)
                 .Include(o => o.OrderAddress)
                 .Include(o => o.OrderStatus)
-                .FirstOrDefault(o => o.Id == id);
+                .FirstOrDefaultAsync(o => o.Id == id);
 
             return order;
         }
 
-        public IEnumerable<T> GetByUserId<T>(string userId, string sortCriteria = null)
+        public async Task<IEnumerable<T>> GetByUserId<T>(string userId, string sortCriteria = null)
         {
             var ordersQuery = this.orderRepository
                 .All()
@@ -121,21 +121,21 @@
                     break;
             }
 
-            var orders = ordersQuery.To<T>().ToList();
+            var orders = await ordersQuery.To<T>().ToListAsync();
 
             return orders;
         }
 
-        public Order GetBaseByUserId(string userId)
+        public async Task<Order> GetBaseByUserId(string userId)
         {
-            var order = this.orderRepository
+            var order = await this.orderRepository
                 .All()
-                .FirstOrDefault(o => o.UserId == userId);
+                .FirstOrDefaultAsync(o => o.UserId == userId);
 
             return order;
         }
 
-        public IEnumerable<T> GetAll<T>(string sortCriteria = null, int? count = null)
+        public async Task<IEnumerable<T>> GetAll<T>(string sortCriteria = null, int? count = null)
         {
             var ordersQuery = this.orderRepository
                 .All();
@@ -162,24 +162,24 @@
                     break;
             }
 
-            var orders = ordersQuery.To<T>().ToList();
+            var orders = await ordersQuery.To<T>().ToListAsync();
 
             return orders;
         }
 
         public async Task<Order> ChangeStatus(int orderId, OrderStatusEnum statusEnum)
         {
-            var order = this.orderRepository
+            var order = await this.orderRepository
                 .All()
                 .Include(o => o.OrderStatus)
-                .FirstOrDefault(o => o.Id == orderId);
+                .FirstOrDefaultAsync(o => o.Id == orderId);
 
             if (order == null)
             {
                 return null;
             }
 
-            order.OrderStatus = this.orderStatusService.GetByName(statusEnum.ToString());
+            order.OrderStatus = await this.orderStatusService.GetByName(statusEnum.ToString());
 
             this.orderRepository.Update(order);
             await this.orderRepository.SaveChangesAsync();

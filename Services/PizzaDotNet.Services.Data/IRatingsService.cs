@@ -9,10 +9,10 @@
     {
         Task RateProductAsync(int productId, string userId, int value);
 
-        double GetProductAverageRating(int productId);
+        Task<double> GetProductAverageRating(int productId);
 
-        double GetProductUserRating(int productId, string userId);
+        Task<double> GetProductUserRating(int productId, string userId);
 
-        ICollection<ApplicationUser> GetProductVotedUsers(int productId);
+        Task<ICollection<ApplicationUser>> GetProductVotedUsers(int productId);
     }
 }

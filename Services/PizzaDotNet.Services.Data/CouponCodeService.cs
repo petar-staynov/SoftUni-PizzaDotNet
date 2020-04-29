@@ -3,7 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore;
     using PizzaDotNet.Data.Common.Repositories;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
@@ -17,59 +19,58 @@
             this.couponCodeRepository = couponCodeRepository;
         }
 
-        public IEnumerable<T> GetAll<T>(int? count = null)
+        public async Task<IEnumerable<T>> GetAll<T>(int? count = null)
         {
-            var codes = this.couponCodeRepository
+            var codes = await this.couponCodeRepository
                 .All()
                 .To<T>()
-                .ToList();
+                .ToListAsync();
 
             return codes;
         }
 
-        public T GetById<T>(int id)
+        public async Task<T> GetById<T>(int id)
         {
-            var code = this.couponCodeRepository
+            var code = await this.couponCodeRepository
                 .All()
                 .Where(c => c.Id == id)
-                .To<T>()
-                .FirstOrDefault();
+                .To<T>().FirstOrDefaultAsync();
 
             return code;
         }
 
-        public CouponCode GetBaseById(int id)
+        public async Task<CouponCode> GetBaseById(int id)
         {
-            var code = this.couponCodeRepository
+            var code = await this.couponCodeRepository
                 .All()
-                .FirstOrDefault(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             return code;
         }
 
-        public T GetByCode<T>(string codeString)
+        public async Task<T> GetByCode<T>(string codeString)
         {
-            var code = this.couponCodeRepository
+            var code = await this.couponCodeRepository
                 .All()
                 .Where(c => c.Code == codeString)
                 .To<T>()
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             return code;
         }
 
-        public CouponCode GetBaseByCode(string codeString)
+        public async Task<CouponCode> GetBaseByCode(string codeString)
         {
-            var code = this.couponCodeRepository
+            var code = await this.couponCodeRepository
                 .All()
-                .FirstOrDefault(c => c.Code == codeString);
+                .FirstOrDefaultAsync(c => c.Code == codeString);
 
             return code;
         }
 
-        public CouponCode CanUseCodeById(int codeId)
+        public async Task<CouponCode> CanUseCodeById(int codeId)
         {
-            var code = this.GetBaseById(codeId);
+            var code = await this.GetBaseById(codeId);
             if (code == null)
             {
                 return null;
@@ -83,9 +84,9 @@
             return code;
         }
 
-        public CouponCode CanUseCodeByCode(string codeString)
+        public async Task<CouponCode> CanUseCodeByCode(string codeString)
         {
-            var code = this.GetBaseByCode(codeString);
+            var code = await this.GetBaseByCode(codeString);
             if (code == null)
             {
                 return null;
@@ -101,7 +102,7 @@
 
         public async void UseCodeByCode(string codeString)
         {
-            var code = this.GetBaseByCode(codeString);
+            var code = await this.GetBaseByCode(codeString);
             code.IsUsed = true;
 
             this.couponCodeRepository.Update(code);

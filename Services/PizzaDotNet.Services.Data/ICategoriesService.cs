@@ -1,15 +1,16 @@
 ﻿namespace PizzaDotNet.Services.Data
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     public interface ICategoriesService
     {
-        int GetCount();
+        Task<int> GetCount();
 
-        IEnumerable<T> GetAll<T>(int? count = null);
+        Task<IEnumerable<T>> GetAll<T>(int? count = null);
 
-        T GetById<T>(int id);
+        Task<T> GetById<T>(int id);
 
-        T GetByName<T>(string name);
+        Task<T> GetByName<T>(string name);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace PizzaDotNet.Services.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace PizzaDotNet.Services.Data
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -18,9 +20,9 @@
 
         public async Task RateProductAsync(int productId, string userId, int value)
         {
-            var rating = this.ratingsRepository
+            var rating = await this.ratingsRepository
                 .All()
-                .FirstOrDefault(x => x.ProductId == productId && x.UserId == userId);
+                .FirstOrDefaultAsync(x => x.ProductId == productId && x.UserId == userId);
 
             if (rating != null)
             {
@@ -41,7 +43,7 @@
             await this.ratingsRepository.SaveChangesAsync();
         }
 
-        public double GetProductAverageRating(int productId)
+        public async Task<double> GetProductAverageRating(int productId)
         {
             var query = this.ratingsRepository
                 .All()
@@ -52,16 +54,16 @@
                 return 0;
             }
 
-            double averageRating = query.Average(r => r.Value);
+            double averageRating = await query.AverageAsync(r => r.Value);
 
             return averageRating;
         }
 
-        public double GetProductUserRating(int productId, string userId)
+        public async Task<double> GetProductUserRating(int productId, string userId)
         {
-            var userRating = this.ratingsRepository
+            var userRating = await this.ratingsRepository
                 .All()
-                .FirstOrDefault(x => x.ProductId == productId && x.UserId == userId);
+                .FirstOrDefaultAsync(x => x.ProductId == productId && x.UserId == userId);
 
             if (userRating == null)
             {
@@ -71,7 +73,7 @@
             return userRating.Value;
         }
 
-        public ICollection<ApplicationUser> GetProductVotedUsers(int productId)
+        public async Task<ICollection<ApplicationUser>> GetProductVotedUsers(int productId)
         {
             throw new System.NotImplementedException();
         }

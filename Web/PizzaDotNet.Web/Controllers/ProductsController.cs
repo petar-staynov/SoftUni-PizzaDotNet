@@ -38,7 +38,7 @@
                 return this.NotFound();
             }
 
-            productViewModel.Rating = this.ratingsService.GetProductAverageRating(id);
+            productViewModel.Rating = await this.ratingsService.GetProductAverageRating(id);
 
             return this.View(productViewModel);
         }

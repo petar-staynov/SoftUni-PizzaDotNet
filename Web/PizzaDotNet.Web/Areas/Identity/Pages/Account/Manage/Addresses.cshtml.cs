@@ -45,7 +45,7 @@
         private async Task LoadAsync(ApplicationUser user)
         {
             var userAddress =
-                this.addressesService.GetByUserId<AddressViewInputModel>(this.UserId) ?? new AddressViewInputModel();
+                await this.addressesService.GetByUserId<AddressViewInputModel>(this.UserId) ?? new AddressViewInputModel();
 
             this.Input = userAddress;
         }
@@ -81,7 +81,7 @@
 
             var userId = this.userManager.GetUserId(this.User);
 
-            var userAddress = this.addressesService.GetBaseByUserId(userId);
+            var userAddress = await this.addressesService.GetBaseByUserId(userId);
             if (userAddress == null)
             {
                 userAddress = this.mapper.Map<UserAddress>(this.Input);

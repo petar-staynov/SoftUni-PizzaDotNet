@@ -1,4 +1,6 @@
-﻿namespace PizzaDotNet.Services.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace PizzaDotNet.Services.Data
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -33,50 +35,50 @@
             return productSize;
         }
 
-        public ICollection<T> GetAllProductSizes<T>(int productId)
+        public async Task<ICollection<T>> GetAllProductSizes<T>(int productId)
         {
             var query = this.productSizeRepository
                     .All()
                     .Where(s => s.ProductId == productId);
 
-            var productSizes = query.To<T>().ToList();
+            var productSizes = await query.To<T>().ToListAsync();
 
             return productSizes;
         }
 
-        public T GetProductSize<T>(int productId, string sizeString)
+        public async Task<T> GetProductSize<T>(int productId, string sizeString)
         {
             var query = this.productSizeRepository
                 .All()
                 .Where(s => s.ProductId == productId && s.Name == sizeString);
 
-            var productSize = query.To<T>().FirstOrDefault();
+            var productSize = await query.To<T>().FirstOrDefaultAsync();
 
             return productSize;
         }
 
-        public ProductSize GetProductSizeBase(int productId, string sizeString)
+        public async Task<ProductSize> GetProductSizeBase(int productId, string sizeString)
         {
-            var productSize = this.productSizeRepository
+            var productSize = await this.productSizeRepository
                 .All()
-                .FirstOrDefault(s => s.ProductId == productId && s.Name == sizeString);
+                .FirstOrDefaultAsync(s => s.ProductId == productId && s.Name == sizeString);
 
             return productSize;
         }
 
         public async Task<bool> DeleteProductSizes(int productId)
         {
-            var sizes = this.productSizeRepository
+            var sizes = await this.productSizeRepository
                 .All()
                 .Where(s => s.ProductId == productId)
-                .ToList();
+                .ToListAsync();
 
             foreach (var productSize in sizes)
             {
                 this.productSizeRepository.Delete(productSize);
             }
 
-            int result = await productSizeRepository.SaveChangesAsync();
+            int result = await this.productSizeRepository.SaveChangesAsync();
             return result > 0;
         }
     }

@@ -7,15 +7,15 @@
 
     public interface IAddressesService
     {
-        IEnumerable<T> GetAll<T>(int? count = null);
+        Task<IEnumerable<T>> GetAll<T>(int? count = null);
 
-        T GetByUserId<T>(string id);
+        Task<T> GetByUserId<T>(string id);
 
-        UserAddress GetBaseByUserId(string id);
+        Task<UserAddress> GetBaseByUserId(string id);
 
-        T GetById<T>(int id);
+        Task<T> GetById<T>(int id);
 
-        UserAddress GetBaseById(int id);
+        Task<UserAddress> GetBaseById(int id);
 
         Task<UserAddress> CreateAsync(UserAddress address);
 

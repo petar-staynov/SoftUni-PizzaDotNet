@@ -1,6 +1,7 @@
 ﻿namespace PizzaDotNet.Web.Areas.Administration.Controllers
 {
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -27,14 +28,14 @@
             this.ordersService = ordersService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var usersCount = this.userManager.Users.Count();
-            var categoriesCount = this.categoriesService.GetCount();
-            var productsCounts = this.productsService.GetCount();
-            var ordersCounts = this.ordersService.GetCount();
+            var categoriesCount = await this.categoriesService.GetCount();
+            var productsCounts = await this.productsService.GetCount();
+            var ordersCounts = await this.ordersService.GetCount();
 
-            decimal totalProfits = this.ordersService.GetTotalProfit() ?? 0M;
+            decimal totalProfits = await this.ordersService.GetTotalProfit() ?? 0M;
 
             var viewModel = new IndexViewModel
             {

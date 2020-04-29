@@ -1,5 +1,7 @@
 ﻿namespace PizzaDotNet.Web.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Mvc;
     using PizzaDotNet.Services.Data;
     using PizzaDotNet.Web.ViewModels.Categories;
@@ -18,12 +20,12 @@
         }
 
         [Route("[controller]")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var viewModel = new CategoriesViewModel
             {
                 Categories =
-                    this.categoriesService.GetAll<CategoriesCategoryViewModel>(),
+                   await this.categoriesService.GetAll<CategoriesCategoryViewModel>(),
             };
 
             return this.View(viewModel);
@@ -31,9 +33,9 @@
 
         [HttpGet]
         [Route("[controller]/{name}")]
-        public IActionResult Details(string name, string sortingCriteria = null)
+        public async Task<IActionResult> Details(string name, string sortingCriteria = null)
         {
-            var categoryViewModel = this.categoriesService.GetByName<CategoryViewModel>(name);
+            var categoryViewModel = await this.categoriesService.GetByName<CategoryViewModel>(name);
             if (categoryViewModel == null)
             {
                 return this.NotFound();
@@ -41,7 +43,7 @@
 
             int categoryId = categoryViewModel.Id;
             categoryViewModel.Products =
-                this.productsService.GetByCategoryId<CategoryProductViewModel>(categoryId, sortingCriteria);
+              await this.productsService.GetByCategoryId<CategoryProductViewModel>(categoryId, sortingCriteria);
 
             return this.View(categoryViewModel);
         }

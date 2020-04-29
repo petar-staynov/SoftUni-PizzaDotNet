@@ -8,9 +8,9 @@
 
     public interface IOrdersService
     {
-        int GetCount();
+        Task<int> GetCount();
 
-        decimal? GetTotalProfit();
+        Task<decimal?> GetTotalProfit();
 
         Task<Order> CreateAsync(Order order);
 
@@ -20,16 +20,15 @@
 
         Task<bool> DeleteAsync(int orderId);
 
-        T GetById<T>(int id);
+        Task<T> GetById<T>(int id);
 
-        Order GetBaseById(int id);
+        Task<Order> GetBaseById(int id);
 
-        IEnumerable<T> GetByUserId<T>(string userId, string sortCriteria = null);
+        Task<IEnumerable<T>> GetByUserId<T>(string userId, string sortCriteria = null);
 
-        Order GetBaseByUserId(string userId);
+        Task<Order> GetBaseByUserId(string userId);
 
-        IEnumerable<T> GetAll<T>(string sortCriteria = null, int? count = null);
-
+        Task<IEnumerable<T>> GetAll<T>(string sortCriteria = null, int? count = null);
 
         Task<Order> ChangeStatus(int orderId, OrderStatusEnum statusEnum);
     }

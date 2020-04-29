@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore;
     using PizzaDotNet.Data.Common.Repositories;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
@@ -18,7 +19,7 @@
             this.addressesRepository = addressesRepository;
         }
 
-        public IEnumerable<T> GetAll<T>(int? count = null)
+        public async Task<IEnumerable<T>> GetAll<T>(int? count = null)
         {
             var query = this.addressesRepository.All();
 
@@ -27,46 +28,47 @@
                 query = query.Take(count.Value);
             }
 
-            return query.To<T>().ToList();
+            var result = await query.To<T>().ToListAsync();
+            return result;
         }
 
-        public T GetByUserId<T>(string id)
+        public async Task<T> GetByUserId<T>(string id)
         {
             var query = this.addressesRepository
                 .All()
                 .Where(a => a.UserId == id);
 
-            var address = query.To<T>().FirstOrDefault();
+            var address = await query.To<T>().FirstOrDefaultAsync();
 
             return address;
         }
 
-        public UserAddress GetBaseByUserId(string id)
+        public async Task<UserAddress> GetBaseByUserId(string id)
         {
-            var address = this.addressesRepository
+            var address = await this.addressesRepository
                 .All()
-                .FirstOrDefault(a => a.UserId == id);
+                .FirstOrDefaultAsync(a => a.UserId == id);
 
             return address;
         }
 
-        public T GetById<T>(int id)
+        public async Task<T> GetById<T>(int id)
         {
             var query = this.addressesRepository
                 .All()
                 .Where(a => a.Id == id);
 
-            var address = query.To<T>().FirstOrDefault();
+            var address = await query.To<T>().FirstOrDefaultAsync();
 
 
             return address;
         }
 
-        public UserAddress GetBaseById(int id)
+        public async Task<UserAddress> GetBaseById(int id)
         {
-            var address = this.addressesRepository
+            var address = await this.addressesRepository
                 .All()
-                .FirstOrDefault(a => a.Id == id);
+                .FirstOrDefaultAsync(a => a.Id == id);
 
             return address;
         }

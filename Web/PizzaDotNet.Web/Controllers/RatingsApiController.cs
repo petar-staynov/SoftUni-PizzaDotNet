@@ -33,7 +33,7 @@
         [HttpGet("{id}")]
         public async Task<RatingResponseModel> GetRating(int id)
         {
-            var productRating = this.ratingsService.GetProductAverageRating(id);
+            var productRating = await this.ratingsService.GetProductAverageRating(id);
 
             var response = new RatingResponseModel
             {
@@ -50,7 +50,7 @@
             // TODO Make this async. Maybe inject UserManager to get user
             var userId = this.userManager.GetUserId(this.User);
 
-            var productUserRating = this.ratingsService.GetProductUserRating(productId, userId);
+            var productUserRating = await this.ratingsService.GetProductUserRating(productId, userId);
 
             var response = new UserRatingResponseModel
             {

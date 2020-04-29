@@ -1,16 +1,17 @@
 ﻿namespace PizzaDotNet.Services.Data
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Data.Models.Enums;
 
     public interface IOrderStatusService
     {
-        OrderStatus GetById(int id);
+        Task<OrderStatus> GetById(int id);
 
-        OrderStatus GetByName(string name);
+        Task<OrderStatus> GetByName(string name);
 
-        IEnumerable<T> GetAll<T>();
+        Task<IEnumerable<T>> GetAll<T>();
     }
 }

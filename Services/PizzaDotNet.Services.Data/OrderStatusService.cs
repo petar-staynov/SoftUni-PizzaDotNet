@@ -1,4 +1,7 @@
-﻿namespace PizzaDotNet.Services.Data
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+namespace PizzaDotNet.Services.Data
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -16,30 +19,32 @@
             this.orderStatusRepository = orderStatusRepository;
         }
 
-        public OrderStatus GetById(int id)
+        public async Task<OrderStatus> GetById(int id)
         {
-            var orderStatus = this.orderStatusRepository
+            var orderStatus = await this.orderStatusRepository
                 .All()
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return orderStatus;
         }
 
-        public OrderStatus GetByName(string name)
+        public async Task<OrderStatus> GetByName(string name)
         {
-            var orderStatus = this.orderStatusRepository
+            var orderStatus = await this.orderStatusRepository
                 .All()
-                .FirstOrDefault(x => x.Status == name);
+                .FirstOrDefaultAsync(x => x.Status == name);
 
             return orderStatus;
         }
 
-        public IEnumerable<T> GetAll<T>()
+        public async Task<IEnumerable<T>> GetAll<T>()
         {
             var query = this.orderStatusRepository
                 .All();
 
-            return query.To<T>().ToList();
+            var result = await query.To<T>().ToListAsync();
+
+            return result;
         }
     }
 }

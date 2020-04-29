@@ -44,7 +44,7 @@
                 return this.RedirectToAction("Index", "Cart");
             }
 
-            var couponCode = this.couponCodeService.CanUseCodeByCode(couponCodeString);
+            var couponCode = await this.couponCodeService.CanUseCodeByCode(couponCodeString);
             if (couponCode == null)
             {
                 this.TempData["Message"] = COUPON_EXPIRED;

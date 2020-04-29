@@ -20,11 +20,11 @@
             this.productsRepository = productsRepository;
         }
 
-        public int GetCount()
+        public async Task<int> GetCount()
         {
-            int count = this.productsRepository
+            int count = await this.productsRepository
                 .All()
-                .Count();
+                .CountAsync();
 
             return count;
         }
@@ -77,7 +77,7 @@
             return product;
         }
 
-        public IEnumerable<T> GetByCategoryId<T>(int categoryId, string sortCriteria = null, int? count = null)
+        public async Task<IEnumerable<T>> GetByCategoryId<T>(int categoryId, string sortCriteria = null, int? count = null)
         {
             var categoryProductsQuery = this.productsRepository
                 .All()
@@ -105,12 +105,12 @@
                     break;
             }
 
-            var categoryProducts = categoryProductsQuery.To<T>().ToList();
+            var categoryProducts = await categoryProductsQuery.To<T>().ToListAsync();
 
             return categoryProducts;
         }
 
-        public IEnumerable<T> GetAll<T>(string sortCriteria = null, int? count = null)
+        public async Task<IEnumerable<T>> GetAll<T>(string sortCriteria = null, int? count = null)
         {
             var productsQuery = this.productsRepository
                 .All();
@@ -143,7 +143,7 @@
                     break;
             }
 
-            var products = productsQuery.To<T>().ToList();
+            var products = await productsQuery.To<T>().ToListAsync();
 
             return products;
         }

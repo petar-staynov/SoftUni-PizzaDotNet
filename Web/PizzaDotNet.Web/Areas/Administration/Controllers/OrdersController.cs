@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
@@ -36,10 +37,10 @@
             return this.View();
         }
 
-        public IActionResult All(string sortingCriteria = null)
+        public async Task<IActionResult> All(string sortingCriteria = null)
         {
             var orders =
-                this.ordersService.GetAll<AdminOrdersOrderListItemViewModel>(sortingCriteria);
+                await this.ordersService.GetAll<AdminOrdersOrderListItemViewModel>(sortingCriteria);
 
             var viewModel = new AdminOrdersViewModel()
             {
@@ -58,17 +59,17 @@
         }
 
 
-        public IActionResult View(int orderId)
+        public async Task<IActionResult> View(int orderId)
         {
-            var orderViewModel = this.ordersService.GetById<AdminOrderViewModel>(orderId);
+            var orderViewModel = await this.ordersService.GetById<AdminOrderViewModel>(orderId);
 
             return this.View(orderViewModel);
         }
 
-        public IActionResult Edit(int orderId)
+        public async Task<IActionResult> Edit(int orderId)
         {
-            var order = this.ordersService.GetBaseById(orderId);
-            var statuses = this.orderStatusService.GetAll<AdminOrderStatusViewModel>();
+            var order = await this.ordersService.GetBaseById(orderId);
+            var statuses = await this.orderStatusService.GetAll<AdminOrderStatusViewModel>();
             var orderProducts = this.mapper.Map<List<AdminOrderProductViewModel>>(order.OrderProducts);
 
             var orderViewModel = new AdminOrderInputModel
@@ -92,14 +93,14 @@
         }
 
         [HttpPost]
-        public IActionResult Edit(AdminOrderInputModel inputModel)
+        public async Task<IActionResult> Edit(AdminOrderInputModel inputModel)
         {
-            var order = this.ordersService.GetBaseById(inputModel.Id);
-            var orderStatus = this.orderStatusService.GetById(inputModel.OrderStatusId);
+            var order = await this.ordersService.GetBaseById(inputModel.Id);
+            var orderStatus = await this.orderStatusService.GetById(inputModel.OrderStatusId);
 
             order.OrderStatus = orderStatus;
 
-            this.ordersService.UpdateAsync(order);
+            await this.ordersService.UpdateAsync(order);
 
             return this.RedirectToAction("View", new { orderId = order.Id });
         }
@@ -119,18 +120,5 @@
             this.TempData["MessageType"] = AlertMessageTypes.Error;
             return this.RedirectToAction("View", new { orderId = orderId });
         }
-
-        /* Order can not be deleted by design */
-        // [HttpPost]
-        // public async Task<ActionResult> Delete(AdminOrderViewModel inputModel)
-        // {
-        //     var orderId = inputModel.Id;
-        //
-        //     var orderViewModel = await this.ordersService.DeleteAsync(orderId);
-        //
-        //     this.TempData["Message"] = ORDER_DELETED;
-        //     this.TempData["MessageType"] = AlertMessageTypes.Success;
-        //     return this.RedirectToAction("All");
-        // }
     }
 }

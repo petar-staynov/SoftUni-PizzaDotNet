@@ -1,23 +1,25 @@
 ﻿namespace PizzaDotNet.Services.Data
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     using PizzaDotNet.Data.Models;
 
     public interface ICouponCodeService
     {
-        IEnumerable<T> GetAll<T>(int? count = null);
+        Task<IEnumerable<T>> GetAll<T>(int? count = null);
 
-        T GetById<T>(int id);
+        Task<T> GetById<T>(int id);
 
-        CouponCode GetBaseById(int id);
+        Task<CouponCode> GetBaseById(int id);
 
-        T GetByCode<T>(string codeString);
+        Task<T> GetByCode<T>(string codeString);
 
-        CouponCode GetBaseByCode(string codeString);
+        Task<CouponCode> GetBaseByCode(string codeString);
 
-        CouponCode CanUseCodeById(int codeId);
+        Task<CouponCode> CanUseCodeById(int codeId);
 
-        CouponCode CanUseCodeByCode(string codeString);
+        Task<CouponCode> CanUseCodeByCode(string codeString);
 
         void UseCodeByCode(string code);
     }
