@@ -20,7 +20,7 @@
     {
         private const string CANCEL_EDIT = "Editing canceled";
         private const string CANCEL_DELETE = "Deleting canceled";
-        private const string PRODUCT_DOESNT_EXIST = "Product does not exist";
+        private const string PRODUCT_DELETED = "Product deleted successfully";
 
         private readonly IMapper mapper;
         private readonly IGoogleCloudStorage googleCloudStorage;
@@ -208,6 +208,9 @@
             // Delete old sizes
             await this.productSizeService.DeleteProductSizes(product.Id);
             await this.productsService.UpdateAsync(product);
+
+            this.TempData["Message"] = PRODUCT_DELETED;
+            this.TempData["MessageType"] = AlertMessageTypes.Success;
 
             // Custom route redirect because it matches the normal ProductsController action
             return this.RedirectToRoute(new
