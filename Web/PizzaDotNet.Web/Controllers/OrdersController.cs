@@ -115,7 +115,7 @@
                 orderProducts.Add(orderProduct);
             }
 
-            decimal orderTotalPrice = orderProducts.Select(p => p.Price).Sum();
+            decimal orderTotalPrice = orderProducts.Select(p => p.Price * p.Quantity).Sum();
 
             /* Apply discount code */
             CouponCode couponCode = null;
