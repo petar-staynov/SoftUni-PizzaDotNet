@@ -146,7 +146,7 @@
                 this.couponCodeService.UseCodeByCode(couponCode.Code);
             }
 
-            return this.RedirectToAction("View", new{ orderId = orderEntity.Id });
+            return this.RedirectToAction("View", new { orderId = orderEntity.Id });
         }
 
         public IActionResult View(int orderId)

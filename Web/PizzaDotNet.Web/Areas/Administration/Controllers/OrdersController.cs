@@ -1,7 +1,4 @@
-﻿using System;
-using PizzaDotNet.Data.Models.Enums;
-
-namespace PizzaDotNet.Web.Areas.Administration.Controllers
+﻿namespace PizzaDotNet.Web.Areas.Administration.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -16,7 +13,7 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
     public class OrdersController : AdministrationController
     {
         private static string CANNOT_DELETE_ORDER = "Orders can not be deleted";
-        private static string CANNOT_EDIT_ORDER = "Feature not implemented yet";
+        private static string CANCEL_EDIT = "Editing canceled";
 
         private readonly IMapper mapper;
         private readonly IOrdersService ordersService;
@@ -106,6 +103,13 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
             return this.RedirectToAction("View", new { orderId = order.Id });
         }
 
+        public IActionResult EditCancel(string orderId)
+        {
+            this.TempData["Message"] = CANCEL_EDIT;
+            this.TempData["MessageType"] = AlertMessageTypes.Error;
+            return this.RedirectToAction("View", new { orderId = orderId });
+        }
+
         public IActionResult Delete(int orderId)
         {
             var orderViewModel = this.ordersService.GetById<AdminOrderViewModel>(orderId);
@@ -115,6 +119,7 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
             return this.RedirectToAction("View", new { orderId = orderId });
         }
 
+        /* Order can not be deleted by design */
         // [HttpPost]
         // public async Task<ActionResult> Delete(AdminOrderViewModel inputModel)
         // {
@@ -128,4 +133,3 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
         // }
     }
 }
-
