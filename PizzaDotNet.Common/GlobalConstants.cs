@@ -13,5 +13,7 @@
         public const int MaxNumberOfProductSizes = 5;
 
         public const string SESSION_CART_KEY = "Cart";
+
+        public const string SESSION_COUPONCODE_KEY = "CouponCode";
     }
 }

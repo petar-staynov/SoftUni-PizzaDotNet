@@ -102,7 +102,7 @@
 
             /* Get Coupon Code (Discount) */
             var sessionCouponCode =
-                this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, "CouponCode");
+                this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, GlobalConstants.SESSION_COUPONCODE_KEY);
             if (sessionCouponCode != null)
             {
                 var couponCode = await this.couponCodeService.GetBaseByCode(sessionCouponCode.Code);

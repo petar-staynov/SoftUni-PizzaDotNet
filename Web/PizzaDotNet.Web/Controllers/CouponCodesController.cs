@@ -36,7 +36,7 @@
                     Code = null,
                 };
 
-                this.sessionService.Set(this.HttpContext.Session, "CouponCode", sessionCouponCodeDto);
+                this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_COUPONCODE_KEY, sessionCouponCodeDto);
 
                 this.TempData["Message"] = COUPON_REMOVED;
                 this.TempData["MessageType"] = AlertMessageTypes.Error;
@@ -58,7 +58,7 @@
                 Code = couponCode.Code,
             };
 
-            this.sessionService.Set(this.HttpContext.Session, "CouponCode", sessionCartProductDto);
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_COUPONCODE_KEY, sessionCartProductDto);
 
             this.TempData["Message"] = COUPON_APPLIED;
             this.TempData["MessageType"] = AlertMessageTypes.Success;

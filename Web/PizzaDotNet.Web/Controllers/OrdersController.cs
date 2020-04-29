@@ -121,7 +121,7 @@
             CouponCode couponCode = null;
             decimal? orderTotalDiscountPrice = orderTotalPrice;
             var sessionCouponCode =
-                this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, "CouponCode");
+                this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, GlobalConstants.SESSION_COUPONCODE_KEY);
             if (sessionCouponCode != null)
             {
                 couponCode = await this.couponCodeService.GetBaseByCode(sessionCouponCode.Code);
@@ -160,6 +160,7 @@
 
             /* Clear session */
             this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, new SessionCartDto());
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_COUPONCODE_KEY, string.Empty);
 
             return this.RedirectToAction("View", new { orderId = orderEntity.Id });
         }
