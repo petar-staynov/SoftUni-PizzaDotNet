@@ -23,6 +23,7 @@
 
         public string Apartment { get; set; }
 
+        [Phone]
         public string PhoneNumber { get; set; }
     }
 }
