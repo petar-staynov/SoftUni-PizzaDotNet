@@ -14,5 +14,7 @@
         public T GetProductSize<T>(int productId, string sizeString);
 
         public ProductSize GetProductSizeBase(int productId, string sizeString);
+
+        public Task<bool> DeleteProductSizes(int productId);
     }
 }

@@ -7,6 +7,7 @@
     using PizzaDotNet.Data.Common.CustomValidationAttributes;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
+    using PizzaDotNet.Web.ViewModels.Administration.Shared;
     using PizzaDotNet.Web.ViewModels.Categories;
     using PizzaDotNet.Web.ViewModels.Products;
 
@@ -32,14 +33,6 @@
 
         public IEnumerable<CategoryDropdownViewModel> Categories { get; set; }
 
-        [DataType(DataType.ImageUrl)]
-        public string ImageUrl { get; set; }
-
-        [Display(Name = "Image")]
-        [MaxFileSize(1, "mb")]
-        [AllowedExtensions(new string[] { ".jpg", "jpeg", ".png", ".gif", ".bmp" })]
-        public IFormFile ImageFile { get; set; }
-
-        public string ImageStorageName { get; set; }
+        public ImageUploadInputModel ImageModel { get; set; }
     }
 }

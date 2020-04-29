@@ -36,8 +36,8 @@
                 return this.NotFound();
             }
 
-            productViewModel.Rating = this.ratingsService.GetProductRating(id);
-            productViewModel.Sizes = this.productSizeService.GetAllProductSizes<ProductSizeViewModel>(id);
+            productViewModel.Rating = this.ratingsService.GetProductAverageRating(id);
+            // productViewModel.Sizes = this.productSizeService.GetAllProductSizes<ProductSizeViewModel>(id);
 
             return this.View(productViewModel);
         }

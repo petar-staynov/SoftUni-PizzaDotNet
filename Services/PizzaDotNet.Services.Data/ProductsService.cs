@@ -37,9 +37,12 @@ namespace PizzaDotNet.Services.Data
             return product;
         }
 
-        public Task<Order> UpdateAsync(Order order)
+        public async Task<Product> UpdateAsync(Product product)
         {
-            throw new System.NotImplementedException();
+            this.productsRepository.Update(product);
+            await this.productsRepository.SaveChangesAsync();
+
+            return product;
         }
 
         public Task<bool> DeleteAsync(int orderId)

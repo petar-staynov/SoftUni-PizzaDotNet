@@ -1,7 +1,4 @@
-﻿using PizzaDotNet.Web.ViewModels.Administration.Products;
-using PizzaDotNet.Web.ViewModels.ProductSize;
-
-namespace PizzaDotNet.Web.Areas.Administration.Controllers
+﻿namespace PizzaDotNet.Web.Areas.Administration.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -11,14 +8,19 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
 
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
+    using PizzaDotNet.Common;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services;
     using PizzaDotNet.Services.Data;
+    using PizzaDotNet.Web.ViewModels.Administration.Products;
+    using PizzaDotNet.Web.ViewModels.Administration.Shared;
     using PizzaDotNet.Web.ViewModels.Categories;
-    using PizzaDotNet.Web.ViewModels.Products;
 
     public class ProductsController : AdministrationController
     {
+        private static string CANCEL_EDIT = "Editing canceled";
+        private static string PRODUCT_DOESNT_EXIST = "Product does not exist";
+
         private readonly IMapper mapper;
         private readonly IGoogleCloudStorage googleCloudStorage;
         private readonly ICategoriesService categoriesService;
@@ -49,11 +51,11 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
             return fileNameForStorage;
         }
 
-        private async Task UploadProductImage(AdminProductCreateInputModel product)
+        private async Task UploadProductImage(ImageUploadInputModel imageModel)
         {
-            string fileNameForStorage = FormFileName(product.Name, product.ImageFile.FileName);
-            product.ImageUrl = await this.googleCloudStorage.UploadFileAsync(product.ImageFile, fileNameForStorage);
-            product.ImageStorageName = fileNameForStorage;
+            string fileNameForStorage = imageModel.ImageFile.FileName;
+            imageModel.ImageUrl = await this.googleCloudStorage.UploadFileAsync(imageModel.ImageFile, fileNameForStorage);
+            imageModel.ImageStorageName = fileNameForStorage;
         }
 
         public IActionResult Index()
@@ -83,6 +85,18 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
         }
 
         [HttpGet]
+        public IActionResult View(int productId)
+        {
+            var productViewModel = this.productsService.GetById<AdminProductViewModel>(productId);
+            if (productViewModel == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(productViewModel);
+        }
+
+        [HttpGet]
         public IActionResult Create()
         {
             var categories =
@@ -106,9 +120,14 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
                 return this.View(inputModel);
             }
 
-            if (inputModel.ImageFile != null)
+            var imageUploadModel = new ImageUploadInputModel();
+            if (inputModel.ImageModel.ImageFile != null)
             {
-                await this.UploadProductImage(inputModel);
+                imageUploadModel = new ImageUploadInputModel
+                {
+                    ImageFile = inputModel.ImageModel.ImageFile,
+                };
+                await this.UploadProductImage(imageUploadModel);
             }
 
             var filteredSizesInputs = inputModel.Sizes
@@ -122,8 +141,8 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
                 Description = inputModel.Description,
                 CategoryId = inputModel.CategoryId,
                 Sizes = sizes,
-                ImageUrl = inputModel.ImageUrl,
-                ImageStorageName = inputModel.ImageStorageName,
+                ImageUrl = imageUploadModel.ImageUrl,
+                ImageStorageName = imageUploadModel.ImageStorageName,
             };
 
             await this.productsService.CreateAsync(product);
@@ -132,34 +151,82 @@ namespace PizzaDotNet.Web.Areas.Administration.Controllers
         }
 
         [HttpGet]
-        public IActionResult View(int productId)
+        public IActionResult Edit(int productId)
         {
-            var productViewModel = this.productsService.GetById<AdminProductViewModel>(productId);
-            if (productViewModel == null)
-            {
-                return this.NotFound();
-            }
+            var productInputModel = this.productsService.GetById<AdminProductEditInputModel>(productId);
 
-            productViewModel.Rating = this.ratingsService.GetProductRating(productId);
-            productViewModel.Sizes = this.productSizeService.GetAllProductSizes<ProductSizeViewModel>(productId);
+            var imageModel = this.productsService.GetById<ImageUploadInputModel>(productId);
+            productInputModel.ImageModel = imageModel;
 
-            return this.View(productViewModel);
-        }
+            var categories =
+                this.categoriesService.GetAll<CategoryDropdownViewModel>();
+            productInputModel.Categories = categories;
 
-        [HttpGet]
-        public IActionResult Edit()
-        {
-            throw new NotImplementedException();
+            return this.View(productInputModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(AdminProductCreateInputModel inputModel)
+        public async Task<IActionResult> Edit(AdminProductEditInputModel inputModel)
         {
-            throw new NotImplementedException();
+            if (!this.ModelState.IsValid)
+            {
+                // Pass back the categories and Sizes list because POST Requests lose Collections
+                var categories =
+                    this.categoriesService.GetAll<CategoryDropdownViewModel>();
+
+                inputModel.Categories = categories;
+                return this.View(inputModel);
+            }
+
+            var product = this.productsService.GetBaseById(inputModel.Id);
+            product.Name = inputModel.Name;
+            product.Description = inputModel.Description;
+            product.CategoryId = inputModel.CategoryId;
+
+            if (inputModel.IsNewImage)
+            {
+                var imageUploadModel = new ImageUploadInputModel();
+                if (inputModel.ImageModel.ImageFile != null)
+                {
+                    imageUploadModel = new ImageUploadInputModel
+                    {
+                        ImageFile = inputModel.ImageModel.ImageFile,
+                    };
+                    await this.UploadProductImage(imageUploadModel);
+                    product.ImageUrl = imageUploadModel.ImageUrl;
+                    product.ImageStorageName = imageUploadModel.ImageStorageName;
+                }
+            }
+
+            var filteredSizesInputs = inputModel.Sizes
+                .Where(s => !string.IsNullOrEmpty(s.Name) && s.Price >= 0M).ToList();
+
+            List<ProductSize> sizes = this.mapper.Map<List<ProductSize>>(filteredSizesInputs);
+            product.Sizes = sizes;
+
+            // Delete old sizes
+            await this.productSizeService.DeleteProductSizes(product.Id);
+            await this.productsService.UpdateAsync(product);
+
+            // Custom route redirect because it matches the normal ProductsController action
+            return this.RedirectToRoute(new {
+                area = "Administration",
+                controller = "Products",
+                action = "View",
+                productId = product.Id,
+            });
         }
 
+        public IActionResult EditCancel(int productId)
+        {
+            this.TempData["Message"] = CANCEL_EDIT;
+            this.TempData["MessageType"] = AlertMessageTypes.Error;
+            return this.RedirectToAction("View", new { productId = productId });
+        }
+
+
         [HttpGet]
-        public IActionResult Delete()
+        public IActionResult Delete(int productId)
         {
             throw new NotImplementedException();
         }

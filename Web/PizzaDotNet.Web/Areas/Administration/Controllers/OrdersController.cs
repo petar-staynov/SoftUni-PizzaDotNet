@@ -14,6 +14,7 @@
     {
         private static string CANNOT_DELETE_ORDER = "Orders can not be deleted";
         private static string CANCEL_EDIT = "Editing canceled";
+        private static string ORDER_DOESNT_EXIST = "Order does not exist";
 
         private readonly IMapper mapper;
         private readonly IOrdersService ordersService;
@@ -103,7 +104,7 @@
             return this.RedirectToAction("View", new { orderId = order.Id });
         }
 
-        public IActionResult EditCancel(string orderId)
+        public IActionResult EditCancel(int orderId)
         {
             this.TempData["Message"] = CANCEL_EDIT;
             this.TempData["MessageType"] = AlertMessageTypes.Error;

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
 
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
@@ -15,14 +16,20 @@
 
         public string Description { get; set; }
 
-        public ICollection<ProductSizeViewModel> Sizes { get; set; }
+        public int CategoryId { get; set; }
+
+        public AdminProductCategoryViewModel Category { get; set; }
 
         public string ImageUrl { get; set; }
 
-        public int CategoryId { get; set; }
+        public string ImageStorageName { get; set; }
 
-        public string Category { get; set; }
+        public virtual ICollection<ProductSizeViewModel> Sizes { get; set; }
 
-        public double? Rating { get; set; }
+        public virtual ICollection<AdminProductRatingViewModel> Ratings { get; set; }
+
+        public double? RatingAverage => this.Ratings.Count > 0
+            ? this.Ratings.Average(r => r.Value)
+            : 0;
     }
 }

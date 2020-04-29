@@ -7,14 +7,12 @@
 
     var sizesOrdered = Model.Sizes.OrderBy(x => x.Price).ToList();
     var sizesDict = Json.Serialize(sizesOrdered.ToDictionary(k => k.Name, v => v.Price));
-
-    var imageUrl = Model.ImageUrl ?? "~/images/placeholders/320x320.png";
-
+    
     var isLoggedIn = User.Identity.IsAuthenticated;
 }
 
 <div class="text-center">
-    <img src="@Url.Content(@imageUrl)" alt="Image" class="img-fluid product-view-image"/>
+    <img src="@Url.Content(@Model.ImageUrl ?? "~/images/placeholders/320x320.png")" alt="Image" class="img-fluid product-view-image"/>
 
     <form id='ratingForm' method='post' hidden></form>
 

@@ -4,6 +4,7 @@
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Web.ViewModels.Addresses;
     using PizzaDotNet.Web.ViewModels.Administration.Products;
+    using PizzaDotNet.Web.ViewModels.Administration.Shared;
     using PizzaDotNet.Web.ViewModels.Cart;
     using PizzaDotNet.Web.ViewModels.DTO;
     using PizzaDotNet.Web.ViewModels.Orders;
@@ -16,6 +17,10 @@
             /* ProductSize <--> AdminProductCreateSizeInputModel*/
             this.CreateMap<ProductSize, AdminProductCreateSizeInputModel>();
             this.CreateMap<AdminProductCreateSizeInputModel, ProductSize>();
+
+            /* ProductSize <--> AdminProductSizeInputModel*/
+            this.CreateMap<ProductSize, AdminProductSizeInputModel>();
+            this.CreateMap<AdminProductSizeInputModel, ProductSize>();
 
             /* ProductViewInputModel <--> SessionCartProductDto*/
             this.CreateMap<ProductViewInputModel, SessionCartProductDto>();
@@ -64,6 +69,10 @@
             /* OrderProduct <-> AdminOrderProductViewModel */
             this.CreateMap<OrderProduct, AdminOrderProductViewModel>();
             this.CreateMap<AdminOrderProductViewModel, OrderProduct>();
+
+            /* ImageModel */
+            this.CreateMap<AdminProductCreateInputModel, ImageUploadInputModel>();
+            this.CreateMap<AdminProductEditInputModel, ImageUploadInputModel>();
         }
     }
 }

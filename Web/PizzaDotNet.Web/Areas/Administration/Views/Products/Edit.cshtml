@@ -1,18 +1,147 @@
-﻿@* @model TModel *@
-@* *@
-@* @{ *@
-@*     Layout = null; *@
-@* } *@
-@* *@
-@* <!DOCTYPE html> *@
-@* *@
-@* <html> *@
-@* <head> *@
-@*     <title>title</title> *@
-@* </head> *@
-@* <body> *@
-@* <div> *@
-@*        *@
-@* </div> *@
-@* </body> *@
-@* </html> *@
+﻿@using PizzaDotNet.Web.ViewModels.Administration.Products
+@model PizzaDotNet.Web.ViewModels.Administration.Products.AdminProductEditInputModel
+@{
+    this.ViewData["Title"] = $"{@Model.Name} - edit";
+
+    var categoriesListItems =
+        Model.Categories.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+
+    var sizesList = Model.Sizes;
+    int maxNumberOfSizes = PizzaDotNet.Common.GlobalConstants.MaxNumberOfProductSizes;
+    for (int i = Model.Sizes.Count; i < maxNumberOfSizes; i++)
+    {
+        sizesList.Add(new AdminProductSizeInputModel());
+    }
+}
+
+<form method="post" asp-action="Edit" enctype="multipart/form-data">
+    <div class="table-responsive-sm">
+        <table class="table table-bordered">
+            <thead hidden>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="1">
+                    <label asp-for="@Model.Id"></label>
+                </td>
+                <td colspan="3">
+                    <input asp-for="@Model.Id" class="form-control disabled" disabled="disabled"/>
+                    <input asp-for="@Model.Id" class="form-control disabled" hidden="hidden"/>
+                    <span asp-validation-for="@Model.Id"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <label asp-for="Name"></label>
+                </td>
+                <td colspan="3">
+                    <input asp-for="Name" class="form-control"/>
+                    <span asp-validation-for="Name"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <label asp-for="Description"></label>
+                </td>
+                <td colspan="3">
+                    <input asp-for="Description" class="form-control"/>
+                    <span asp-validation-for="Description"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <label asp-for="CategoryId"></label>
+                </td>
+                <td colspan="3">
+                    <select asp-for="CategoryId" asp-items="categoriesListItems" class="form-control"></select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <label asp-for="RatingAverage"></label>
+                </td>
+                <td colspan="3">
+                    <input asp-for="RatingAverage" class="form-control disabled" disabled="disabled"/>
+                    <span asp-validation-for="RatingAverage"></span>
+                </td>
+            </tr>
+            <tr class="font-weight-bold">
+                <td colspan="4" class="text-center">
+                    <label asp-for="Sizes"></label>:
+                </td>
+            </tr>
+            <tr class="font-weight-bold">
+                <td colspan="2" class="text-center">Name</td>
+                <td colspan="2" class="text-center">Price</td>
+            </tr>
+            @for (int i = 0; i < Model.Sizes.Count; i++)
+            {
+@*                 <input asp-for="@Model.Sizes[i].Id" hidden="hidden"> *@
+                <tr>
+                    <td colspan="2">
+                        <input type="text" class="form-control" placeholder="Size" asp-for="@Model.Sizes[i].Name">
+                    </td>
+                    <td colspan="2">
+                        <input type="number" class="form-control" placeholder="Price" asp-for="@Model.Sizes[i].Price">
+                        <span asp-validation-for="@Model.Sizes[i]"></span>
+                    </td>
+                </tr>
+            }
+            <br/>
+            <tr>
+                <td colspan="4" class="text-center font-weight-bold">
+                    <label asp-for="ImageModel.ImageFile" class="control-label"></label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <input asp-for="ImageModel.ImageFile" class="form-control-file" onchange="readImage(this)"/>
+                    <span asp-validation-for="ImageModel.ImageFile" class="text-danger"></span>
+                </td>
+                <td colspan="3">
+                    <input asp-for="@Model.IsNewImage" class="" type="checkbox">
+                    <label asp-for="@Model.IsNewImage" class="form-check-label"></label>
+                </td>
+            </tr>
+            <tr class="font-weight-bold">
+                <td colspan="4" class="text-center">
+                    <img id="imageContainer" src="@Url.Content(@Model.ImageModel.ImageUrl ?? "~/images/placeholders/320x320.png")" alt="Image" class="img-fluid product-view-image"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-warning btn-lg w-25">Confirm</button>
+        <a type="button" class="btn btn-danger btn-lg w-25"
+           asp-area="Administration" asp-controller="Products" asp-action="EditCancel" asp-route-productId="@Model.Id">
+            Cancel
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        const readImage = (input) => {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                $('#imageContainer')
+                    .attr('src', e.target.result)
+                    .width("auto")
+                    .height(320);
+            };
+            
+            reader.readAsDataURL(input.files[0]);
+         }
+    };
+    </script>
+}

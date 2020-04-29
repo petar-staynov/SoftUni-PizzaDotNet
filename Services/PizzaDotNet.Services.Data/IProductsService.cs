@@ -12,7 +12,7 @@
 
         Task<Product> CreateAsync(Product product);
 
-        Task<Order> UpdateAsync(Order order);
+        Task<Product> UpdateAsync(Product product);
 
         Task<bool> DeleteAsync(int orderId);
 

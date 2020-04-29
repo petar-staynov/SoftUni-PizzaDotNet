@@ -63,5 +63,21 @@
 
             return productSize;
         }
+
+        public async Task<bool> DeleteProductSizes(int productId)
+        {
+            var sizes = this.productSizeRepository
+                .All()
+                .Where(s => s.ProductId == productId)
+                .ToList();
+
+            foreach (var productSize in sizes)
+            {
+                this.productSizeRepository.Delete(productSize);
+            }
+
+            int result = await productSizeRepository.SaveChangesAsync();
+            return result > 0;
+        }
     }
 }

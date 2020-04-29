@@ -1,0 +1,65 @@
+@model PizzaDotNet.Web.ViewModels.Administration.Products.AdminProductViewModel
+
+<div class="table-responsive-sm">
+    <table class="table table-bordered">
+        <thead hidden>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="1">Id:</td>
+            <td colspan="3">@Model.Id</td>
+        </tr>
+        <tr>
+            <td colspan="1">Name: </td>
+            <td colspan="3">@Model.Name</td>
+        </tr>
+        <tr>
+            <td colspan="1">Description:</td>
+            <td colspan="3">@Model.Description</td>
+        </tr>
+        <tr>
+            <td colspan="1">Category:</td>
+            <td colspan="3">@Model.Category.Name</td>
+        </tr>
+        <tr>
+            <td colspan="1">Rating:</td>
+            <td colspan="3">@Model.RatingAverage</td>
+        </tr>
+        <tr class="font-weight-bold">
+            <td colspan="4" class="text-center">Sizes:</td>
+        </tr>
+        <tr class="font-weight-bold">
+            <td colspan="2" class="text-center">Name</td>
+            <td colspan="2" class="text-center">Price</td>
+        </tr>
+        @foreach (var size in Model.Sizes)
+        {
+            <tr>
+                <td colspan="2">@size.Name</td>
+                <td colspan="2">@size.Price</td>
+            </tr>
+        }
+        <tr class="font-weight-bold">
+            <td colspan="4" class="text-center">
+                <img src="@Url.Content(@Model.ImageUrl ?? "~/images/placeholders/320x320.png")" alt="Image" class="img-fluid product-view-image"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="text-center">
+    <a type="button" class="btn btn-warning btn-lg w-25"
+       asp-area="Administration" asp-controller="Products" asp-action="Edit" asp-route-productId="@Model.Id">
+        Edit
+    </a>
+    <a type="button" class="btn btn-danger btn-lg w-25"
+       asp-area="Administration" asp-controller="Products" asp-action="Delete" asp-route-productId="@Model.Id">
+        Delete
+    </a>
+</div>
