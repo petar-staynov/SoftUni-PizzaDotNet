@@ -42,6 +42,12 @@ namespace PizzaDotNet.Services.Data
             var query = this.orderStatusRepository
                 .All();
 
+            if (typeof(T) == typeof(OrderStatus))
+            {
+                var statuses = query.ToList<OrderStatus>();
+                return statuses as IEnumerable<T>;
+            }
+
             var result = await query.To<T>().ToListAsync();
 
             return result;

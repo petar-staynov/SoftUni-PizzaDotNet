@@ -35,6 +35,12 @@
                 query = query.Take(count.Value);
             }
 
+            if (typeof(T) == typeof(Category))
+            {
+                var categories = query.ToList<Category>();
+                return categories as IEnumerable<T>;
+            }
+
             var result = await query.To<T>().ToListAsync();
             return result;
         }

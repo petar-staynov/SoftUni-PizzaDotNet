@@ -143,9 +143,15 @@
                     break;
             }
 
-            var products = await productsQuery.To<T>().ToListAsync();
+            if (typeof(T) == typeof(Product))
+            {
+                var products = productsQuery.ToList<Product>();
+                return products as IEnumerable<T>;
+            }
 
-            return products;
+            var result = await productsQuery.To<T>().ToListAsync();
+
+            return result;
         }
     }
 }
