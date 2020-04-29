@@ -17,13 +17,13 @@
     {
         orderStatusMessage = $"This order is being processed. Refresh the page for updates.";
     }
-    else if (Model.OrderStatus.Status == OrderStatusEnum.Delivered.ToString())
+    else if (Model.OrderStatus.Status == OrderStatusEnum.Shipped.ToString())
     {
-        orderStatusMessage = $"This order is on its way to {string.Join(",", addressStringArr)}";
+        orderStatusMessage = $"This order is on its way to {string.Join(", ", addressStringArr)}";
     }
     else if (Model.OrderStatus.Status == OrderStatusEnum.Delivered.ToString())
     {
-        orderStatusMessage = $"This order has been delivered to {string.Join(",", addressStringArr)}";
+        orderStatusMessage = $"This order has been delivered to {string.Join(", ", addressStringArr)}";
     }
     else if (Model.OrderStatus.Status == OrderStatusEnum.Cancelled.ToString())
     {

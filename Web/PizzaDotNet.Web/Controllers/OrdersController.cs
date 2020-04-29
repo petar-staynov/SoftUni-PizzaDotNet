@@ -146,10 +146,10 @@
                 this.couponCodeService.UseCodeByCode(couponCode.Code);
             }
 
-            return this.RedirectToAction("ViewOrder", new{ orderId = orderEntity.Id });
+            return this.RedirectToAction("View", new{ orderId = orderEntity.Id });
         }
 
-        public IActionResult ViewOrder(int orderId)
+        public IActionResult View(int orderId)
         {
             var userIsAdmin = this.User.IsInRole(GlobalConstants.AdministratorRoleName);
             var userId = this.userManager.GetUserId(this.User);
@@ -185,7 +185,7 @@
             {
                 this.TempData["Message"] = ORDER_CANT_CANCEL;
                 this.TempData["MessageType"] = AlertMessageTypes.Error;
-                return this.RedirectToAction("ViewOrder", new { orderId = orderId });
+                return this.RedirectToAction("View", new { orderId = orderId });
             }
 
             await this.ordersService.ChangeStatus(orderId, OrderStatusEnum.Cancelled);
@@ -193,7 +193,7 @@
 
             this.TempData["Message"] = ORDER_CANCELLED;
             this.TempData["MessageType"] = AlertMessageTypes.Error;
-            return this.RedirectToAction("ViewOrder", new { orderId = orderId });
+            return this.RedirectToAction("View", new { orderId = orderId });
         }
     }
 }
