@@ -12,8 +12,6 @@
 
     public class AdminProductCreateInputModel : IMapFrom<Product>
     {
-        private List<AdminProductCreateSizeInputModel> _sizes;
-
         public AdminProductCreateInputModel()
         {
             this.Sizes = new List<AdminProductCreateSizeInputModel>();

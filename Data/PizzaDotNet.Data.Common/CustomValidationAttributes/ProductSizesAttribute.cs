@@ -19,17 +19,16 @@
                 PropertyInfo sizeProp = objType.GetProperty("Name");
                 PropertyInfo priceProp = objType.GetProperty("Price");
 
-                if (sizeProp == null || priceProp == null)
+
+                var sizeValue = sizeProp.GetValue(obj);
+                var priceValue = priceProp.GetValue(obj);
+                if (sizeValue == null || priceValue == null)
                 {
                     continue;
                 }
 
-                var sizeValue = sizeProp.GetValue(obj);
                 string sizeString = (string)sizeValue;
-
-                var priceValue = priceProp.GetValue(obj);
                 decimal priceDecimal = (decimal)priceValue;
-
                 if (String.IsNullOrEmpty(sizeString))
                 {
                     continue;
