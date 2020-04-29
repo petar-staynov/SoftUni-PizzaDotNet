@@ -1,6 +1,4 @@
-﻿using PizzaDotNet.Common;
-
-namespace PizzaDotNet.Web.Controllers
+﻿namespace PizzaDotNet.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -13,6 +11,7 @@ namespace PizzaDotNet.Web.Controllers
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
+    using PizzaDotNet.Common;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services;
     using PizzaDotNet.Services.Data;
@@ -51,17 +50,25 @@ namespace PizzaDotNet.Web.Controllers
             this.mapper = mapper;
         }
 
-        // TODO Alert messages to separate variable and use global constants for css
         public async Task<IActionResult> Index()
         {
             var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
-
-            // TODO Remove dummy data
-            if (cart == null || cart.Products.Count <= 0)
+            if (cart == null)
             {
-                this.SetTempCart();
+                this.sessionService.Set(
+                    this.HttpContext.Session,
+                    GlobalConstants.SESSION_CART_KEY,
+                    new SessionCartDto());
                 cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             }
+
+            // TODO Remove dummy data
+            // if (cart == null || cart.Products.Count <= 0)
+            // {
+            //     this.SetTempCart();
+            //     cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
+            // }
+
 
             var cartViewModel = this.mapper.Map<CartViewModel>(cart);
 
@@ -73,7 +80,7 @@ namespace PizzaDotNet.Web.Controllers
 
                 /* Get product size */
                 var productSize =
-                    this.productSizeService.GetProductSize<ProductSizeViewModel>(productDto.Id, productDto.SizeName);
+                    await this.productSizeService.GetProductSize<ProductSizeViewModel>(productDto.Id, productDto.SizeName);
                 productViewModel.Size = productSize;
 
                 /* Map data (Quantity, Size) from Product DTO */
@@ -88,7 +95,7 @@ namespace PizzaDotNet.Web.Controllers
             /* Get user address */
             var userId = this.userManager.GetUserId(this.User);
             var addressViewModel =
-                this.addressesService.GetByUserId<CartAddressViewInputModel>(userId) ?? new CartAddressViewInputModel();
+               await this.addressesService.GetByUserId<CartAddressViewInputModel>(userId) ?? new CartAddressViewInputModel();
             cartViewModel.Address = addressViewModel;
 
             /* Get Coupon Code (Discount) */
@@ -96,7 +103,7 @@ namespace PizzaDotNet.Web.Controllers
                 this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, "CouponCode");
             if (sessionCouponCode != null)
             {
-                var couponCode = this.couponCodeService.GetBaseByCode(sessionCouponCode.Code);
+                var couponCode = await this.couponCodeService.GetBaseByCode(sessionCouponCode.Code);
                 if (couponCode != null)
                 {
                     cartViewModel.CouponCode = couponCode.Code;

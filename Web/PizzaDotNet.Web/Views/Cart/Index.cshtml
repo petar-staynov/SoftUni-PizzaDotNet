@@ -23,47 +23,58 @@
         </div>
     </div>
     <hr/>
-    @foreach (var cartProductViewModel in Model.Products)
+    @if (Model.Products.Count <= 0)
     {
         <div class="row">
-            <div class="col-3 col-md-2">
-                <img src="@cartProductViewModel.ImageUrl" alt="Image" class="img-fluid"/>
-            </div>
-            <div class="col-9 col-md-5">
-                <span class="font-weight-bold">@cartProductViewModel.Name</span><br/>
-                <span class="cart-product-description font-weight-light">@cartProductViewModel.SizeString</span>
-                <div>
-                    <span class="cart-ingredient">+ Ingredient</span>
-                </div>
-            </div>
-            <div class="col-4 col-md-2 text-center">
-                <a role="button" class="btn btn-outline-secondary btn-sm"
-                   asp-action="DecreaseItemQuantity"
-                   asp-route-itemId="@cartProductViewModel.Id"
-                   asp-route-itemSize="@cartProductViewModel.SizeString">
-                    -
-                </a>
-                <span>@cartProductViewModel.Quantity</span>
-                <a role="button" class="btn btn-outline-secondary btn-sm"
-                   asp-action="IncreaseItemQuantity"
-                   asp-route-itemId="@cartProductViewModel.Id"
-                   asp-route-itemSize="@cartProductViewModel.SizeString">
-                    +
-                </a>
-            </div>
-            <div class="col-4 col-md-2 text-center">
-                <span>@cartProductViewModel.TotalPrice</span>
-            </div>
-            <div class="col-4 col-md-1  text-center">
-                <a role="button" class="btn btn-danger btn-sm"
-                   asp-action="RemoveItem"
-                   asp-route-itemId="@cartProductViewModel.Id"
-                   asp-route-itemSize="@cartProductViewModel.SizeString">
-                    X
-                </a>
+            <div class="col-12">
+                <h6>You cart is empty</h6>
             </div>
         </div>
-        <br/>
+    }
+    else
+    {
+        @foreach (var cartProductViewModel in Model.Products)
+        {
+            <div class="row">
+                <div class="col-3 col-md-2">
+                    <img src="@cartProductViewModel.ImageUrl" alt="Image" class="img-fluid"/>
+                </div>
+                <div class="col-9 col-md-5">
+                    <span class="font-weight-bold">@cartProductViewModel.Name</span><br/>
+                    <span class="cart-product-description font-weight-light">@cartProductViewModel.SizeString</span>
+                    <div>
+                        <span class="cart-ingredient">+ Ingredient</span>
+                    </div>
+                </div>
+                <div class="col-4 col-md-2 text-center">
+                    <a role="button" class="btn btn-outline-secondary btn-sm"
+                       asp-action="DecreaseItemQuantity"
+                       asp-route-itemId="@cartProductViewModel.Id"
+                       asp-route-itemSize="@cartProductViewModel.SizeString">
+                        -
+                    </a>
+                    <span>@cartProductViewModel.Quantity</span>
+                    <a role="button" class="btn btn-outline-secondary btn-sm"
+                       asp-action="IncreaseItemQuantity"
+                       asp-route-itemId="@cartProductViewModel.Id"
+                       asp-route-itemSize="@cartProductViewModel.SizeString">
+                        +
+                    </a>
+                </div>
+                <div class="col-4 col-md-2 text-center">
+                    <span>@cartProductViewModel.TotalPrice</span>
+                </div>
+                <div class="col-4 col-md-1  text-center">
+                    <a role="button" class="btn btn-danger btn-sm"
+                       asp-action="RemoveItem"
+                       asp-route-itemId="@cartProductViewModel.Id"
+                       asp-route-itemSize="@cartProductViewModel.SizeString">
+                        X
+                    </a>
+                </div>
+            </div>
+            <br/>
+        }
     }
     <hr/>
 
@@ -109,57 +120,60 @@
         </div>
     </div>
     <hr/>
-    <div class="row">
-        <div class="col-12">
-            <form method="post" asp-controller="Orders" asp-action="PlaceOrder">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label asp-for="@Model.Address.PersonName"></label>
-                        <input type="text" class="form-control" asp-for="@Model.Address.PersonName">
-                        <span asp-validation-for="@Model.Address.PersonName" class="text-danger"></span>
+    @if (Model.Products.Count > 0)
+    {
+        <div class="row">
+            <div class="col-12">
+                <form method="post" asp-controller="Orders" asp-action="PlaceOrder">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="@Model.Address.PersonName"></label>
+                            <input type="text" class="form-control" asp-for="@Model.Address.PersonName">
+                            <span asp-validation-for="@Model.Address.PersonName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="@Model.Address.PhoneNumber"></label>
+                            <input type="text" class="form-control" asp-for="@Model.Address.PhoneNumber">
+                            <span asp-validation-for="@Model.Address.PhoneNumber" class="text-danger"></span>
+                        </div>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label asp-for="@Model.Address.PhoneNumber"></label>
-                        <input type="text" class="form-control" asp-for="@Model.Address.PhoneNumber">
-                        <span asp-validation-for="@Model.Address.PhoneNumber" class="text-danger"></span>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label asp-for="@Model.Address.Area"></label>
+                            <input type="text" class="form-control" asp-for="@Model.Address.Area">
+                            <span asp-validation-for="@Model.Address.Area" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="@Model.Address.Street"></label>
+                            <input type="text" class="form-control" asp-for="@Model.Address.Street">
+                            <span asp-validation-for="@Model.Address.Street" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label asp-for="@Model.Address.Floor"></label>
+                            <input type="text" class="form-control" asp-for="@Model.Address.Floor">
+                            <span asp-validation-for="@Model.Address.Floor" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label asp-for="@Model.Address.Apartment"></label>
+                            <input type="text" class="form-control" asp-for="@Model.Address.Apartment">
+                            <span asp-validation-for="@Model.Address.Apartment" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label asp-for="@Model.Address.Area"></label>
-                        <input type="text" class="form-control" asp-for="@Model.Address.Area">
-                        <span asp-validation-for="@Model.Address.Area" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="@Model.AdditionalNotes"></label>
+                        <input asp-for="@Model.AdditionalNotes" type="text" class="form-control" placeholder="Example: Door is locked or Beware of dog.">
                     </div>
-                    <div class="form-group col-md-4">
-                        <label asp-for="@Model.Address.Street"></label>
-                        <input type="text" class="form-control" asp-for="@Model.Address.Street">
-                        <span asp-validation-for="@Model.Address.Street" class="text-danger"></span>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input asp-for="@Model.UseAddress" class="form-check-input" type="checkbox">
+                            <label asp-for="@Model.UseAddress" class="form-check-label"></label>
+                        </div>
                     </div>
-                    <div class="form-group col-md-2">
-                        <label asp-for="@Model.Address.Floor"></label>
-                        <input type="text" class="form-control" asp-for="@Model.Address.Floor">
-                        <span asp-validation-for="@Model.Address.Floor" class="text-danger"></span>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary w-50">Order now</button>
                     </div>
-                    <div class="form-group col-md-2">
-                        <label asp-for="@Model.Address.Apartment"></label>
-                        <input type="text" class="form-control" asp-for="@Model.Address.Apartment">
-                        <span asp-validation-for="@Model.Address.Apartment" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.AdditionalNotes"></label>
-                    <input asp-for="@Model.AdditionalNotes" type="text" class="form-control" placeholder="Example: Door is locked or Beware of dog.">
-                </div>
-                <div class="form-group">
-                    <div class="form-check">
-                        <input asp-for="@Model.UseAddress" class="form-check-input" type="checkbox">
-                        <label asp-for="@Model.UseAddress" class="form-check-label"></label>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary w-50">Order now</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
+    }
 </div>
