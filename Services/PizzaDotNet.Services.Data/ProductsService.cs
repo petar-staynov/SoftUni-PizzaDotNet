@@ -22,9 +22,9 @@
 
         public async Task<int> GetCount()
         {
-            int count = await this.productsRepository
+            int count = this.productsRepository
                 .All()
-                .CountAsync();
+                .Count();
 
             return count;
         }

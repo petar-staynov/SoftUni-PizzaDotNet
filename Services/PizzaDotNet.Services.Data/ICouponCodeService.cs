@@ -7,17 +7,7 @@
 
     public interface ICouponCodeService
     {
-        Task<IEnumerable<T>> GetAll<T>(int? count = null);
-
-        Task<T> GetById<T>(int id);
-
-        Task<CouponCode> GetBaseById(int id);
-
-        Task<T> GetByCode<T>(string codeString);
-
         Task<CouponCode> GetBaseByCode(string codeString);
-
-        Task<CouponCode> CanUseCodeById(int codeId);
 
         Task<CouponCode> CanUseCodeByCode(string codeString);
 

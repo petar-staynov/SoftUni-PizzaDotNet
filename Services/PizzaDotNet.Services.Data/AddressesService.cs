@@ -19,19 +19,6 @@
             this.addressesRepository = addressesRepository;
         }
 
-        public async Task<IEnumerable<T>> GetAll<T>(int? count = null)
-        {
-            var query = this.addressesRepository.All();
-
-            if (count.HasValue)
-            {
-                query = query.Take(count.Value);
-            }
-
-            var result = await query.To<T>().ToListAsync();
-            return result;
-        }
-
         public async Task<T> GetByUserId<T>(string id)
         {
             var query = this.addressesRepository
@@ -48,27 +35,6 @@
             var address = await this.addressesRepository
                 .All()
                 .FirstOrDefaultAsync(a => a.UserId == id);
-
-            return address;
-        }
-
-        public async Task<T> GetById<T>(int id)
-        {
-            var query = this.addressesRepository
-                .All()
-                .Where(a => a.Id == id);
-
-            var address = await query.To<T>().FirstOrDefaultAsync();
-
-
-            return address;
-        }
-
-        public async Task<UserAddress> GetBaseById(int id)
-        {
-            var address = await this.addressesRepository
-                .All()
-                .FirstOrDefaultAsync(a => a.Id == id);
 
             return address;
         }

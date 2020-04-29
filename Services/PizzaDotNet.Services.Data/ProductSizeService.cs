@@ -1,11 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace PizzaDotNet.Services.Data
+﻿namespace PizzaDotNet.Services.Data
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore;
     using PizzaDotNet.Data.Common.Repositories;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
@@ -17,33 +15,6 @@ namespace PizzaDotNet.Services.Data
         public ProductSizeService(IDeletableEntityRepository<ProductSize> productSizeRepository)
         {
             this.productSizeRepository = productSizeRepository;
-        }
-
-
-        public async Task<ProductSize> CreateAsync(int productId, string size, decimal price)
-        {
-            var productSize = new ProductSize
-            {
-                ProductId = productId,
-                Name = size,
-                Price = price,
-            };
-
-            await this.productSizeRepository.AddAsync(productSize);
-            await this.productSizeRepository.SaveChangesAsync();
-
-            return productSize;
-        }
-
-        public async Task<ICollection<T>> GetAllProductSizes<T>(int productId)
-        {
-            var query = this.productSizeRepository
-                    .All()
-                    .Where(s => s.ProductId == productId);
-
-            var productSizes = await query.To<T>().ToListAsync();
-
-            return productSizes;
         }
 
         public async Task<T> GetProductSize<T>(int productId, string sizeString)

@@ -9,8 +9,6 @@
 
         Task<IEnumerable<T>> GetAll<T>(int? count = null);
 
-        Task<T> GetById<T>(int id);
-
         Task<T> GetByName<T>(string name);
     }
 }

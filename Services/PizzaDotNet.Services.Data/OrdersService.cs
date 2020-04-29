@@ -24,9 +24,9 @@
 
         public async Task<int> GetCount()
         {
-            int count = await this.orderRepository
+            int count = this.orderRepository
                 .All()
-                .CountAsync();
+                .Count();
 
             return count;
         }

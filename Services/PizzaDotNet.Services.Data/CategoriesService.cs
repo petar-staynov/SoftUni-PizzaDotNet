@@ -20,9 +20,9 @@
 
         public async Task<int> GetCount()
         {
-            int count = await this.categoriesRepository
+            int count = this.categoriesRepository
                 .All()
-                .CountAsync();
+                .Count();
 
             return count;
         }
@@ -37,17 +37,6 @@
 
             var result = await query.To<T>().ToListAsync();
             return result;
-        }
-
-        public async Task<T> GetById<T>(int id)
-        {
-            var category = await this.categoriesRepository
-                .All()
-                .Where(c => c.Id == id)
-                .To<T>()
-                .FirstOrDefaultAsync();
-
-            return category;
         }
 
         public async Task<T> GetByName<T>(string name)

@@ -16,17 +16,11 @@
 
         Task UpdateAsync(Order order);
 
-        void Update(Order order);
-
-        Task<bool> DeleteAsync(int orderId);
-
         Task<T> GetById<T>(int id);
 
         Task<Order> GetBaseById(int id);
 
         Task<IEnumerable<T>> GetByUserId<T>(string userId, string sortCriteria = null);
-
-        Task<Order> GetBaseByUserId(string userId);
 
         Task<IEnumerable<T>> GetAll<T>(string sortCriteria = null, int? count = null);
 
