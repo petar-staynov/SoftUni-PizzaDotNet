@@ -108,9 +108,15 @@
                     break;
             }
 
-            var orders = await ordersQuery.To<T>().ToListAsync();
+            if (typeof(T) == typeof(Order))
+            {
+                var orders = ordersQuery.ToList<Order>();
+                return orders as IEnumerable<T>;
+            }
 
-            return orders;
+            var result = await ordersQuery.To<T>().ToListAsync();
+
+            return result;
         }
 
         public async Task<IEnumerable<T>> GetAll<T>(string sortCriteria = null, int? count = null)
