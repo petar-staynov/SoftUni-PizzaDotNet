@@ -21,14 +21,14 @@
 
         public async Task<CouponCode> GetBaseByCode(string codeString)
         {
-            var code = await this.couponCodeRepository
+            var code = this.couponCodeRepository
                 .All()
-                .FirstOrDefaultAsync(c => c.Code == codeString);
+                .FirstOrDefault(c => c.Code == codeString);
 
             return code;
         }
 
-        public async Task<CouponCode> CanUseCodeByCode(string codeString)
+        public async Task<CouponCode> CanUseCodeByCodeString(string codeString)
         {
             var code = await this.GetBaseByCode(codeString);
             if (code == null)
