@@ -33,7 +33,7 @@
     <tbody>
     @foreach (var order in Model.Orders)
     {
-        <tr style="cursor: pointer;" onclick="window.location='/Orders/ViewOrder/?orderId=@order.Id';">
+        <tr style="cursor: pointer;" onclick="window.location='/Orders/View/?orderId=@order.Id';">
             <td>@order.Id</td>
             <td>@order.CreatedOn</td>
             <td>@order.OrderStatus.Status</td>

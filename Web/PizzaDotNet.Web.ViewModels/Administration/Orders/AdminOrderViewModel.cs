@@ -1,9 +1,10 @@
-﻿namespace PizzaDotNet.Web.ViewModels.Orders
+﻿namespace PizzaDotNet.Web.ViewModels.Administration.Orders
 {
     using System.Collections.Generic;
 
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
+    using PizzaDotNet.Web.ViewModels.Orders;
 
     public class AdminOrderViewModel : IMapFrom<Order>
     {

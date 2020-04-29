@@ -41,7 +41,7 @@
             await this.ratingsRepository.SaveChangesAsync();
         }
 
-        public double GetProductRating(int productId)
+        public double GetProductAverageRating(int productId)
         {
             var query = this.ratingsRepository
                 .All()

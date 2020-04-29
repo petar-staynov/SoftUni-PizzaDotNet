@@ -33,7 +33,7 @@
         [HttpGet("{id}")]
         public async Task<RatingResponseModel> GetRating(int id)
         {
-            var productRating = this.ratingsService.GetProductRating(id);
+            var productRating = this.ratingsService.GetProductAverageRating(id);
 
             var response = new RatingResponseModel
             {
