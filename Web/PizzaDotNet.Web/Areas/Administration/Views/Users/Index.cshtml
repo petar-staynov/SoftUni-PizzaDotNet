@@ -1,18 +1,8 @@
-﻿@model PizzaDotNet.Web.ViewModels.Administration.Dashboard.IndexViewModel
+﻿@using PizzaDotNet.Common
 @{
-    this.ViewData["Title"] = "Administration dashboard";
+    this.ViewData["Title"] = "Users Dashboard";
 }
 
-<div class="row">
-    <div class="col-md-3">
-        <partial name="_AdminSidebarPartial"/>
-    </div>
-    <div class="col-md-9">
-        <h1 class="text-center">Welcome!</h1>
-        <span>There are @Model.UsersCount users</span> <br/>
-        <span>which have generated $ @Model.OrdersTotalProfits</span> <br/>
-        <br/>
-        <span>There are @Model.ProductsCount products</span> <br/>
-        <span>in @Model.CategoriesCount categories</span> <br/>
-    </div>
-</div>
+<p>
+    Not implemented yet
+</p>
