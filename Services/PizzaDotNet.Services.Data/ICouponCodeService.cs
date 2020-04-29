@@ -9,7 +9,7 @@
     {
         Task<CouponCode> GetBaseByCode(string codeString);
 
-        Task<CouponCode> CanUseCodeByCode(string codeString);
+        Task<CouponCode> CanUseCodeByCodeString(string codeString);
 
         void UseCodeByCode(string code);
     }
