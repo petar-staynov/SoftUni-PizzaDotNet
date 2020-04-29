@@ -105,6 +105,12 @@
                     break;
             }
 
+            if (typeof(T) == typeof(Product))
+            {
+                var products = categoryProductsQuery.ToList<Product>();
+                return products as IEnumerable<T>;
+            }
+
             var categoryProducts = await categoryProductsQuery.To<T>().ToListAsync();
 
             return categoryProducts;
