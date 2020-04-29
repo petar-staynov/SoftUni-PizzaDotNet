@@ -113,15 +113,6 @@
             return orders;
         }
 
-        public async Task<Order> GetBaseByUserId(string userId)
-        {
-            var order = await this.orderRepository
-                .All()
-                .FirstOrDefaultAsync(o => o.UserId == userId);
-
-            return order;
-        }
-
         public async Task<IEnumerable<T>> GetAll<T>(string sortCriteria = null, int? count = null)
         {
             var ordersQuery = this.orderRepository
@@ -164,8 +155,9 @@
         {
             var order = await this.orderRepository
                 .All()
+                .Where(o => o.Id == orderId)
                 .Include(o => o.OrderStatus)
-                .FirstOrDefaultAsync(o => o.Id == orderId);
+                .FirstOrDefaultAsync();
 
             if (order == null)
             {
