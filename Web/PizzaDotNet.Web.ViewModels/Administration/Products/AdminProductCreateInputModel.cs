@@ -16,6 +16,7 @@
         public AdminProductCreateInputModel()
         {
             this.Sizes = new List<AdminProductCreateSizeInputModel>();
+            this.ImageModel = new ImageUploadInputModel();
         }
 
         [Required]
