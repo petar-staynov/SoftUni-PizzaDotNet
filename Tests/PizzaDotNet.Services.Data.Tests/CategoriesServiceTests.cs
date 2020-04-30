@@ -7,6 +7,7 @@
     using Moq;
     using PizzaDotNet.Data.Common.Repositories;
     using PizzaDotNet.Data.Models;
+    using PizzaDotNet.Data.Repositories;
     using PizzaDotNet.Services.Data.Tests.Common;
     using PizzaDotNet.Services.Data.Tests.Models;
     using Xunit;
@@ -21,16 +22,17 @@
         [Fact]
         public async Task GetCountShouldReturnCount()
         {
-            var repository = new Mock<IRepository<Category>>();
-            repository.Setup(r => r.All()).Returns(new List<Category>
-            {
-                new Category(),
-                new Category(),
-                new Category(),
-            }.AsQueryable());
+            var dbContext = ApplicationDbContextInMemoryFactory.InitializeContext();
+            var repository = new EfDeletableEntityRepository<Category>(dbContext);
+            var service = new CategoriesService(repository);
 
-            var service = new CategoriesService(repository.Object);
+            // Create
+            dbContext.Categories.Add(new Category {Name = "Test"});
+            dbContext.Categories.Add(new Category {Name = "Test2"});
+            dbContext.Categories.Add(new Category {Name = "Test3"});
+            dbContext.SaveChanges();
 
+            var asd = dbContext.Categories.ToList();
             var count = await service.GetCount();
 
             Assert.Equal(3, count);
@@ -39,33 +41,34 @@
         [Fact]
         public async Task GetAllShouldReturnAll()
         {
-            var repository = new Mock<IRepository<Category>>();
-            repository.Setup(r => r.All()).Returns(new List<Category>
-            {
-                new Category(),
-                new Category(),
-                new Category(),
-            }.AsQueryable());
+            var dbContext = ApplicationDbContextInMemoryFactory.InitializeContext();
+            var repository = new EfDeletableEntityRepository<Category>(dbContext);
+            var service = new CategoriesService(repository);
 
-            var service = new CategoriesService(repository.Object);
+            // Create
+            dbContext.Categories.Add(new Category {Name = "Test"});
+            dbContext.Categories.Add(new Category {Name = "Test2"});
+            dbContext.SaveChanges();
 
-            var categories = service.GetAll<Category>();
+            var categoriesList = await service.GetAll<Category>();
+            var firstCategory = categoriesList.First();
 
-            Assert.Equal(1, 1);
+            Assert.Equal("Test", firstCategory.Name);
         }
 
         [Fact]
         public async Task GetByNameShouldReturnCategory()
         {
-            var repository = new Mock<IRepository<Category>>();
-            repository.Setup(r => r.All()).Returns(new List<Category>
-            {
-                new Category() { Name = "Cat1" },
-                new Category() { Name = "Test" },
-                new Category() { Name = "NONE" },
-            }.AsQueryable());
+            var dbContext = ApplicationDbContextInMemoryFactory.InitializeContext();
+            var repository = new EfDeletableEntityRepository<Category>(dbContext);
+            var service = new CategoriesService(repository);
+            var userManager = MockUserManager.GetUserManager();
 
-            var service = new CategoriesService(repository.Object);
+            // Create
+            dbContext.Categories.Add(new Category {Name = "Cat1"});
+            dbContext.Categories.Add(new Category {Name = "Test"});
+            dbContext.Categories.Add(new Category {Name = "NONE"});
+            dbContext.SaveChanges();
 
             Assert.Equal(1, 1);
 

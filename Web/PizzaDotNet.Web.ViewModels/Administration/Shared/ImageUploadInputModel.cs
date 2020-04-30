@@ -7,7 +7,7 @@
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services.Mapping;
 
-    public class ImageUploadInputModel : IMapFrom<Product>
+    public class ImageUploadInputModel : IMapFrom<Product>, IMapFrom<Category>
     {
         [DataType(DataType.ImageUrl)]
         public string ImageUrl { get; set; }

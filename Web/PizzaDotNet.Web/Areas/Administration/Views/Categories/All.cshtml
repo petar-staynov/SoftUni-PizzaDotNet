@@ -1,11 +1,10 @@
-@model PizzaDotNet.Web.ViewModels.Administration.Products.AdminProductsViewModel
+﻿@model PizzaDotNet.Web.ViewModels.Administration.Categories.AdminCategoriesViewModel
 @{
     this.ViewData["Title"] = "Title";
 
     var sortingCriteriasListItems =
         Model.SortingCriteriaList.Select(x => new SelectListItem(x.Description, x.Name));
 }
-
 <div>
     <form method="post">
         <div class="form-inline">
@@ -26,46 +25,40 @@
         <tr>
             <th scope="col">Id</th>
             <th scope="col">Name</th>
-            <th scope="col">Category</th>
-            <th scope="col">Sizes</th>
-            <th scope="col">PriceAvg</th>
-            <th scope="col">Rating</th>
+            <th scope="col">Products</th>
             <th scope="col">Action</th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var product in Model.Products)
+        @foreach (var category in Model.Categories)
         {
             <tr>
-                <td>@product.Id</td>
-                <td>@product.Name</td>
-                <td>@product.Category.Name</td>
-                <td>@product.SizesCount</td>
-                <td>@product.PriceAverage</td>
-                <td>@product.RatingAverage</td>
+                <td>@category.Id</td>
+                <td>@category.Name</td>
+                <td>@category.ProductsCount</td>
                 <td>
                     <a type="button" class="btn btn-success btn-sm"
-                       asp-area="Administration" asp-controller="Products" asp-action="View" asp-route-productId="@product.Id">
+                       asp-area="Administration" asp-controller="Categories" asp-action="View" asp-route-categoryId="@category.Id">
                         View
                     </a>
                     <a type="button" class="btn btn-warning btn-sm"
-                       asp-area="Administration" asp-controller="Products" asp-action="Edit" asp-route-productId="@product.Id">
+                       asp-area="Administration" asp-controller="Categories" asp-action="Edit" asp-route-categoryId="@category.Id">
                         Edit
                     </a>
                     <a type="button" class="btn btn-danger btn-sm"
-                       asp-area="Administration" asp-controller="Products" asp-action="Delete" asp-route-productId="@product.Id">
+                       asp-area="Administration" asp-controller="Categories" asp-action="Delete" asp-route-categoryId="@category.Id">
                         Delete
                     </a>
                 </td>
             </tr>
         }
         </tbody>
+        <hr/>
+        <div class="text-center">
+            <a type="button" class="btn btn-outline-secondary"
+               asp-area="Administration" asp-controller="Categories" asp-action="All">
+                Go back
+            </a>
+        </div>
     </table>
-    <hr/>
-    <div class="text-center">
-        <a type="button" class="btn btn-outline-secondary"
-           asp-area="Administration" asp-controller="Products" asp-action="Index">
-            Go back
-        </a>
-    </div>
 </div>

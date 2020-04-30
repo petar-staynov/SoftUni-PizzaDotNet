@@ -1,4 +1,4 @@
-@model PizzaDotNet.Web.ViewModels.Administration.Products.AdminProductsViewModel
+﻿@model PizzaDotNet.Web.ViewModels.Administration.Categories.AdminCategoryViewModel
 @{
     this.ViewData["Title"] = "Title";
 
@@ -7,7 +7,8 @@
 }
 
 <div>
-    <form method="post">
+    <form method="post" asp-action="ViewPost">
+        <input asp-for="@Model.Id" hidden="hidden"/>
         <div class="form-inline">
             <div class="form-group mb-2">
                 <label asp-for="@Model.SortingCriteria"></label>
@@ -20,7 +21,7 @@
             </div>
         </div>
     </form>
-
+    <h5 class="text-center">@Model.Name</h5>
     <table class="table table-sm table-hover">
         <thead>
         <tr>
@@ -64,8 +65,16 @@
     <hr/>
     <div class="text-center">
         <a type="button" class="btn btn-outline-secondary"
-           asp-area="Administration" asp-controller="Products" asp-action="Index">
+           asp-area="Administration" asp-controller="Categories" asp-action="All">
             Go back
+        </a>
+        <a type="button" class="btn btn-warning"
+           asp-area="Administration" asp-controller="Categories" asp-action="Edit" asp-route-categoryId="@Model.Id">
+            Edit
+        </a>
+        <a type="button" class="btn btn-danger"
+           asp-area="Administration" asp-controller="Categories" asp-action="Delete" asp-route-categoryId="@Model.Id">
+            Delete
         </a>
     </div>
 </div>

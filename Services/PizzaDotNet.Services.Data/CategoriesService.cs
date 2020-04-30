@@ -1,4 +1,6 @@
-﻿namespace PizzaDotNet.Services.Data
+﻿using PizzaDotNet.Common;
+
+namespace PizzaDotNet.Services.Data
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -11,9 +13,9 @@
 
     public class CategoriesService : ICategoriesService
     {
-        private readonly IRepository<Category> categoriesRepository;
+        private readonly IDeletableEntityRepository<Category> categoriesRepository;
 
-        public CategoriesService(IRepository<Category> categoriesRepository)
+        public CategoriesService(IDeletableEntityRepository<Category> categoriesRepository)
         {
             this.categoriesRepository = categoriesRepository;
         }
@@ -27,12 +29,25 @@
             return count;
         }
 
-        public async Task<IEnumerable<T>> GetAll<T>(int? count = null)
+        public async Task<IEnumerable<T>> GetAll<T>(string sortCriteria = null, int? count = null)
         {
-            var query = this.categoriesRepository.All();
-            if (count.HasValue)
+            var query = this.categoriesRepository
+                .All();
+
+            switch (sortCriteria)
             {
-                query = query.Take(count.Value);
+                case SortingCriterias.CATEGORIES_PRODUCT_COUNT_HIGHEST_TO_LOWEST:
+                    query = query.OrderByDescending(c => c.Products.Count());
+                    break;
+                case SortingCriterias.CATEGORIES_PRODUCT_COUNT_LOWEST_TO_HIGHEST:
+                    query = query.OrderBy(c => c.Products.Count());
+                    break;
+                case SortingCriterias.CATEGORIES_NAME_ASCENDING:
+                    query = query.OrderBy(c => c.Name);
+                    break;
+                case SortingCriterias.CATEGORIES_NAME_DESCENDING:
+                    query = query.OrderByDescending(c => c.Name);
+                    break;
             }
 
             if (typeof(T) == typeof(Category))
@@ -45,6 +60,27 @@
             return result;
         }
 
+        public async Task<T> GetById<T>(int categoryId)
+        {
+            var category = await this.categoriesRepository
+                .All()
+                .Where(c => c.Id == categoryId)
+                .To<T>()
+                .FirstOrDefaultAsync();
+
+            return category;
+        }
+
+        public async Task<Category> GetBaseById(int categoryId)
+        {
+            var category = await this.categoriesRepository
+                .All()
+                .Where(c => c.Id == categoryId)
+                .FirstOrDefaultAsync();
+
+            return category;
+        }
+
         public async Task<T> GetByName<T>(string name)
         {
             var category = await this.categoriesRepository
@@ -54,6 +90,30 @@
                 .FirstOrDefaultAsync();
 
             return category;
+        }
+
+        public async Task<Category> CreateAsync(Category category)
+        {
+            await this.categoriesRepository.AddAsync(category);
+            await this.categoriesRepository.SaveChangesAsync();
+
+            return category;
+        }
+
+        public async Task<Category> UpdateAsync(Category category)
+        {
+            this.categoriesRepository.Update(category);
+            await this.categoriesRepository.SaveChangesAsync();
+
+            return category;
+        }
+
+        public async Task<bool> DeleteAsync(Category category)
+        {
+            this.categoriesRepository.Delete(category);
+            var result = await this.categoriesRepository.SaveChangesAsync();
+
+            return result > 0;
         }
     }
 }

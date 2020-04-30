@@ -57,6 +57,23 @@
             return result > 0;
         }
 
+        public async Task<bool> DeleteByCategoryIdAsync(int categoryId)
+        {
+            var products = this.productsRepository
+                .All()
+                .Include(p => p.Category)
+                .Where(p => p.CategoryId == categoryId);
+
+            foreach (var product in products)
+            {
+                this.productsRepository.Delete(product);
+            }
+
+            var result = await this.productsRepository.SaveChangesAsync();
+
+            return result > 0;
+        }
+
         public async Task<T> GetById<T>(int id)
         {
             var product = await this.productsRepository

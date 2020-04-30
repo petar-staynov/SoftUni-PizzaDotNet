@@ -23,5 +23,13 @@
         public const string PRODUCT_NAME_DESCENDING = "name-descending";
         public const string PRODUCT_CATEGORY_NAME_ASCENDING = "product-category-name-ascending";
         public const string PRODUCT_CATEGORY_NAME_DESCENDING = "product-category-name-descending";
+
+        /*
+         * CATEGORIES SORTING
+         */
+        public const string CATEGORIES_PRODUCT_COUNT_LOWEST_TO_HIGHEST = "category-product-count-lowest-to-highest";
+        public const string CATEGORIES_PRODUCT_COUNT_HIGHEST_TO_LOWEST = "category-product-count-highest-to-lowest";
+        public const string CATEGORIES_NAME_ASCENDING = "category-name-ascending";
+        public const string CATEGORIES_NAME_DESCENDING = "category-name-descending";
     }
 }

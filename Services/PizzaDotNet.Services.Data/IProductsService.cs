@@ -16,6 +16,8 @@
 
         Task<bool> DeleteAsync(int productId);
 
+        Task<bool> DeleteByCategoryIdAsync(int categoryId);
+
         Task<T> GetById<T>(int id);
 
         Task<Product> GetBaseById(int id);
