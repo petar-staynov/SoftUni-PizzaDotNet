@@ -17,7 +17,7 @@
         <input asp-for="Description" class="form-control disabled" disabled="disabled"/>
     </div>
     <div class="form-group">
-        <img id="imageContainer" src="~/images/placeholders/320x320.png" alt="category image"/>
+        <img id="imageContainer" src="@Url.Content(@Model.ImageModel.ImageUrl ?? "~/images/placeholders/320x320.png")" alt="category image" class="img-fluid product-view-image"/>
     </div>
     <div class="form-group">
         <input type="submit" value="Confirm delete" class="btn btn-danger"/>
