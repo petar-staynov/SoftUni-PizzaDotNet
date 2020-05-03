@@ -66,12 +66,6 @@
                 cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
             }
 
-            // if (cart == null || cart.Products.Count <= 0)
-            // {
-            //     this.SetTempCart();
-            //     cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
-            // }
-
             var cartViewModel = this.mapper.Map<CartViewModel>(cart);
 
             var productsViewModels = new List<CartProductViewModel>();
@@ -184,29 +178,6 @@
             this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cart);
 
             return this.RedirectToAction("Index");
-        }
-
-        public void SetTempCart()
-        {
-            var cartData = new SessionCartDto()
-            {
-                Products = new List<SessionCartProductDto>()
-                {
-                    new SessionCartProductDto()
-                    {
-                        Id = 2,
-                        Quantity = 1,
-                        SizeName = "Small",
-                    },
-                    new SessionCartProductDto()
-                    {
-                        Id = 3,
-                        Quantity = 2,
-                        SizeName = "Medium",
-                    },
-                },
-            };
-            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cartData);
         }
     }
 }
