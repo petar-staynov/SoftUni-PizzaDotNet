@@ -1,21 +1,16 @@
 ﻿namespace PizzaDotNet.Web.Controllers
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Newtonsoft.Json;
     using PizzaDotNet.Common;
     using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services;
     using PizzaDotNet.Services.Data;
-    using PizzaDotNet.Web.ViewModels.Addresses;
     using PizzaDotNet.Web.ViewModels.Cart;
     using PizzaDotNet.Web.ViewModels.DTO;
     using PizzaDotNet.Web.ViewModels.Products;
@@ -25,7 +20,7 @@
     public class CartController : BaseController
     {
         private const string CART_ADD_PRODUCT = "Product added to cart";
-        private const string CART_REMOVE_PRODUCT = "Product added to cart";
+        private const string CART_REMOVE_PRODUCT = "Product removed from cart";
         private const string CART_INVALID_ITEM = "Invalid item";
 
         private readonly IProductsService productsService;
@@ -153,6 +148,8 @@
 
             this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cart);
 
+            this.TempData["Message"] = CART_REMOVE_PRODUCT;
+            this.TempData["MessageType"] = AlertMessageTypes.Success;
             return this.RedirectToAction("Index");
         }
 
