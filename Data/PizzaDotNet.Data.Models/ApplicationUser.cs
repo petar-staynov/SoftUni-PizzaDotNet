@@ -34,6 +34,8 @@ namespace PizzaDotNet.Data.Models
 
         public virtual ICollection<Order> Orders { get; set; }
 
+        public virtual ICollection<CouponCode> CouponCodes { get; set; }
+
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }

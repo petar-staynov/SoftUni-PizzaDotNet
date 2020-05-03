@@ -7,6 +7,10 @@
 
     public class CouponCode : BaseModel<int>
     {
+        public string UserId { get; set; }
+
+        public virtual ApplicationUser User { get; set; }
+
         [StringLength(6, MinimumLength = 6)]
         public string Code { get; set; }
 
