@@ -1,19 +1,31 @@
 ﻿@page
-@model PizzaDotNet.Web.Areas.Identity.Pages.Account.Manage.CouponCodes
-
+@model CouponCodesModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Coupon Codes";
+    ViewData["ActivePage"] = ManageNavPages.CouponCodes;
 }
 
-<!DOCTYPE html>
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage"/>
 
-<html>
-<head>
-    <title></title>
-</head>
-<body>
 <div>
-    
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Coupon code</th>
+            <th scope="col">Discount</th>
+            <th scope="col">Valid until</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var couponCode in Model.CouponCodes)
+        {
+            <tr>
+                <td>@couponCode.Code</td>
+                <td>@couponCode.DiscountPercent%</td>
+                <td>@couponCode.ValidUntil</td>
+            </tr>
+        }
+        </tbody>
+    </table>
 </div>
-</body>
-</html>

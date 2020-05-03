@@ -1,14 +1,15 @@
-﻿using PizzaDotNet.Common;
-
-namespace PizzaDotNet.Services.Data
+﻿namespace PizzaDotNet.Services.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using PizzaDotNet.Common;
     using PizzaDotNet.Data.Common.Repositories;
     using PizzaDotNet.Data.Models;
+    using PizzaDotNet.Services.Mapping;
 
     public class CouponCodeService : ICouponCodeService
     {
@@ -33,6 +34,26 @@ namespace PizzaDotNet.Services.Data
                 .FirstOrDefault(c => c.Code == codeString);
 
             return code;
+        }
+
+        public async Task<IEnumerable<T>> GetValidByUserId<T>(string userId)
+        {
+            var query = this.couponCodeRepository
+                .All()
+                .Where(c =>
+                    c.UserId == userId &&
+                    c.IsUsed == false &&
+                    c.ValidUntil < DateTime.Now);
+
+            if (typeof(T) == typeof(CouponCode))
+            {
+                var orders = query.ToList<CouponCode>();
+                return orders as IEnumerable<T>;
+            }
+
+            var result = await query.To<T>().ToListAsync();
+
+            return result;
         }
 
         public async Task<CouponCode> CanUseCodeByCodeString(string codeString)

@@ -11,6 +11,8 @@
 
         Task<CouponCode> GetBaseByCode(string codeString);
 
+        Task<IEnumerable<T>> GetValidByUserId<T>(string userId);
+
         Task<CouponCode> CanUseCodeByCodeString(string codeString);
 
         void UseCodeByCodeString(string code);
