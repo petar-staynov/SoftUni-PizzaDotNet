@@ -24,7 +24,7 @@
         [HttpGet("NumberOfItems")]
         public CartItemsNumberResponseModel GetNumberOfCartItems()
         {
-            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SessionCartKey);
             if (cart == null)
             {
                 cart = new SessionCartDto();

@@ -8,12 +8,20 @@
 
         public const string ManagerRoleName = "Manager";
 
+        public const string DelivererRoleName = "Deliverer";
+
         public const string UserRoleName = "User";
 
         public const int MaxNumberOfProductSizes = 5;
 
-        public const string SESSION_CART_KEY = "Cart";
+        public const int CouponCodeStringLength = 6;
 
-        public const string SESSION_COUPONCODE_KEY = "CouponCode";
+        public const string SessionCartKey = "Cart";
+
+        public const string SessionCouponCodeKey = "CouponCode";
+
+        public const int StandardDiscountPercent = 10;
+
+        public const int ComplimentaryDiscountPercent = 20;
     }
 }

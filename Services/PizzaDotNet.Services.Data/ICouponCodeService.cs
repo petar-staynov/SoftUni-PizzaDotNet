@@ -7,10 +7,14 @@
 
     public interface ICouponCodeService
     {
+        Task<CouponCode> CreateAsync(CouponCode couponCode);
+
         Task<CouponCode> GetBaseByCode(string codeString);
 
         Task<CouponCode> CanUseCodeByCodeString(string codeString);
 
-        void UseCodeByCode(string code);
+        void UseCodeByCodeString(string code);
+
+        Task<CouponCode> GenerateCouponCodeForUser(int discountPercent, string userId);
     }
 }

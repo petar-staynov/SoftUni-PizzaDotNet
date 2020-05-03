@@ -91,7 +91,7 @@
             var orderStatus = await this.orderStatusService.GetByName(OrderStatusEnum.Processing.ToString());
 
             /* Map order products */
-            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SessionCartKey);
             var orderProducts = new List<OrderProduct>();
             foreach (SessionCartProductDto productDto in cart.Products)
             {
@@ -121,7 +121,7 @@
             CouponCode couponCode = null;
             decimal? orderTotalDiscountPrice = orderTotalPrice;
             var sessionCouponCode =
-                this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, GlobalConstants.SESSION_COUPONCODE_KEY);
+                this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, GlobalConstants.SessionCouponCodeKey);
             if (sessionCouponCode != null)
             {
                 couponCode = await this.couponCodeService.GetBaseByCode(sessionCouponCode.Code);
@@ -146,7 +146,7 @@
             /* Disable coupon code */
             if (couponCode != null)
             {
-                this.couponCodeService.UseCodeByCode(couponCode.Code);
+                this.couponCodeService.UseCodeByCodeString(couponCode.Code);
             }
 
             /* Send email*/
@@ -159,8 +159,8 @@
                 null);
 
             /* Clear session */
-            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, new SessionCartDto());
-            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_COUPONCODE_KEY, string.Empty);
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SessionCartKey, new SessionCartDto());
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SessionCouponCodeKey, string.Empty);
 
             return this.RedirectToAction("View", new { orderId = orderEntity.Id });
         }

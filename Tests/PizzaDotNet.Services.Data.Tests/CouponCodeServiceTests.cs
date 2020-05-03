@@ -53,7 +53,7 @@
         }
 
         [Fact]
-        public async Task UseCodeByCodeShouldReturnCorrect()
+        public async Task UseCodeByCodeStringShouldReturnCorrect()
         {
             var repository = new Mock<IRepository<CouponCode>>();
             repository.Setup(r => r.All()).Returns(new List<CouponCode>
@@ -65,7 +65,7 @@
 
             var service = new CouponCodeService(repository.Object);
 
-            service.UseCodeByCode("123213");
+            service.UseCodeByCodeString("123213");
 
             var usedCode = repository.Object.All().FirstOrDefault(c => c.Code == "123213");
             var unusedCode1 = repository.Object.All().FirstOrDefault(c => c.Code == "AsdAsd");

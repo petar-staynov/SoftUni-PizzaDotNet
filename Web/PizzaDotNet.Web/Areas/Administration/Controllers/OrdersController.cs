@@ -1,4 +1,6 @@
-﻿namespace PizzaDotNet.Web.Areas.Administration.Controllers
+﻿using PizzaDotNet.Data.Models.Enums;
+
+namespace PizzaDotNet.Web.Areas.Administration.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -19,15 +21,18 @@
         private readonly IMapper mapper;
         private readonly IOrdersService ordersService;
         private readonly IOrderStatusService orderStatusService;
+        private readonly ICouponCodeService couponCodeService;
 
         public OrdersController(
             IMapper mapper,
             IOrdersService ordersService,
-            IOrderStatusService orderStatusService)
+            IOrderStatusService orderStatusService,
+            ICouponCodeService couponCodeService)
         {
             this.mapper = mapper;
             this.ordersService = ordersService;
             this.orderStatusService = orderStatusService;
+            this.couponCodeService = couponCodeService;
         }
 
         public IActionResult Index()
@@ -115,6 +120,21 @@
             this.TempData["Message"] = CANNOT_DELETE_ORDER;
             this.TempData["MessageType"] = AlertMessageTypes.Error;
             return this.RedirectToAction("View", new { orderId = orderId });
+        }
+
+        public async Task<IActionResult> CompleteOrder(int orderId)
+        {
+            /* Update order status */
+            var order = await this.ordersService.GetBaseById(orderId);
+            order.OrderStatus = await this.orderStatusService.GetByName(OrderStatusEnum.Delivered.ToString());
+
+            /* Give CouponCode ot user */
+            var userId = order.UserId;
+            var couponCode =
+                this.couponCodeService.GenerateCouponCodeForUser(GlobalConstants.StandardDiscountPercent, userId);
+
+            /* Redirect to last action */
+            return this.Redirect(this.Request.Headers["Referer"].ToString());
         }
     }
 }

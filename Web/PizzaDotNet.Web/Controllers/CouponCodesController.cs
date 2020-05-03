@@ -1,9 +1,13 @@
 ﻿namespace PizzaDotNet.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using PizzaDotNet.Common;
+    using PizzaDotNet.Data.Models;
     using PizzaDotNet.Services;
     using PizzaDotNet.Services.Data;
     using PizzaDotNet.Web.ViewModels.Cart;
@@ -15,13 +19,16 @@
         private const string COUPON_REMOVED = "Successfuly removed coupon code";
         private const string COUPON_APPLIED = "Coupon code successfully applied";
 
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly ISessionService sessionService;
         private readonly ICouponCodeService couponCodeService;
 
         public CouponCodesController(
+            UserManager<ApplicationUser> userManager,
             ISessionService sessionService,
             ICouponCodeService couponCodeService)
         {
+            this.userManager = userManager;
             this.sessionService = sessionService;
             this.couponCodeService = couponCodeService;
         }
@@ -36,7 +43,10 @@
                     Code = null,
                 };
 
-                this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_COUPONCODE_KEY, sessionCouponCodeDto);
+                this.sessionService.Set(
+                    this.HttpContext.Session,
+                    GlobalConstants.SessionCouponCodeKey,
+                    sessionCouponCodeDto);
 
                 this.TempData["Message"] = COUPON_REMOVED;
                 this.TempData["MessageType"] = AlertMessageTypes.Error;
@@ -58,7 +68,10 @@
                 Code = couponCode.Code,
             };
 
-            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_COUPONCODE_KEY, sessionCartProductDto);
+            this.sessionService.Set(
+                this.HttpContext.Session,
+                GlobalConstants.SessionCouponCodeKey,
+                sessionCartProductDto);
 
             this.TempData["Message"] = COUPON_APPLIED;
             this.TempData["MessageType"] = AlertMessageTypes.Success;

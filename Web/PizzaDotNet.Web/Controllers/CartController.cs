@@ -51,14 +51,14 @@
 
         public async Task<IActionResult> Index()
         {
-            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SessionCartKey);
             if (cart == null)
             {
                 this.sessionService.Set(
                     this.HttpContext.Session,
-                    GlobalConstants.SESSION_CART_KEY,
+                    GlobalConstants.SessionCartKey,
                     new SessionCartDto());
-                cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
+                cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SessionCartKey);
             }
 
             var cartViewModel = this.mapper.Map<CartViewModel>(cart);
@@ -91,7 +91,7 @@
 
             /* Get Coupon Code (Discount) */
             var sessionCouponCode =
-                this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, GlobalConstants.SESSION_COUPONCODE_KEY);
+                this.sessionService.Get<SessionCouponCodeDto>(this.HttpContext.Session, GlobalConstants.SessionCouponcodeKey);
             if (sessionCouponCode != null)
             {
                 var couponCode = await this.couponCodeService.GetBaseByCode(sessionCouponCode.Code);
@@ -123,14 +123,14 @@
             }
 
             var cart = new SessionCartDto();
-            if (this.sessionService.TryGet(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY))
+            if (this.sessionService.TryGet(this.HttpContext.Session, GlobalConstants.SessionCartKey))
             {
-                cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
+                cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SessionCartKey);
             }
 
             var cartProductModel = this.mapper.Map<SessionCartProductDto>(inputModel);
             cart.Products.Add(cartProductModel);
-            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cart);
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SessionCartKey, cart);
 
             this.TempData["Message"] = CART_ADD_PRODUCT;
             this.TempData["MessageType"] = AlertMessageTypes.Success;
@@ -142,11 +142,11 @@
 
         public IActionResult RemoveItem(int itemId, string itemSize)
         {
-            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SessionCartKey);
             cart.Products
                 .RemoveAll(p => p.Id == itemId && p.SizeName == itemSize);
 
-            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cart);
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SessionCartKey, cart);
 
             this.TempData["Message"] = CART_REMOVE_PRODUCT;
             this.TempData["MessageType"] = AlertMessageTypes.Success;
@@ -155,24 +155,24 @@
 
         public IActionResult IncreaseItemQuantity(int itemId, string itemSize)
         {
-            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SessionCartKey);
             cart.Products
                 .FindAll(p => p.Id == itemId && p.SizeName == itemSize && p.Quantity < 10)
                 .ForEach(p => p.Quantity++);
 
-            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cart);
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SessionCartKey, cart);
 
             return this.RedirectToAction("Index");
         }
 
         public IActionResult DecreaseItemQuantity(int itemId, string itemSize)
         {
-            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY);
+            var cart = this.sessionService.Get<SessionCartDto>(this.HttpContext.Session, GlobalConstants.SessionCartKey);
             cart.Products
                 .FindAll(p => p.Id == itemId && p.SizeName == itemSize && p.Quantity > 1)
                 .ForEach(p => p.Quantity--);
 
-            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SESSION_CART_KEY, cart);
+            this.sessionService.Set(this.HttpContext.Session, GlobalConstants.SessionCartKey, cart);
 
             return this.RedirectToAction("Index");
         }
