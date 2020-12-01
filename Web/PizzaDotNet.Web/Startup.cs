@@ -54,14 +54,14 @@
             // Third-party authentication configuration
             services.AddAuthentication().AddFacebook(facebookOptions =>
             {
-                facebookOptions.AppId = this.configuration.GetValue<string>("FacebookAppId");
-                facebookOptions.AppSecret = this.configuration.GetValue<string>("FacebookAppSecret");
+                facebookOptions.AppId = this.configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = this.configuration["Authentication:Facebook:AppSecret"];
                 facebookOptions.AccessDeniedPath = "/Error/LoginFailed";
             });
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
-                googleOptions.ClientId = this.configuration.GetValue<string>("GoogleAppId");
-                googleOptions.ClientSecret = this.configuration.GetValue<string>("GoogleAppSecret");
+                googleOptions.ClientId = this.configuration["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = this.configuration["Authentication:Google:ClientSecret"];
                 googleOptions.AccessDeniedPath = "/Error/LoginFailed";
             });
 
