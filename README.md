@@ -1,5 +1,6 @@
 # SoftUni-PizzaDotNet
-Demo project for Pizza restaurant business web app based on ASP.NET Core 3.1
+Demo project for Pizza restaurant business web app based on ASP.NET Core 3.1  
+Live demo available here: https://pizzadotnetweb20201130231618.azurewebsites.net/
 
 ## Roles
 * Administrator
@@ -9,11 +10,14 @@ Demo project for Pizza restaurant business web app based on ASP.NET Core 3.1
 ## Functionality
 ### Site guest (**Visitor**) 
 * can view the menu and its products 
-
-### Users
+* sort products by name/price/rating  
+  
+### Users (**Registered**)
 * same as guest
 * can add items to their cart
+* rate products
 * place orders
+* receive coupon codes
 * use coupon codes and view their available ones
 * view their orders and cancel ones which are still processing
 * change their email, password and address
